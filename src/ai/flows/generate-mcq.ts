@@ -20,7 +20,7 @@ const GenerateMcqInputSchema = z.object({
 });
 export type GenerateMcqInput = z.infer<typeof GenerateMcqInputSchema>;
 
-const GenerateMcqOutputSchema = z.object({
+export const GenerateMcqOutputSchema = z.object({
   mcqs: z.array(
     z.object({
       question: z.string().describe('The multiple choice question.'),
