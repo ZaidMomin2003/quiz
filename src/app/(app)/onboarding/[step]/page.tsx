@@ -20,12 +20,15 @@ export default function OnboardingStepPage() {
     isStepCompleted,
   } = useOnboarding();
 
-  useEffect(() => {
-    // Check if user is trying to access a step prematurely
+ useEffect(() => {
+    // This effect ensures that we only render the step component after verifying access rights.
+    // It prevents navigation calls during the render phase.
     if (step === 'exams' && !isStepCompleted('goal')) {
       router.replace('/onboarding/goal');
     } else if (step === 'finish' && !isStepCompleted('exams')) {
       router.replace('/onboarding/exams');
+    } else if (step && !['welcome', 'goal', 'exams', 'finish'].includes(step)) {
+      router.replace('/onboarding/welcome');
     } else {
         setIsReady(true);
     }
@@ -33,9 +36,13 @@ export default function OnboardingStepPage() {
 
 
   const handleNext = (data: any) => {
+    // Only update the data. The hook will handle navigation.
     updateOnboardingData(data);
-    goToNextStep();
   };
+  
+  const handleWelcomeNext = () => {
+    updateOnboardingData({}); // Mark welcome as complete
+  }
 
   const renderStep = () => {
     if (!isReady) {
@@ -44,7 +51,7 @@ export default function OnboardingStepPage() {
 
     switch (step) {
       case 'welcome':
-        return <WelcomeStep onNext={() => goToNextStep()} />;
+        return <WelcomeStep onNext={handleWelcomeNext} />;
       case 'goal':
         return (
           <GoalStep
@@ -62,11 +69,7 @@ export default function OnboardingStepPage() {
       case 'finish':
         return <FinishStep />;
       default:
-        // This handles invalid steps by redirecting to the start.
-        // It's placed here to avoid a render-loop with useEffect.
-        if (isReady) {
-          router.replace('/onboarding/welcome');
-        }
+        // Let the useEffect handle redirection for invalid steps
         return null;
     }
   };
