@@ -3,7 +3,7 @@ import './globals.css';
 import { ThemeProvider } from '@/components/theme-provider';
 import { Toaster } from '@/components/ui/toaster';
 import { Button } from '@/components/ui/button';
-import { Sparkles, Bot } from 'lucide-react';
+import { Bot } from 'lucide-react';
 
 export const metadata: Metadata = {
   title: 'SEOtalos',
@@ -38,6 +38,7 @@ export default function RootLayout({
                     </span>
                   </a>
                   <nav className="hidden space-x-6 text-sm font-medium md:flex">
+                    <a href="/quiz" className="transition-colors hover:text-primary/80">Quiz</a>
                     <a href="#" className="transition-colors hover:text-primary/80">Resources</a>
                     <a href="#" className="transition-colors hover:text-primary/80">Support</a>
                     <a href="#" className="transition-colors hover:text-primary/80">Pricing</a>
