@@ -65,15 +65,8 @@ export default function DashboardPage() {
         
         // Calculate unique questions attempted
         const uniqueQuestions = new Set<string>();
-        const seenQuizIdentifiers = new Set<string>();
-
         historyItems.forEach(item => {
-            // Create a unique identifier for the quiz based on its questions
-            const quizIdentifier = JSON.stringify(item.mcqs.map(q => q.question).sort());
-            if (!seenQuizIdentifiers.has(quizIdentifier)) {
-                item.mcqs.forEach(mcq => uniqueQuestions.add(mcq.question));
-                seenQuizIdentifiers.add(quizIdentifier);
-            }
+            item.mcqs.forEach(mcq => uniqueQuestions.add(mcq.question));
         });
 
         setStats({
@@ -155,10 +148,10 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            <Card className="relative shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow duration-300 bg-[#00CC99] text-black border-0">
+            <Card>
                 <CardHeader>
                     <CardTitle>Create Your Next Challenge</CardTitle>
-                    <CardDescription className="text-black/80">Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
+                    <CardDescription>Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
@@ -166,7 +159,7 @@ export default function DashboardPage() {
                         <Input 
                             id="topic-input"
                             placeholder="e.g., The Renaissance, JavaScript Promises, or Quantum Physics" 
-                            className="flex-grow bg-white/20 text-black placeholder:text-black/70 border-black/50 focus:bg-white/30 focus-visible:ring-black"
+                            className="flex-grow"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                         />
@@ -181,13 +174,12 @@ export default function DashboardPage() {
                                 onChange={(e) => setQuestionCount(Math.min(10, Math.max(1, parseInt(e.target.value, 10) || 1)))}
                                 min={1}
                                 max={10}
-                                className="bg-white/20 text-black placeholder:text-black/70 border-black/50 focus:bg-white/30 focus-visible:ring-black"
                             />
                         </div>
                         <div className="space-y-2">
                              <Label htmlFor="difficulty">Difficulty</Label>
                              <Select value={difficulty} onValueChange={(value) => setDifficulty(value as 'easy' | 'medium' | 'hard')}>
-                                <SelectTrigger id="difficulty" className="bg-white/20 text-black border-black/50 focus:bg-white/30 focus:ring-black">
+                                <SelectTrigger id="difficulty">
                                     <SelectValue placeholder="Select difficulty" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -198,7 +190,7 @@ export default function DashboardPage() {
                             </Select>
                         </div>
                     </div>
-                     <Button size="lg" className="w-full bg-white text-black hover:bg-gray-200" disabled={!canGenerate} onClick={handleGenerateQuiz}>
+                     <Button size="lg" className="w-full" disabled={!canGenerate} onClick={handleGenerateQuiz}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
