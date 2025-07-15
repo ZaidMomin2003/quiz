@@ -11,11 +11,11 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { syllabusData } from '@/lib/syllabus';
-import { AlertTriangle, ClipboardCheck, Target, Loader2, Atom, FlaskConical, Dna, Sigma } from 'lucide-react';
+import { AlertTriangle, ClipboardCheck, FilePlus2, Loader2, Atom, FlaskConical, Dna, Sigma } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
-import { generateMcqAction } from '@/app/actions';
+import { generateMcqAction, generateQuestionSetAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
 import type { LucideIcon } from 'lucide-react';
 
@@ -44,6 +44,8 @@ export default function SyllabusPage() {
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState(false);
   const [loadingTopic, setLoadingTopic] = useState<string | null>(null);
+  const [generatingSetTopic, setGeneratingSetTopic] = useState<string | null>(null);
+
 
   useEffect(() => {
     if (user) {
@@ -89,6 +91,24 @@ export default function SyllabusPage() {
     }
   }
 
+  const handleGenerateSet = async (topic: string) => {
+    setGeneratingSetTopic(topic);
+    const result = await generateQuestionSetAction({ topic });
+    setGeneratingSetTopic(null);
+
+    if (result.error) {
+      toast({ variant: 'destructive', title: 'Generation Failed', description: result.error });
+    } else if (result.mcqs) {
+      // In a real app, you'd save these to your database.
+      // For now, we'll just confirm it worked.
+      console.log(`Generated ${result.mcqs.length} questions for ${topic}:`, result.mcqs);
+      toast({
+        title: 'Question Set Generated!',
+        description: `A question set of ${result.mcqs.length} MCQs has been created for ${topic}.`,
+      });
+    }
+  };
+
   if (!hydrated) {
     return null; // or a loading skeleton
   }
@@ -107,7 +127,7 @@ export default function SyllabusPage() {
               <Card key={examName}>
                 <CardHeader>
                     <CardTitle className="text-2xl">{examName} Syllabus</CardTitle>
-                    <CardDescription>Browse subjects, chapters, and topics.</CardDescription>
+                    <CardDescription>Browse subjects, chapters, and topics to generate questions.</CardDescription>
                 </CardHeader>
                 <CardContent>
                     <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
@@ -140,7 +160,7 @@ export default function SyllabusPage() {
                                                                             size="sm" 
                                                                             className="flex-1"
                                                                             onClick={() => handlePracticeQuiz(topic)}
-                                                                            disabled={loadingTopic === topic}
+                                                                            disabled={loadingTopic === topic || generatingSetTopic === topic}
                                                                         >
                                                                             {loadingTopic === topic ? (
                                                                                 <Loader2 className="mr-2 h-4 w-4 animate-spin" />
@@ -149,9 +169,19 @@ export default function SyllabusPage() {
                                                                             )}
                                                                             Practice
                                                                         </Button>
-                                                                        <Button size="sm" variant="secondary" className="flex-1" disabled>
-                                                                            <Target className="mr-2 h-4 w-4" />
-                                                                            Proficiency
+                                                                        <Button 
+                                                                          size="sm" 
+                                                                          variant="secondary" 
+                                                                          className="flex-1"
+                                                                          onClick={() => handleGenerateSet(topic)}
+                                                                          disabled={generatingSetTopic === topic || loadingTopic === topic}
+                                                                        >
+                                                                            {generatingSetTopic === topic ? (
+                                                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                            ) : (
+                                                                                <FilePlus2 className="mr-2 h-4 w-4" />
+                                                                            )}
+                                                                            Generate Set
                                                                         </Button>
                                                                     </CardFooter>
                                                                 </Card>
