@@ -25,13 +25,16 @@ export function PublicPageLayout({
             </nav>
           </div>
           <div className="flex items-center space-x-4">
-            <Button asChild size="sm">
+             <Button asChild variant="ghost" size="sm">
+                <Link href="/login">Sign In</Link>
+             </Button>
+             <Button asChild size="sm">
               <Link href="/signup">Start For Free</Link>
             </Button>
           </div>
         </div>
       </header>
-      <main className="flex-1 container mx-auto py-12 flex justify-center">{children}</main>
+      <main className="flex-1">{children}</main>
        <footer className="border-t border-border/40 py-12">
         <div className="container">
           <div className="grid grid-cols-1 gap-8 md:grid-cols-4">
@@ -66,7 +69,7 @@ export function PublicPageLayout({
           </div>
           <div className="mt-8 border-t border-border/40 pt-8 flex justify-between items-center">
             <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} QuizForge. All rights reserved.</p>
-            <p className="text-sm text-muted-foreground">Made by Arshad with 💓</p>
+            <p className="text-sm text-muted-foreground">Made with 💓 by an AI</p>
           </div>
         </div>
       </footer>
