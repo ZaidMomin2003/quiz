@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp, Lightbulb } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
@@ -82,40 +82,40 @@ export default function Home() {
         </section>
 
         {/* New Modern Features Section */}
-        <section className="relative w-full py-16 md:py-24 overflow-hidden">
+        <section id="features" className="relative w-full py-16 md:py-24 overflow-hidden">
             <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
                 <div className="absolute -z-10 w-96 h-96 bg-blue-500/20 blur-[120px] rounded-full"></div>
                 <div className="absolute -z-10 w-96 h-96 left-48 top-24 bg-purple-500/20 blur-[120px] rounded-full"></div>
             </div>
 
-            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
-                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
+                <Card className="md:col-span-2 bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
                     <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">AI-Powered Generation</h3>
                         <Zap className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds.</p>
+                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds, tailoring content to your specified difficulty.</p>
                 </Card>
-                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                 <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
                     <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">Interactive Learning</h3>
                         <BookOpen className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations to reinforce concepts.</p>
+                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations.</p>
                 </Card>
                 <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
                      <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">Performance Analytics</h3>
                         <TrendingUp className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Track your progress, identify strengths, and pinpoint areas for improvement with our smart analytics.</p>
+                    <p className="text-muted-foreground text-sm">Track your progress and identify areas for improvement.</p>
                 </Card>
-                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                 <Card className="md:col-span-2 bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
                     <div className="flex items-center justify-between w-full">
-                        <h3 className="font-bold text-lg">Customizable Difficulty</h3>
-                        <Target className="text-primary" />
+                        <h3 className="font-bold text-lg">Weakness-Focused Practice</h3>
+                        <BrainCircuit className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Tailor quizzes to your needs. Choose from easy, medium, or hard difficulty levels for a perfect challenge.</p>
+                    <p className="text-muted-foreground text-sm">Our AI analyzes your quiz results to identify your weak spots and automatically generates new quizzes focused on those specific concepts, helping you turn weaknesses into strengths.</p>
                 </Card>
             </div>
         </section>
