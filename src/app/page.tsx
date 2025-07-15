@@ -1,13 +1,22 @@
+// src/app/page.tsx
+'use client';
+
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, Bot, BookOpen, Share2, BrainCircuit } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2 } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
+import {
+  Carousel,
+  CarouselContent,
+  CarouselItem,
+} from "@/components/ui/carousel"
+import Autoplay from "embla-carousel-autoplay"
 
 export default function Home() {
   const testimonials = [
@@ -25,6 +34,21 @@ export default function Home() {
       name: 'David L., Student',
       role: 'University Student',
       text: "I use QuizForge to create practice tests for myself. It's a great way to study and test my knowledge on different subjects before exams. Super easy to use!",
+    },
+    {
+      name: 'Emily R., Homeschooling Parent',
+      role: 'Parent & Educator',
+      text: "As a homeschooling parent, QuizForge is a lifesaver. I can instantly create fun and educational quizzes for my kids on any subject they're interested in.",
+    },
+    {
+      name: 'John S., Developer',
+      role: 'Tech Bootcamp Student',
+      text: "I use QuizForge to quickly generate quizzes on programming concepts. It helps me verify my understanding and prepare for technical interviews. Highly recommended!",
+    },
+    {
+      name: 'Maria G., HR Professional',
+      role: 'Human Resources',
+      text: "We've integrated QuizForge into our onboarding process. It's a simple and effective way to ensure new hires have grasped the essential company knowledge.",
     },
   ];
 
@@ -231,21 +255,40 @@ export default function Home() {
               <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
                 Don't just take our word for it. Here's what our users have to say.
               </p>
-              <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                {testimonials.map((testimonial, index) => (
-                   <Card key={index} className="bg-background/50 text-left">
-                      <CardContent className="pt-6">
-                        <p className="italic">&quot;{testimonial.text}&quot;</p>
-                      </CardContent>
-                      <CardFooter className="flex items-center gap-4 pt-4">
-                         <div className="flex flex-col">
-                          <p className="font-semibold">{testimonial.name}</p>
-                          <p className="text-sm text-muted-foreground">{testimonial.role}</p>
-                        </div>
-                      </CardFooter>
-                   </Card>
-                ))}
-              </div>
+              <Carousel
+                plugins={[
+                  Autoplay({
+                    delay: 2000,
+                    stopOnInteraction: true,
+                    stopOnMouseEnter: true,
+                  }),
+                ]}
+                opts={{
+                  align: "start",
+                  loop: true,
+                }}
+                className="w-full"
+              >
+                <CarouselContent>
+                  {testimonials.map((testimonial, index) => (
+                    <CarouselItem key={index} className="md:basis-1/2 lg:basis-1/3">
+                      <div className="p-1 h-full">
+                        <Card className="bg-background/50 text-left h-full flex flex-col">
+                          <CardContent className="pt-6 flex-grow">
+                            <p className="italic">&quot;{testimonial.text}&quot;</p>
+                          </CardContent>
+                          <CardFooter className="flex items-center gap-4 pt-4 mt-auto">
+                            <div className="flex flex-col">
+                              <p className="font-semibold">{testimonial.name}</p>
+                              <p className="text-sm text-muted-foreground">{testimonial.role}</p>
+                            </div>
+                          </CardFooter>
+                        </Card>
+                      </div>
+                    </CarouselItem>
+                  ))}
+                </CarouselContent>
+              </Carousel>
           </div>
         </section>
         
