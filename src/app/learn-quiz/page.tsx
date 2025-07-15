@@ -139,22 +139,19 @@ export default function LearnQuizPage() {
                                     {currentMcq.options.map((option, i) => {
                                         const isSelected = selectedAnswer === option;
                                         const isTheCorrectAnswer = currentMcq.correctAnswer === option;
-                                        const variant = isAnswered 
-                                            ? isTheCorrectAnswer ? 'correct' : (isSelected ? 'incorrect' : 'disabled')
-                                            : 'default';
 
                                         return (
                                         <Label key={i} htmlFor={`q-o-${i}`} className={cn(
                                             "flex items-center space-x-3 p-4 border rounded-lg cursor-pointer transition-all",
                                             !isAnswered && "hover:bg-accent",
-                                            variant === 'correct' && "border-green-500 bg-green-500/10",
-                                            variant === 'incorrect' && "border-red-500 bg-red-500/10",
-                                            variant === 'disabled' && "opacity-60",
+                                            isAnswered && isTheCorrectAnswer && "border-green-500 bg-green-500/10",
+                                            isAnswered && isSelected && !isTheCorrectAnswer && "border-red-500 bg-red-500/10",
+                                            isAnswered && !isSelected && "opacity-60",
                                         )}>
                                             <RadioGroupItem value={option} id={`q-o-${i}`} className="hidden" />
                                             <span>{option}</span>
-                                            {isAnswered && variant === 'correct' && <CheckCircle className="ml-auto h-5 w-5 text-green-500" />}
-                                            {isAnswered && variant === 'incorrect' && <XCircle className="ml-auto h-5 w-5 text-red-500" />}
+                                            {isAnswered && isTheCorrectAnswer && <CheckCircle className="ml-auto h-5 w-5 text-green-500" />}
+                                            {isAnswered && isSelected && !isTheCorrectAnswer && <XCircle className="ml-auto h-5 w-5 text-red-500" />}
                                         </Label>
                                     )})}
                                 </RadioGroup>
