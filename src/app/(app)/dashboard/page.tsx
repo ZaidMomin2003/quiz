@@ -1,4 +1,3 @@
-
 // src/app/(app)/dashboard/page.tsx
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
@@ -28,7 +27,7 @@ export default function DashboardPage() {
         <div className="space-y-6">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
             
-            {/* Analytics Cards Section */}
+            {/* Analytics Cards Section - Independent Container */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                     <CardHeader>
@@ -59,7 +58,7 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            {/* Progress Chart Section */}
+            {/* Progress Chart Section - Independent Container */}
             <Card>
                 <CardHeader>
                     <CardTitle>Weekly Progress</CardTitle>
