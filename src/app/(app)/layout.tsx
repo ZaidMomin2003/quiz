@@ -4,7 +4,8 @@ import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, Si
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Pencil } from 'lucide-react';
+import { LayoutDashboard, Pencil, Bot } from 'lucide-react';
+import Link from 'next/link';
 
 export default function AppLayout({
   children,
@@ -37,6 +38,12 @@ export default function AppLayout({
     <SidebarProvider>
       <Sidebar>
           <div className="flex flex-col h-full p-2">
+            <div className="p-2 mb-2">
+              <Link className="flex items-center gap-2" href="/dashboard">
+                <Bot className="h-6 w-6" />
+                <span className="font-bold text-lg">QuizForge</span>
+              </Link>
+            </div>
             <div className="flex-1">
               <SidebarMenu>
                  <SidebarMenuItem>
