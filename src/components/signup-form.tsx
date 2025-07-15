@@ -45,7 +45,7 @@ export function SignupForm() {
     setError(null);
     try {
       await signup(values.name, values.email, values.password);
-      router.push("/dashboard");
+      // Let the auth hook handle redirection
     } catch (err: any) {
         setError(err.message || "Failed to create an account. Please try again.");
     } finally {
@@ -64,8 +64,8 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Name</FormLabel>
               <FormControl>
-                <div className="relative">
-                    <User className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                    <User className="absolute left-3 h-4 w-4 text-muted-foreground" />
                     <Input placeholder="Your Name" {...field} />
                 </div>
               </FormControl>
@@ -80,8 +80,8 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                 <div className="relative">
-                    <Mail className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                 <div className="relative flex items-center">
+                    <Mail className="absolute left-3 h-4 w-4 text-muted-foreground" />
                     <Input type="email" placeholder="you@example.com" {...field} />
                  </div>
               </FormControl>
@@ -96,8 +96,8 @@ export function SignupForm() {
             <FormItem>
               <FormLabel>Password</FormLabel>
               <FormControl>
-                <div className="relative">
-                    <Lock className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
+                <div className="relative flex items-center">
+                    <Lock className="absolute left-3 h-4 w-4 text-muted-foreground" />
                     <Input 
                         type={showPassword ? "text" : "password"} 
                         placeholder="••••••••" 
@@ -106,7 +106,7 @@ export function SignupForm() {
                      <button 
                         type="button" 
                         onClick={() => setShowPassword(!showPassword)} 
-                        className="absolute right-3 top-1/2 -translate-y-1/2 text-muted-foreground"
+                        className="absolute right-3 text-muted-foreground"
                         aria-label={showPassword ? "Hide password" : "Show password"}
                     >
                         {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
