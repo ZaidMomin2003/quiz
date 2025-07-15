@@ -88,42 +88,34 @@ export default function Home() {
             </div>
 
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
-                <div className="relative rounded-2xl md:col-span-2 border-beam">
-                    <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
-                        <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-lg">AI-Powered Generation</h3>
-                            <Zap className="text-primary" />
-                        </div>
-                        <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds, tailoring content to your specified difficulty.</p>
-                    </Card>
-                </div>
-                 <div className="relative rounded-2xl border-beam">
-                    <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
-                        <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-lg">Interactive Learning</h3>
-                            <BookOpen className="text-primary" />
-                        </div>
-                        <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations.</p>
-                    </Card>
-                 </div>
-                <div className="relative rounded-2xl border-beam">
-                    <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
-                        <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-lg">Performance Analytics</h3>
-                            <TrendingUp className="text-primary" />
-                        </div>
-                        <p className="text-muted-foreground text-sm">Track your progress and identify areas for improvement.</p>
-                    </Card>
-                 </div>
-                 <div className="relative rounded-2xl md:col-span-2 border-beam">
-                    <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
-                        <div className="flex items-center justify-between w-full">
-                            <h3 className="font-bold text-lg">Weakness-Focused Practice</h3>
-                            <BrainCircuit className="text-primary" />
-                        </div>
-                        <p className="text-muted-foreground text-sm">Our AI analyzes your quiz results to identify your weak spots and automatically generates new quizzes focused on those specific concepts, helping you turn weaknesses into strengths.</p>
-                    </Card>
-                 </div>
+                <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4 md:col-span-2">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">AI-Powered Generation</h3>
+                        <Zap className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds, tailoring content to your specified difficulty.</p>
+                </Card>
+                 <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Interactive Learning</h3>
+                        <BookOpen className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations.</p>
+                 </Card>
+                <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Performance Analytics</h3>
+                        <TrendingUp className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Track your progress and identify areas for improvement.</p>
+                 </Card>
+                 <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4 md:col-span-2">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Weakness-Focused Practice</h3>
+                        <BrainCircuit className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Our AI analyzes your quiz results to identify your weak spots and automatically generates new quizzes focused on those specific concepts, helping you turn weaknesses into strengths.</p>
+                 </Card>
             </div>
         </section>
 

@@ -99,16 +99,10 @@ export default {
             height: '0',
           },
         },
-        'border-beam': {
-          '100%': {
-            '--angle': '360deg',
-          }
-        }
       },
       animation: {
         'accordion-down': 'accordion-down 0.2s ease-out',
         'accordion-up': 'accordion-up 0.2s ease-out',
-        'border-beam': 'border-beam 5s linear infinite',
       },
     },
   },
