@@ -1,6 +1,8 @@
+
 "use client";
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
+import { useRouter } from 'next/navigation';
 
 // A simple in-memory user object for demonstration
 type User = {
@@ -27,6 +29,7 @@ const users: { [email: string]: { password: string, name: string} } = {
 export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const [user, setUser] = useState<User | null>(null);
   const [loading, setLoading] = useState(true);
+  const router = useRouter();
 
   useEffect(() => {
     // Check if user is logged in from a previous session
@@ -44,6 +47,14 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const loggedInUser = { email, name: users[email].name };
             setUser(loggedInUser);
             sessionStorage.setItem('quizforge_user', JSON.stringify(loggedInUser));
+            
+            // Check if user has completed onboarding
+            const hasOnboarded = localStorage.getItem(`onboarding_complete_${email}`);
+            if (hasOnboarded) {
+                router.push("/dashboard");
+            } else {
+                router.push("/onboarding");
+            }
             resolve();
         } else {
             reject(new Error("Invalid email or password"));
@@ -62,6 +73,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const newUser = { email, name };
           setUser(newUser);
           sessionStorage.setItem('quizforge_user', JSON.stringify(newUser));
+          router.push("/onboarding");
           resolve();
         }
       }, 500);
@@ -71,6 +83,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   const logout = () => {
     setUser(null);
     sessionStorage.removeItem('quizforge_user');
+    router.push('/');
   };
 
   return (

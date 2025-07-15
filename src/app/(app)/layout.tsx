@@ -5,7 +5,7 @@ import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, Si
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
-import { useRouter } from 'next/navigation';
+import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
 import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark } from 'lucide-react';
 import Link from 'next/link';
@@ -20,6 +20,7 @@ export default function AppLayout({
 }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+  const pathname = usePathname();
   const { theme, setTheme } = useTheme();
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
@@ -60,6 +61,11 @@ export default function AppLayout({
     }
   }, []);
 
+  // Don't render layout for onboarding page
+  if (pathname === '/onboarding') {
+    return <>{children}</>;
+  }
+
   if (loading || !user) {
     return (
        <div className="flex h-screen items-center justify-center">
@@ -70,7 +76,6 @@ export default function AppLayout({
 
   const handleLogout = () => {
     logout();
-    router.push('/');
   }
 
   return (

@@ -7,9 +7,22 @@ import { Label } from '@/components/ui/label';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
+import { useEffect, useState } from 'react';
+import { Badge } from '@/components/ui/badge';
+import { BookCopy } from 'lucide-react';
 
 export default function ProfilePage() {
     const { user } = useAuth();
+    const [userExams, setUserExams] = useState<string[]>([]);
+
+    useEffect(() => {
+        if (user) {
+            const storedExams = localStorage.getItem(`user_exams_${user.email}`);
+            if (storedExams) {
+                setUserExams(JSON.parse(storedExams));
+            }
+        }
+    }, [user]);
 
     if (!user) {
         return null;
@@ -45,6 +58,28 @@ export default function ProfilePage() {
                             <Button>Save Changes</Button>
                         </CardFooter>
                     </Card>
+
+                     {userExams.length > 0 && (
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-3">
+                                    <BookCopy className="h-6 w-6 text-primary" />
+                                    <CardTitle>Exams I'm Preparing For</CardTitle>
+                                </div>
+                                <CardDescription>Your selected exams help us tailor your experience.</CardDescription>
+                            </CardHeader>
+                            <CardContent>
+                                <div className="flex flex-wrap gap-2">
+                                    {userExams.map(exam => (
+                                        <Badge key={exam} variant="secondary">{exam}</Badge>
+                                    ))}
+                                </div>
+                            </CardContent>
+                            <CardFooter>
+                                <Button variant="outline">Change Selections</Button>
+                            </CardFooter>
+                        </Card>
+                    )}
                 </div>
 
                 <div className="space-y-6">
@@ -63,7 +98,7 @@ export default function ProfilePage() {
                     </Card>
 
                     <Card>
-                        <CardHeader>
+                         <CardHeader>
                             <CardTitle>Account Settings</CardTitle>
                             <CardDescription>Manage your account settings.</CardDescription>
                         </CardHeader>
