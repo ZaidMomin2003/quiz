@@ -171,30 +171,6 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            {weakConcepts.length > 0 && (
-                 <Card className="bg-amber-500/10 border-amber-500/30">
-                    <CardHeader>
-                        <div className="flex items-center gap-4">
-                             <BrainCircuit className="h-8 w-8 text-amber-400" />
-                            <div>
-                                <CardTitle>Practice Your Weaknesses</CardTitle>
-                                <CardDescription className="text-foreground/80">We've identified some areas you can work on. Take a custom quiz to improve!</CardDescription>
-                            </div>
-                        </div>
-                    </CardHeader>
-                    <CardContent>
-                        <Button 
-                            className="w-full bg-amber-500 hover:bg-amber-500/90 text-background" 
-                            onClick={handlePracticeWeaknesses} 
-                            disabled={isWeaknessLoading || isLoading}
-                        >
-                             {isWeaknessLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
-                             {isWeaknessLoading ? 'Building Your Quiz...' : 'Generate Practice Quiz'}
-                        </Button>
-                    </CardContent>
-                </Card>
-            )}
-
             <Card>
                 <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
                     <CardTitle>Create Your Next Challenge</CardTitle>
@@ -254,6 +230,30 @@ export default function DashboardPage() {
                     </Button>
                 </CardContent>
             </Card>
+            
+            {weakConcepts.length > 0 && (
+                 <Card className="bg-amber-500/10 border-amber-500/30">
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                             <BrainCircuit className="h-8 w-8 text-amber-400" />
+                            <div>
+                                <CardTitle>Practice Your Weaknesses</CardTitle>
+                                <CardDescription className="text-foreground/80">We've identified some areas you can work on. Take a custom quiz to improve!</CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <Button 
+                            className="w-full bg-amber-500 hover:bg-amber-500/90 text-background" 
+                            onClick={handlePracticeWeaknesses} 
+                            disabled={isWeaknessLoading || isLoading}
+                        >
+                             {isWeaknessLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                             {isWeaknessLoading ? 'Building Your Quiz...' : 'Generate Practice Quiz'}
+                        </Button>
+                    </CardContent>
+                </Card>
+            )}
 
         </div>
     );
