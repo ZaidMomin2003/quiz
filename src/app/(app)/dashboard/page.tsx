@@ -19,6 +19,7 @@ type DashboardStats = {
     quizzesTaken: number;
     correctRatio: number;
     averageScore: string;
+    totalQuestionsAttempted: number;
 };
 
 export default function DashboardPage() {
@@ -30,7 +31,8 @@ export default function DashboardPage() {
     const [stats, setStats] = useState<DashboardStats>({
         quizzesTaken: 0,
         correctRatio: 0,
-        averageScore: '0/0'
+        averageScore: '0/0',
+        totalQuestionsAttempted: 0,
     });
     
     const { toast } = useToast();
@@ -47,24 +49,38 @@ export default function DashboardPage() {
 
     const calculateStats = (historyItems: QuizHistoryItem[]) => {
         if (historyItems.length === 0) {
-            setStats({ quizzesTaken: 0, correctRatio: 0, averageScore: '0/0'});
+            setStats({ quizzesTaken: 0, correctRatio: 0, averageScore: '0/0', totalQuestionsAttempted: 0});
             return;
         }
 
         const totalQuizzes = historyItems.length;
         const totalCorrect = historyItems.reduce((acc, item) => acc + item.score, 0);
-        const totalQuestions = historyItems.reduce((acc, item) => acc + item.totalQuestions, 0);
+        const totalQuestionsInHistory = historyItems.reduce((acc, item) => acc + item.totalQuestions, 0);
 
-        const correctRatio = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+        const correctRatio = totalQuestionsInHistory > 0 ? Math.round((totalCorrect / totalQuestionsInHistory) * 100) : 0;
         
         const avgScore = totalCorrect / totalQuizzes;
-        const avgTotal = totalQuestions / totalQuizzes;
+        const avgTotal = totalQuestionsInHistory / totalQuizzes;
         const averageScore = `${avgScore.toFixed(1)}/${avgTotal.toFixed(1)}`;
         
+        // Calculate unique questions attempted
+        const uniqueQuestions = new Set<string>();
+        const seenQuizIdentifiers = new Set<string>();
+
+        historyItems.forEach(item => {
+            // Create a unique identifier for the quiz based on its questions
+            const quizIdentifier = JSON.stringify(item.mcqs.map(q => q.question).sort());
+            if (!seenQuizIdentifiers.has(quizIdentifier)) {
+                item.mcqs.forEach(mcq => uniqueQuestions.add(mcq.question));
+                seenQuizIdentifiers.add(quizIdentifier);
+            }
+        });
+
         setStats({
             quizzesTaken: totalQuizzes,
             correctRatio,
             averageScore,
+            totalQuestionsAttempted: uniqueQuestions.size,
         });
     };
 
@@ -100,7 +116,7 @@ export default function DashboardPage() {
         <div className="flex flex-col gap-8">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
             
-            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
                 <Card>
                     <CardHeader>
                         <CardTitle>Quizzes Taken</CardTitle>
@@ -108,6 +124,15 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <p className="text-4xl font-bold">{stats.quizzesTaken}</p>
+                    </CardContent>
+                </Card>
+                <Card>
+                    <CardHeader>
+                        <CardTitle>Total Questions</CardTitle>
+                        <CardDescription>Unique questions you've attempted.</CardDescription>
+                    </CardHeader>
+                    <CardContent>
+                        <p className="text-4xl font-bold">{stats.totalQuestionsAttempted}</p>
                     </CardContent>
                 </Card>
                 <Card>
