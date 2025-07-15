@@ -25,12 +25,6 @@ export function PublicPageLayout({
             </nav>
           </div>
           <div className="flex items-center space-x-4">
-            <Button asChild variant="ghost" size="sm">
-              <Link href="/login">
-                <LogIn className="mr-2"/>
-                Sign In
-              </Link>
-            </Button>
             <Button asChild size="sm">
               <Link href="/signup">Start For Free</Link>
             </Button>
