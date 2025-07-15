@@ -218,24 +218,24 @@ export default function Home() {
               </Card>
               
               {/* Pro Plan */}
-              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-pro-start to-gradient-pro-end border-0 text-white shadow-lg shadow-emerald-500/30">
+              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-pro-start to-gradient-pro-end border-0 text-black shadow-lg shadow-emerald-500/30">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                    <Badge>Most Popular</Badge>
                 </div>
                 <CardHeader className="flex-grow">
                   <CardTitle className="text-2xl font-bold">Pro</CardTitle>
-                  <CardDescription className="text-white/80">For educators, trainers, and power users.</CardDescription>
+                  <CardDescription className="text-black/80">For educators, trainers, and power users.</CardDescription>
                   <div className="pt-4">
                     <span className="text-4xl font-bold">$10</span>
-                    <span className="text-sm font-normal text-white/80">/month</span>
+                    <span className="text-sm font-normal text-black/80">/month</span>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                   <Button className="w-full bg-white text-emerald-600 hover:bg-white/90" asChild><Link href="/signup">Choose Pro</Link></Button>
-                   <p className="text-xs text-white/80 text-center mt-2">Billed monthly.</p>
+                   <Button className="w-full bg-emerald-800 text-white hover:bg-emerald-800/90" asChild><Link href="/signup">Choose Pro</Link></Button>
+                   <p className="text-xs text-black/80 text-center mt-2">Billed monthly.</p>
                    <div className="mt-6 space-y-3">
-                      <p className="font-semibold text-sm text-white">All Free plan features, plus:</p>
-                      <ul className="space-y-2 text-sm text-white/80">
+                      <p className="font-semibold text-sm">All Free plan features, plus:</p>
+                      <ul className="space-y-2 text-sm text-black/80">
                         <li className="flex items-center gap-2"><Check className="h-4 w-4" />Unlimited Quizzes</li>
                         <li className="flex items-center gap-2"><Check className="h-4 w-4" />Up to 50 questions per quiz</li>
                         <li className="flex items-center gap-2"><Check className="h-4 w-4" />Advanced AI model</li>
