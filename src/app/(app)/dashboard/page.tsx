@@ -164,10 +164,10 @@ export default function DashboardPage() {
             </div>
 
             {weakConcepts.length > 0 && (
-                 <Card className="bg-orange-500/10 border-orange-500/30">
+                 <Card className="bg-amber-500/10 border-amber-500/30">
                     <CardHeader>
                         <div className="flex items-center gap-4">
-                             <BrainCircuit className="h-8 w-8 text-orange-400" />
+                             <BrainCircuit className="h-8 w-8 text-amber-400" />
                             <div>
                                 <CardTitle>Practice Your Weaknesses</CardTitle>
                                 <CardDescription className="text-foreground/80">We've identified some areas you can work on. Take a custom quiz to improve!</CardDescription>
@@ -176,7 +176,7 @@ export default function DashboardPage() {
                     </CardHeader>
                     <CardContent>
                         <Button 
-                            className="w-full bg-orange-500 hover:bg-orange-500/90" 
+                            className="w-full bg-amber-500 hover:bg-amber-500/90 text-background" 
                             onClick={handlePracticeWeaknesses} 
                             disabled={isWeaknessLoading || isLoading}
                         >
@@ -188,9 +188,9 @@ export default function DashboardPage() {
             )}
 
             <Card>
-                <CardHeader className="bg-[#8A2BE2] text-white rounded-t-lg">
+                <CardHeader className="bg-primary text-primary-foreground rounded-t-lg">
                     <CardTitle>Create Your Next Challenge</CardTitle>
-                    <CardDescription className="text-white/80">Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
+                    <CardDescription className="text-primary-foreground/80">Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6 pt-6">
                     <div className="space-y-2">
@@ -229,7 +229,7 @@ export default function DashboardPage() {
                             </Select>
                         </div>
                     </div>
-                     <Button size="lg" className="w-full bg-[#8A2BE2] hover:bg-[#8A2BE2]/90 text-white" disabled={!canGenerate} onClick={handleGenerateQuiz}>
+                     <Button size="lg" className="w-full" disabled={!canGenerate} onClick={handleGenerateQuiz}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
