@@ -24,10 +24,28 @@ export default function AppLayout({
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
   useEffect(() => {
-    if (!loading && !user) {
+    if (loading) return;
+
+    if (!user) {
       router.push('/login');
+      return;
     }
-  }, [user, loading, router]);
+
+    // Check if onboarding is complete
+    const onboardingComplete = localStorage.getItem(`onboarding_complete_${user.email}`);
+    
+    // If onboarding is NOT complete and we are not in an onboarding or login page, redirect to onboarding
+    if (!onboardingComplete && !pathname.startsWith('/onboarding')) {
+      router.push('/onboarding/welcome');
+      return;
+    }
+    
+    // If onboarding IS complete and the user is somehow on the root app page, push them to dashboard
+    if (onboardingComplete && pathname === '/') {
+        router.push('/dashboard');
+    }
+
+  }, [user, loading, router, pathname]);
 
   useEffect(() => {
     const updateBookmarkCount = () => {
