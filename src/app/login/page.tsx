@@ -5,9 +5,9 @@ import Link from "next/link";
 
 export default function LoginPage() {
     return (
-        <PublicPageLayout>
-            <div className="w-full max-w-md">
-                <Card>
+        <PublicPageLayout showFooter={false}>
+            <div className="w-full max-w-md mx-auto flex items-center min-h-[calc(100vh-4rem)]">
+                <Card className="w-full">
                     <CardHeader className="text-center">
                         <CardTitle>Welcome Back!</CardTitle>
                         <CardDescription>Sign in to continue to QuizForge</CardDescription>
