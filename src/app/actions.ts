@@ -4,6 +4,8 @@ import { generateMcq } from '@/ai/flows/generate-mcq';
 import { analyzeQuiz } from '@/ai/flows/analyze-quiz-flow';
 import { generateFromConcepts } from '@/ai/flows/generate-from-concepts-flow';
 import { generateLearnQuiz } from '@/ai/flows/generate-learn-quiz';
+import { generateQuestionSet } from '@/ai/flows/generate-question-set-flow';
+
 
 import type { 
     GenerateMcqInput, 
@@ -13,7 +15,9 @@ import type {
     GenerateFromConceptsInput, 
     GenerateFromConceptsOutput,
     GenerateLearnQuizInput,
-    GenerateLearnQuizOutput
+    GenerateLearnQuizOutput,
+    GenerateQuestionSetInput,
+    GenerateQuestionSetOutput
 } from '@/lib/types';
 
 
@@ -75,5 +79,20 @@ export async function generateLearnQuizAction(
     } catch (error) {
         console.error('Error generating learn quiz:', error);
         return { error: 'An unexpected error occurred while generating your lesson.' };
+    }
+}
+
+export async function generateQuestionSetAction(
+    input: GenerateQuestionSetInput
+): Promise<{ mcqs?: GenerateQuestionSetOutput['mcqs']; error?: string }> {
+    try {
+        const result = await generateQuestionSet(input);
+        if (!result || !result.mcqs || result.mcqs.length === 0) {
+            return { error: 'Could not generate the question set for this topic.' };
+        }
+        return { mcqs: result.mcqs };
+    } catch (error) {
+        console.error('Error generating question set:', error);
+        return { error: 'An unexpected error occurred while generating the question set.' };
     }
 }

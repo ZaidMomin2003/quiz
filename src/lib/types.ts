@@ -2,6 +2,7 @@ export type Mcq = {
   question: string;
   options: string[];
   correctAnswer: string;
+  difficulty: 'easy' | 'moderate' | 'difficult' | 'extreme';
 };
 
 export type GenerateMcqInput = {
@@ -11,13 +12,13 @@ export type GenerateMcqInput = {
 };
 
 export type GenerateMcqOutput = {
-  mcqs: Mcq[];
+  mcqs: Omit<Mcq, 'difficulty'>[];
 };
 
 export type QuizHistoryItem = {
   topic: string;
   difficulty: 'easy' | 'medium' | 'hard';
-  mcqs: Mcq[];
+  mcqs: Omit<Mcq, 'difficulty'>[];
   userAnswers: Record<number, string>;
   score: number;
   totalQuestions: number;
@@ -52,7 +53,7 @@ export type GenerateFromConceptsInput = {
 };
 
 export type GenerateFromConceptsOutput = {
-    mcqs: Mcq[];
+    mcqs: Omit<Mcq, 'difficulty'>[];
 };
 
 // Types for the new Learn Quiz feature
@@ -83,6 +84,15 @@ export type BookmarkItem = {
 export type QuizData = {
     topic: string;
     difficulty: 'easy' | 'medium' | 'hard';
-    mcqs: Mcq[];
+    mcqs: Omit<Mcq, 'difficulty'>[];
     totalTime?: number;
+};
+
+// For Question Set Generation
+export type GenerateQuestionSetInput = {
+  topic: string;
+};
+
+export type GenerateQuestionSetOutput = {
+  mcqs: Mcq[];
 };

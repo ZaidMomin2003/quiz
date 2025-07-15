@@ -18,15 +18,15 @@ const GenerateMcqInputSchema = z.object({
     .describe('The difficulty level of the MCQs.'),
 });
 
+const McqSchema = z.object({
+  question: z.string().describe('The multiple choice question.'),
+  options: z.array(z.string()).describe('The possible answers to the question.'),
+  correctAnswer: z.string().describe('The correct answer to the question.'),
+});
+
+
 const GenerateMcqOutputSchema = z.object({
-  mcqs: z.array(
-    z.object({
-      question: z.string().describe('The multiple choice question.'),
-      options: z.array(z.string()).describe('The possible answers to the question.'),
-      correctAnswer: z.string().describe('The correct answer to the question.'),
-    })
-  ).
-describe('An array of multiple choice questions.')
+  mcqs: z.array(McqSchema).describe('An array of multiple choice questions.')
 });
 
 export async function generateMcq(input: GenerateMcqInput): Promise<GenerateMcqOutput> {

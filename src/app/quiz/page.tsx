@@ -20,7 +20,7 @@ import { cn } from '@/lib/utils';
 type QuizData = {
     topic: string;
     difficulty: 'easy' | 'medium' | 'hard';
-    mcqs: Mcq[];
+    mcqs: Omit<Mcq, 'difficulty'>[];
     totalTime?: number;
 };
 
