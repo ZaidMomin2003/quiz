@@ -11,12 +11,13 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { syllabusData } from '@/lib/syllabus';
-import { BookMarked, AlertTriangle, ClipboardCheck, Target, Loader2 } from 'lucide-react';
+import { AlertTriangle, ClipboardCheck, Target, Loader2, Atom, FlaskConical, Dna, Sigma } from 'lucide-react';
 import Link from 'next/link';
 import { Button } from '@/components/ui/button';
 import { useRouter } from 'next/navigation';
 import { generateMcqAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
+import type { LucideIcon } from 'lucide-react';
 
 
 type Syllabus = {
@@ -28,6 +29,13 @@ type Syllabus = {
     }[];
   }[];
 };
+
+const subjectIcons: Record<string, LucideIcon> = {
+    'Physics': Atom,
+    'Chemistry': FlaskConical,
+    'Biology': Dna,
+    'Mathematics': Sigma,
+}
 
 export default function SyllabusPage() {
   const { user } = useAuth();
@@ -90,76 +98,79 @@ export default function SyllabusPage() {
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Syllabus</h1>
       
       {selectedExams.length > 0 ? (
-        <Accordion type="multiple" className="w-full space-y-4">
+        <div className="space-y-8">
           {selectedExams.map((examName) => {
             const syllabus = getSyllabusForExam(examName);
             if (!syllabus) return null;
 
             return (
-              <AccordionItem key={examName} value={examName} className="border-0">
-                 <Card>
-                    <CardHeader>
-                        <AccordionTrigger className="p-0 hover:no-underline">
-                             <CardTitle>{examName} Syllabus</CardTitle>
-                        </AccordionTrigger>
-                    </CardHeader>
-                    <AccordionContent>
-                        <CardContent>
-                            <Accordion type="multiple" className="w-full space-y-2">
-                                {syllabus.subjects.map((subject, subjectIndex) => (
-                                    <AccordionItem key={subject.name} value={`subject-${subjectIndex}`} className="border rounded-md px-4">
-                                        <AccordionTrigger>{subject.name}</AccordionTrigger>
-                                        <AccordionContent>
-                                            <Accordion type="multiple" className="w-full space-y-1">
-                                                {subject.chapters.map((chapter, chapterIndex) => (
-                                                     <AccordionItem key={chapter.name} value={`chapter-${chapterIndex}`} className="border-b-0">
-                                                        <AccordionTrigger className="text-sm py-3 hover:no-underline rounded-md px-3 hover:bg-accent">
-                                                            {chapter.name}
-                                                        </AccordionTrigger>
-                                                        <AccordionContent>
-                                                            <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
-                                                                {chapter.topics.map((topic) => (
-                                                                    <Card key={topic} className="bg-background/50">
-                                                                        <CardHeader className="p-4">
-                                                                            <CardTitle className="text-sm font-medium">{topic}</CardTitle>
-                                                                        </CardHeader>
-                                                                        <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row gap-2">
-                                                                            <Button 
-                                                                                size="sm" 
-                                                                                className="flex-1"
-                                                                                onClick={() => handlePracticeQuiz(topic)}
-                                                                                disabled={loadingTopic === topic}
-                                                                            >
-                                                                                {loadingTopic === topic ? (
-                                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-                                                                                ) : (
-                                                                                    <ClipboardCheck className="mr-2 h-4 w-4" />
-                                                                                )}
-                                                                                Practice Quiz
-                                                                            </Button>
-                                                                            <Button size="sm" variant="secondary" className="flex-1" disabled>
-                                                                                <Target className="mr-2 h-4 w-4" />
-                                                                                Proficiency
-                                                                            </Button>
-                                                                        </CardFooter>
-                                                                    </Card>
-                                                                ))}
-                                                            </div>
-                                                        </AccordionContent>
-                                                    </AccordionItem>
-                                                ))}
-                                            </Accordion>
-                                        </AccordionContent>
-                                    </AccordionItem>
-                                ))}
-                            </Accordion>
-                        </CardContent>
-                    </AccordionContent>
-                 </Card>
-              </AccordionItem>
+              <Card key={examName}>
+                <CardHeader>
+                    <CardTitle className="text-2xl">{examName} Syllabus</CardTitle>
+                    <CardDescription>Browse subjects, chapters, and topics.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        {syllabus.subjects.map((subject) => {
+                            const Icon = subjectIcons[subject.name] || Atom;
+                            return (
+                                <Card key={subject.name} className="flex flex-col">
+                                    <CardHeader className="flex-row items-center gap-4 space-y-0">
+                                        <div className="p-3 bg-primary/10 rounded-full">
+                                            <Icon className="h-6 w-6 text-primary" />
+                                        </div>
+                                        <CardTitle>{subject.name}</CardTitle>
+                                    </CardHeader>
+                                    <CardContent className="flex-grow">
+                                        <Accordion type="multiple" className="w-full">
+                                            {subject.chapters.map((chapter, chapterIndex) => (
+                                                 <AccordionItem key={chapter.name} value={`chapter-${chapterIndex}`} className="border-b last:border-b-0">
+                                                    <AccordionTrigger className="text-sm py-3 hover:no-underline rounded-md px-3 hover:bg-accent">
+                                                        {chapter.name}
+                                                    </AccordionTrigger>
+                                                    <AccordionContent>
+                                                        <div className="pt-2 grid grid-cols-1 gap-3">
+                                                            {chapter.topics.map((topic) => (
+                                                                <Card key={topic} className="bg-background/50">
+                                                                    <CardHeader className="p-3">
+                                                                        <CardTitle className="text-sm font-normal">{topic}</CardTitle>
+                                                                    </CardHeader>
+                                                                    <CardFooter className="p-3 pt-0 flex flex-col sm:flex-row gap-2">
+                                                                        <Button 
+                                                                            size="sm" 
+                                                                            className="flex-1"
+                                                                            onClick={() => handlePracticeQuiz(topic)}
+                                                                            disabled={loadingTopic === topic}
+                                                                        >
+                                                                            {loadingTopic === topic ? (
+                                                                                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                            ) : (
+                                                                                <ClipboardCheck className="mr-2 h-4 w-4" />
+                                                                            )}
+                                                                            Practice
+                                                                        </Button>
+                                                                        <Button size="sm" variant="secondary" className="flex-1" disabled>
+                                                                            <Target className="mr-2 h-4 w-4" />
+                                                                            Proficiency
+                                                                        </Button>
+                                                                    </CardFooter>
+                                                                </Card>
+                                                            ))}
+                                                        </div>
+                                                    </AccordionContent>
+                                                </AccordionItem>
+                                            ))}
+                                        </Accordion>
+                                    </CardContent>
+                                </Card>
+                            )
+                        })}
+                    </div>
+                </CardContent>
+              </Card>
             );
           })}
-        </Accordion>
+        </div>
       ) : (
         <Card>
             <CardContent className="py-16 flex flex-col items-center justify-center text-center gap-4">
