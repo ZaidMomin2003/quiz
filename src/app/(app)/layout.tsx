@@ -6,7 +6,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter, usePathname } from 'next/navigation';
 import { useState, useEffect } from 'react';
-import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark, BookMarked } from 'lucide-react';
 import Link from 'next/link';
 import { useTheme } from '@/components/theme-provider';
 import { Switch } from '@/components/ui/switch';
@@ -115,6 +115,14 @@ export default function AppLayout({
                     <a href="/history">
                        <History />
                         <span>History</span>
+                    </a>
+                   </SidebarMenuButton>
+                 </SidebarMenuItem>
+                 <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Syllabus">
+                    <a href="/syllabus">
+                       <BookMarked />
+                        <span>Syllabus</span>
                     </a>
                    </SidebarMenuButton>
                  </SidebarMenuItem>
