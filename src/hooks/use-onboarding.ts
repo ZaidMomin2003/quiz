@@ -32,13 +32,15 @@ export function useOnboarding() {
   }, [user]);
 
   const updateOnboardingData = (newData: Partial<OnboardingData>) => {
-    const updatedData = { ...onboardingData, ...newData };
-    
     // Ensure completedSteps is an array and add the current step
     const completed = Array.isArray(onboardingData.completedSteps) ? onboardingData.completedSteps : [];
-    if (!completed.includes(currentStep)) {
-        updatedData.completedSteps = [...completed, currentStep];
-    }
+    const newCompletedSteps = completed.includes(currentStep) ? completed : [...completed, currentStep];
+
+    const updatedData = { 
+        ...onboardingData, 
+        ...newData,
+        completedSteps: newCompletedSteps,
+    };
     
     setOnboardingData(updatedData);
     if (user) {
@@ -47,20 +49,6 @@ export function useOnboarding() {
   };
   
   const goToNextStep = () => {
-    // First, mark the current step as completed
-    const completed = Array.isArray(onboardingData.completedSteps) ? onboardingData.completedSteps : [];
-    if (!completed.includes(currentStep)) {
-        const updatedData = {
-            ...onboardingData,
-            completedSteps: [...completed, currentStep]
-        };
-        setOnboardingData(updatedData);
-        if (user) {
-            localStorage.setItem(`onboarding_data_${user.email}`, JSON.stringify(updatedData));
-        }
-    }
-
-    // Then, navigate to the next step
     const nextStepIndex = currentStepIndex + 1;
     if (nextStepIndex < ONBOARDING_STEPS.length) {
       router.push(`/onboarding/${ONBOARDING_STEPS[nextStepIndex]}`);
