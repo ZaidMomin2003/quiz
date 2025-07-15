@@ -13,8 +13,7 @@ export default function ProfilePage() {
 
     if (!user) return null;
 
-    const username = user.email.split('@')[0];
-    const userInitial = username.charAt(0).toUpperCase();
+    const userInitial = user.name.charAt(0).toUpperCase();
 
     return (
         <div className="space-y-6">
@@ -29,7 +28,7 @@ export default function ProfilePage() {
                         <CardContent className="space-y-4">
                              <div className="space-y-2">
                                 <Label htmlFor="username">Username</Label>
-                                <Input id="username" defaultValue={username} />
+                                <Input id="username" defaultValue={user.name} />
                             </div>
                             <div className="space-y-2">
                                 <Label htmlFor="email">Email</Label>
@@ -53,7 +52,7 @@ export default function ProfilePage() {
                                 <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
                                 <AvatarFallback className="text-3xl">{userInitial}</AvatarFallback>
                             </Avatar>
-                            <CardTitle>{username}</CardTitle>
+                            <CardTitle>{user.name}</CardTitle>
                             <CardDescription>{user.email}</CardDescription>
                         </CardHeader>
                         <CardContent className="p-0">
@@ -65,7 +64,7 @@ export default function ProfilePage() {
                         <CardHeader>
                             <CardTitle>Account Settings</CardTitle>
                              <CardDescription>Manage your account settings.</CardDescription>
-                        </CardHeader>
+                        </Header>
                         <CardContent>
                             <Button variant="destructive" className="w-full">Delete Account</Button>
                         </CardContent>

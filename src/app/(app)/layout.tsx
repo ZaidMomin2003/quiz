@@ -89,11 +89,11 @@ export default function AppLayout({
                 <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent">
                    <Avatar className="h-8 w-8">
                      <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
-                      <AvatarFallback>{user.email.charAt(0).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                    </Avatar>
                    <div className="flex flex-col group-data-[collapsible=icon]:hidden">
                      <span className="text-sm font-medium text-sidebar-foreground">
-                       {user.email.split('@')[0]}
+                       {user.name}
                      </span>
                      <span className="text-xs text-sidebar-foreground/70">
                         {user.email}
