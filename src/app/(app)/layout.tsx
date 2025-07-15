@@ -1,12 +1,12 @@
 
 // src/app/(app)/layout.tsx
 'use client';
-import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuBadge } from '@/components/ui/sidebar';
 import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
 import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
-import { useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 import { useTheme } from '@/components/theme-provider';
@@ -21,6 +21,7 @@ export default function AppLayout({
   const { user, loading, logout } = useAuth();
   const router = useRouter();
   const { theme, setTheme } = useTheme();
+  const [bookmarkCount, setBookmarkCount] = useState(0);
 
 
   useEffect(() => {
@@ -28,6 +29,35 @@ export default function AppLayout({
       router.push('/login');
     }
   }, [user, loading, router]);
+
+  useEffect(() => {
+    const updateBookmarkCount = () => {
+        const storedBookmarks = localStorage.getItem('bookmarks');
+        if (storedBookmarks) {
+            try {
+                const bookmarks = JSON.parse(storedBookmarks);
+                setBookmarkCount(Array.isArray(bookmarks) ? bookmarks.length : 0);
+            } catch {
+                setBookmarkCount(0);
+            }
+        } else {
+            setBookmarkCount(0);
+        }
+    }
+
+    updateBookmarkCount();
+
+    // Listen for changes in localStorage from other tabs/windows
+    window.addEventListener('storage', updateBookmarkCount);
+
+    // Also listen for a custom event for same-tab updates
+    window.addEventListener('bookmarksUpdated', updateBookmarkCount);
+
+    return () => {
+        window.removeEventListener('storage', updateBookmarkCount);
+        window.removeEventListener('bookmarksUpdated', updateBookmarkCount);
+    }
+  }, []);
 
   if (loading || !user) {
     return (
@@ -79,12 +109,13 @@ export default function AppLayout({
                    </SidebarMenuButton>
                  </SidebarMenuItem>
                   <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Bookmarks">
-                    <a href="/bookmarks">
-                       <Bookmark />
-                        <span>Bookmarks</span>
-                    </a>
-                   </SidebarMenuButton>
+                    <SidebarMenuButton asChild tooltip="Bookmarks">
+                        <a href="/bookmarks">
+                            <Bookmark />
+                            <span>Bookmarks</span>
+                        </a>
+                    </SidebarMenuButton>
+                    {bookmarkCount > 0 && <SidebarMenuBadge>{bookmarkCount}</SidebarMenuBadge>}
                  </SidebarMenuItem>
               </SidebarMenu>
             </div>

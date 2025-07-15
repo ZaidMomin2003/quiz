@@ -101,6 +101,8 @@ export default function LearnQuizPage() {
             const updatedBookmarks = [...existingBookmarks, newBookmark];
             localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
             setBookmarkedTimestamps(prev => new Set(prev).add(currentQuestionIndex));
+             // Dispatch a custom event to notify other components (like the layout) of the change
+            window.dispatchEvent(new CustomEvent('bookmarksUpdated'));
             toast({
               title: "Bookmarked!",
               description: "The explanation has been saved to your bookmarks.",

@@ -31,6 +31,8 @@ export default function BookmarksPage() {
     );
     setBookmarks(updatedBookmarks);
     localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+    // Dispatch a custom event to notify other components (like the layout) of the change
+    window.dispatchEvent(new CustomEvent('bookmarksUpdated'));
   };
   
   if (!hydrated) {
