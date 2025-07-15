@@ -10,8 +10,10 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { analyzeQuizAction } from '../actions';
-import { CheckCircle, XCircle, BrainCircuit, Target, Loader2 } from 'lucide-react';
+import { CheckCircle, XCircle, BrainCircuit, Target, Loader2, Lightbulb } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+
 
 type QuizData = {
     topic: string;
@@ -19,9 +21,17 @@ type QuizData = {
     mcqs: Mcq[];
 };
 
+type Explanation = {
+    question: string;
+    userAnswer: string;
+    correctAnswer: string;
+    explanation: string;
+}
+
 type Analysis = {
     strongConcepts: string[];
     weakConcepts: string[];
+    detailedExplanations: Explanation[];
 };
 
 export default function QuizPage() {
@@ -40,9 +50,8 @@ export default function QuizPage() {
         if (storedData) {
             try {
                 const parsedData = JSON.parse(storedData);
-                // Ensure difficulty is part of the data, add default if not
                 if (!parsedData.difficulty) {
-                    parsedData.difficulty = 'easy';
+                    parsedData.difficulty = 'medium';
                 }
                 setQuizData(parsedData);
             } catch (error) {
@@ -54,7 +63,7 @@ export default function QuizPage() {
         }
     }, [router]);
 
-    const saveQuizToHistory = (score: number) => {
+    const saveQuizToHistory = (score: number, analysisResult: Analysis | null) => {
         if (!quizData) return;
 
         const newHistoryItem: QuizHistoryItem = {
@@ -71,6 +80,14 @@ export default function QuizPage() {
         const history = existingHistory ? JSON.parse(existingHistory) : [];
         history.push(newHistoryItem);
         localStorage.setItem('quizHistory', JSON.stringify(history));
+
+        // Save weak concepts
+        if (analysisResult?.weakConcepts && analysisResult.weakConcepts.length > 0) {
+            const existingWeakConcepts = localStorage.getItem('weakConcepts');
+            const weakConceptsSet = existingWeakConcepts ? new Set(JSON.parse(existingWeakConcepts)) : new Set();
+            analysisResult.weakConcepts.forEach(concept => weakConceptsSet.add(concept));
+            localStorage.setItem('weakConcepts', JSON.stringify(Array.from(weakConceptsSet)));
+        }
     };
 
     const handleNextQuestion = async () => {
@@ -86,7 +103,6 @@ export default function QuizPage() {
                 setIsAnalyzing(true);
                 
                 const score = calculateScore(newAnswers);
-                saveQuizToHistory(score);
 
                 const result = await analyzeQuizAction({
                     questions: quizData!.mcqs.map(mcq => ({
@@ -96,8 +112,13 @@ export default function QuizPage() {
                     })),
                     userAnswers: newAnswers
                 });
+                
                 if (result.analysis) {
                     setAnalysis(result.analysis);
+                    saveQuizToHistory(score, result.analysis);
+                } else {
+                    // Save history even if analysis fails
+                    saveQuizToHistory(score, null);
                 }
                 setIsAnalyzing(false);
             }
@@ -201,20 +222,48 @@ export default function QuizPage() {
                     <CardHeader>
                         <CardTitle>Question Breakdown</CardTitle>
                     </CardHeader>
-                    <CardContent className="space-y-6">
-                        {quizData.mcqs.map((mcq, index) => (
-                            <div key={index} className="p-4 border rounded-lg">
-                                <p className="font-semibold">{index + 1}. {mcq.question}</p>
-                                <div className="mt-2 text-sm space-y-1">
-                                    <p className={userAnswers[index] === mcq.correctAnswer ? 'text-green-500' : 'text-red-500'}>
-                                        Your answer: {userAnswers[index]} {userAnswers[index] === mcq.correctAnswer ? <CheckCircle className="inline h-4 w-4 ml-1" /> : <XCircle className="inline h-4 w-4 ml-1" />}
-                                    </p>
-                                    {userAnswers[index] !== mcq.correctAnswer && (
-                                        <p className="text-muted-foreground">Correct answer: {mcq.correctAnswer}</p>
-                                    )}
-                                </div>
-                            </div>
-                        ))}
+                    <CardContent className="space-y-2">
+                        <Accordion type="multiple" className="w-full">
+                        {quizData.mcqs.map((mcq, index) => {
+                            const userAnswer = userAnswers[index];
+                            const isCorrect = userAnswer === mcq.correctAnswer;
+                            const explanationData = analysis?.detailedExplanations.find(ex => ex.question === mcq.question);
+
+                            return (
+                                <AccordionItem key={index} value={`item-${index}`} className="border-b-0">
+                                    <div className="p-4 border rounded-lg">
+                                        <div className="flex items-center justify-between">
+                                             <p className="font-semibold">{index + 1}. {mcq.question}</p>
+                                             {isCorrect ? <CheckCircle className="h-5 w-5 text-green-500" /> : <XCircle className="h-5 w-5 text-red-500" />}
+                                        </div>
+                                        <div className="mt-2 text-sm space-y-1">
+                                            <p className={isCorrect ? 'text-green-500' : 'text-red-500'}>
+                                                Your answer: {userAnswer}
+                                            </p>
+                                            {!isCorrect && (
+                                                <p className="text-muted-foreground">Correct answer: {mcq.correctAnswer}</p>
+                                            )}
+                                        </div>
+                                        {!isCorrect && explanationData && (
+                                            <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline pt-2">
+                                                <div className="flex items-center gap-2">
+                                                    <Lightbulb className="h-4 w-4" /> 
+                                                    Show Explanation
+                                                </div>
+                                            </AccordionTrigger>
+                                        )}
+                                    </div>
+                                    <AccordionContent>
+                                        {explanationData && (
+                                             <div className="p-4 bg-accent/50 rounded-b-lg mt-[-8px]">
+                                                <p className="text-sm text-foreground">{explanationData.explanation}</p>
+                                             </div>
+                                        )}
+                                    </AccordionContent>
+                                </AccordionItem>
+                            )
+                        })}
+                        </Accordion>
                     </CardContent>
                 </Card>
 

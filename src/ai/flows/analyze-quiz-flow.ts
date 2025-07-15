@@ -1,7 +1,7 @@
 // src/ai/flows/analyze-quiz-flow.ts
 'use server';
 /**
- * @fileOverview A flow for analyzing a user's quiz performance to identify strong and weak concepts.
+ * @fileOverview A flow for analyzing a user's quiz performance to identify strong and weak concepts and provide explanations.
  *
  * - analyzeQuiz - A function that analyzes quiz results.
  * - AnalyzeQuizInput - The input type for the analyzeQuiz function.
@@ -41,6 +41,14 @@ const AnalyzeQuizOutputSchema = z.object({
     .describe(
       'A list of 2-3 concepts or topics the user should focus on improving, based on their incorrect answers.'
     ),
+  detailedExplanations: z.array(
+    z.object({
+        question: z.string().describe("The original question that was answered incorrectly."),
+        userAnswer: z.string().describe("The user's incorrect answer."),
+        correctAnswer: z.string().describe("The correct answer to the question."),
+        explanation: z.string().describe("A brief, clear explanation for why the correct answer is right and the user's answer was wrong."),
+    })
+  ).describe("An array of explanations for each question the user answered incorrectly.")
 });
 export type AnalyzeQuizOutput = z.infer<typeof AnalyzeQuizOutputSchema>;
 
@@ -59,9 +67,9 @@ const prompt = ai.definePrompt({
   output: {schema: AnalyzeQuizOutputSchema},
   prompt: `You are an expert tutor analyzing a student's quiz results. The quiz was on the topic of: {{{topic}}}.
 
-Based on the following list of questions and the student's answers, identify their conceptual strengths and weaknesses.
-
-Provide a list of 2-3 specific concepts or topics they seem to understand well (strongConcepts) and a list of 2-3 specific concepts they should review (weakConcepts). The concepts should be directly related to the questions they answered correctly or incorrectly.
+Based on the following list of questions and the student's answers, please do the following:
+1.  Identify their conceptual strengths and weaknesses. Provide a list of 2-3 specific concepts or topics they seem to understand well (strongConcepts) and a list of 2-3 specific concepts they should review (weakConcepts).
+2.  For each question that was answered **incorrectly**, provide a detailed explanation. The explanation should clearly state why the correct answer is correct.
 
 Quiz Results:
 {{#each results}}
@@ -91,8 +99,6 @@ const analyzeQuizFlow = ai.defineFlow(
       };
     });
 
-    // To get the overall topic, we'll ask the AI to infer it from the questions.
-    // This is a simple, single-shot prompt.
     const topicPrompt = `Based on these questions, what is the single, overall topic of this quiz? Give a short 2-5 word answer.
 
     Questions:

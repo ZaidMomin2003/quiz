@@ -1,4 +1,3 @@
-
 // src/app/(app)/dashboard/page.tsx
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
@@ -7,8 +6,8 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { generateMcqAction } from "@/app/actions";
-import { Loader2 } from "lucide-react";
+import { generateMcqAction, generateFromConceptsAction } from "@/app/actions";
+import { Loader2, BrainCircuit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import type { QuizHistoryItem } from '@/lib/types';
@@ -25,6 +24,8 @@ export default function DashboardPage() {
     const [questionCount, setQuestionCount] = useState(5);
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [isLoading, setIsLoading] = useState(false);
+    const [isWeaknessLoading, setIsWeaknessLoading] = useState(false);
+    const [weakConcepts, setWeakConcepts] = useState<string[]>([]);
     const [stats, setStats] = useState<DashboardStats>({
         quizzesTaken: 0,
         correctRatio: 0,
@@ -41,6 +42,12 @@ export default function DashboardPage() {
             const parsedHistory: QuizHistoryItem[] = JSON.parse(storedHistory);
             calculateStats(parsedHistory);
         }
+        
+        const storedWeakConcepts = localStorage.getItem('weakConcepts');
+        if (storedWeakConcepts) {
+            setWeakConcepts(JSON.parse(storedWeakConcepts));
+        }
+
     }, []);
 
     const calculateStats = (historyItems: QuizHistoryItem[]) => {
@@ -72,7 +79,7 @@ export default function DashboardPage() {
         });
     };
 
-    const canGenerate = topic.trim().length > 1 && !isLoading;
+    const canGenerate = topic.trim().length > 1 && !isLoading && !isWeaknessLoading;
 
     async function handleGenerateQuiz() {
         if (!canGenerate) return;
@@ -85,6 +92,29 @@ export default function DashboardPage() {
             toast({ variant: "destructive", title: "Error", description: result.error });
         } else if (result.mcqs) {
             const quizData = { topic, difficulty, mcqs: result.mcqs };
+            sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
+            router.push('/quiz');
+        }
+    }
+
+    async function handlePracticeWeaknesses() {
+        if (weakConcepts.length === 0 || isWeaknessLoading) return;
+        setIsWeaknessLoading(true);
+
+        const result = await generateFromConceptsAction({
+            concepts: weakConcepts,
+            questionCount: 5, // Or make this configurable
+        });
+
+        setIsWeaknessLoading(false);
+        if (result.error) {
+             toast({ variant: "destructive", title: "Error", description: result.error });
+        } else if (result.mcqs) {
+            const quizData = {
+                topic: "Practice Your Weaknesses",
+                difficulty: 'medium',
+                mcqs: result.mcqs
+            };
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
             router.push('/quiz');
         }
@@ -132,6 +162,30 @@ export default function DashboardPage() {
                     </CardContent>
                 </Card>
             </div>
+
+            {weakConcepts.length > 0 && (
+                 <Card className="bg-orange-500/10 border-orange-500/30">
+                    <CardHeader>
+                        <div className="flex items-center gap-4">
+                             <BrainCircuit className="h-8 w-8 text-orange-400" />
+                            <div>
+                                <CardTitle>Practice Your Weaknesses</CardTitle>
+                                <CardDescription className="text-foreground/80">We've identified some areas you can work on. Take a custom quiz to improve!</CardDescription>
+                            </div>
+                        </div>
+                    </CardHeader>
+                    <CardContent>
+                        <Button 
+                            className="w-full bg-orange-500 hover:bg-orange-500/90" 
+                            onClick={handlePracticeWeaknesses} 
+                            disabled={isWeaknessLoading || isLoading}
+                        >
+                             {isWeaknessLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                             {isWeaknessLoading ? 'Building Your Quiz...' : 'Generate Practice Quiz'}
+                        </Button>
+                    </CardContent>
+                </Card>
+            )}
 
             <Card>
                 <CardHeader className="bg-[#8A2BE2] text-white rounded-t-lg">
