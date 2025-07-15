@@ -56,11 +56,11 @@ export function AuthCarousel() {
                 loop: true,
             }}
             orientation="vertical"
-            className="w-full max-w-md"
+            className="w-full max-w-md h-full"
             >
-            <CarouselContent className="-mt-4 h-[250px]">
+            <CarouselContent className="-mt-4 h-full">
                 {testimonials.map((testimonial, index) => (
-                <CarouselItem key={index} className="pt-4 md:basis-1/2">
+                <CarouselItem key={index} className="pt-4 md:basis-1/3">
                     <div className="p-1 h-full">
                         <Card className="bg-white/10 text-white border-0 h-full flex flex-col">
                             <CardContent className="p-4 flex-grow">
