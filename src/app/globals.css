@@ -94,3 +94,31 @@ body {
     background-position: top left;
   }
 }
+
+@layer components {
+  .border-beam {
+    @apply relative;
+  }
+  .border-beam::before {
+    content: "";
+    @apply absolute -inset-[1px] rounded-[inherit] -z-10;
+    background: conic-gradient(
+      from var(--angle),
+      hsl(var(--primary) / 0.2),
+      hsl(var(--primary) / 1),
+      hsl(var(--primary) / 0.2)
+    );
+    animation: border-beam 5s linear infinite;
+    animation-play-state: paused;
+  }
+
+  .border-beam:hover::before {
+    animation-play-state: running;
+  }
+}
+
+@property --angle {
+  syntax: "<angle>";
+  initial-value: 0deg;
+  inherits: false;
+}
