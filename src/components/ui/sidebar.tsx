@@ -49,7 +49,7 @@ function useSidebar() {
 
 const SidebarProvider = React.forwardRef<
   HTMLDivElement,
-  Omit<React.ComponentProps<"div">, "params"> & {
+  React.ComponentProps<"div"> & {
     defaultOpen?: boolean
     open?: boolean
     onOpenChange?: (open: boolean) => void
@@ -63,6 +63,8 @@ const SidebarProvider = React.forwardRef<
       className,
       style,
       children,
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      params,
       ...props
     },
     ref
