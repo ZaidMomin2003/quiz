@@ -326,7 +326,7 @@ export default function QuizPage() {
                 <div className="flex justify-between items-center text-sm text-muted-foreground">
                    <p>Question {currentQuestionIndex + 1} of {quizData.mcqs.length}</p>
                    {timeLeft !== null && (
-                        <div className="flex items-center gap-2 font-mono text-base font-semibold">
+                        <div className="flex items-center gap-2 font-mono text-base font-semibold bg-secondary text-secondary-foreground px-3 py-1 rounded-full border">
                             <Clock className="h-4 w-4" />
                             <span>{formatTime(timeLeft)}</span>
                         </div>
