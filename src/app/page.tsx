@@ -54,7 +54,7 @@ export default function Home() {
 
   return (
     <PublicPageLayout>
-        <div className="flex flex-col items-center overflow-x-hidden -mt-12">
+        <div className="flex flex-col items-center">
 
         {/* Hero Section */}
         <section className="w-full grid-bg relative">
