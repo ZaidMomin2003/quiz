@@ -48,7 +48,7 @@ export const syllabusData = {
           { name: 'Electrochemistry', topics: ['Redox reactions, conductance in electrolytic solutions', 'Electrolytic cells and Galvanic cells', 'Lead accumulator, fuel cells'] },
           { name: 'Chemical Kinetics', topics: ['Rate of a reaction (average and instantaneous)', 'Factors affecting rates of reaction', 'Order and molecularity of a reaction'] },
           { name: 'Surface Chemistry', topics: ['Adsorption', 'Catalysis', 'Colloidal state'] },
-          { name:_('General Principles and Processes of Isolation of Elements'), topics: ['Principles and methods of extraction', 'Thermodynamic principles of metallurgy'] },
+          { name: 'General Principles and Processes of Isolation of Elements', topics: ['Principles and methods of extraction', 'Thermodynamic principles of metallurgy'] },
           { name: 'p- Block Elements', topics: ['Group 15 elements', 'Group 16 elements', 'Group 17 elements', 'Group 18 elements'] },
           { name: 'd and f Block Elements', topics: ['General introduction, electronic configuration, occurrence and characteristics of transition metals', 'Lanthanoids', 'Actinoids'] },
           { name: 'Coordination Compounds', topics: ['Introduction, ligands, coordination number, colour, magnetic properties and shapes', 'IUPAC nomenclature of mononuclear coordination compounds'] },
