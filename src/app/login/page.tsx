@@ -11,7 +11,7 @@ export default function LoginPage() {
         <PublicPageLayout showHeader={false} showFooter={false}>
             <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
                 <div className="hidden bg-muted lg:block">
-                   <div className="flex flex-col justify-between h-full p-8 text-white bg-gradient-to-br from-gray-900 to-gray-800">
+                   <div className="flex flex-col justify-between h-full p-8 text-white bg-black">
                         <Link className="flex items-center gap-2 font-semibold" href="/">
                             <Bot className="h-6 w-6" />
                             <span className="font-headline text-xl">QuizForge</span>
