@@ -1,4 +1,3 @@
-
 // src/app/(app)/syllabus/page.tsx
 'use client';
 
@@ -56,12 +55,12 @@ export default function SyllabusPage() {
     return undefined;
   };
 
-  const handlePracticeQuiz = async (topic: string, examName: string) => {
+  const handlePracticeQuiz = async (topic: string) => {
     setLoadingTopic(topic);
     const difficulty = 'hard';
 
     const result = await generateMcqAction({ 
-        topic: `${topic} (for ${examName})`, 
+        topic: topic, 
         questionCount: 20, 
         difficulty: difficulty 
     });
@@ -128,7 +127,7 @@ export default function SyllabusPage() {
                                                                             <Button 
                                                                                 size="sm" 
                                                                                 className="flex-1"
-                                                                                onClick={() => handlePracticeQuiz(topic, examName)}
+                                                                                onClick={() => handlePracticeQuiz(topic)}
                                                                                 disabled={loadingTopic === topic}
                                                                             >
                                                                                 {loadingTopic === topic ? (

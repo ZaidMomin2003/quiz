@@ -54,6 +54,14 @@ const generateMcqFlow = ai.defineFlow(
     name: 'generateMcqFlow',
     inputSchema: GenerateMcqInputSchema,
     outputSchema: GenerateMcqOutputSchema,
+    config: {
+        safetySettings: [
+            {
+                category: 'HARM_CATEGORY_DANGEROUS_CONTENT',
+                threshold: 'BLOCK_NONE',
+            }
+        ]
+    }
   },
   async input => {
     const {output} = await prompt(input);
