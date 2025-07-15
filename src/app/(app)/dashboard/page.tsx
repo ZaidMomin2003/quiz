@@ -155,25 +155,25 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
-            <Card className="relative shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow duration-300 bg-[#00CC99] text-primary-foreground border-0">
+            <Card className="relative shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow duration-300 bg-[#00CC99] text-black border-0">
                 <CardHeader>
-                    <CardTitle className="text-white">Create Your Next Challenge</CardTitle>
-                    <CardDescription className="text-white/80">Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
+                    <CardTitle>Create Your Next Challenge</CardTitle>
+                    <CardDescription className="text-black/80">Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
                 </CardHeader>
                 <CardContent className="space-y-6">
                     <div className="space-y-2">
-                        <Label htmlFor="topic-input" className="text-white">What topic do you want to practice today?</Label>
+                        <Label htmlFor="topic-input">What topic do you want to practice today?</Label>
                         <Input 
                             id="topic-input"
                             placeholder="e.g., The Renaissance, JavaScript Promises, or Quantum Physics" 
-                            className="flex-grow bg-white/20 text-white placeholder:text-white/70 border-white/50 focus:bg-white/30 focus-visible:ring-white"
+                            className="flex-grow bg-white/20 text-black placeholder:text-black/70 border-black/50 focus:bg-white/30 focus-visible:ring-black"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                         />
                     </div>
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div className="space-y-2">
-                            <Label htmlFor="question-count" className="text-white">Number of Questions</Label>
+                            <Label htmlFor="question-count">Number of Questions</Label>
                              <Input 
                                 id="question-count"
                                 type="number"
@@ -181,13 +181,13 @@ export default function DashboardPage() {
                                 onChange={(e) => setQuestionCount(Math.min(10, Math.max(1, parseInt(e.target.value, 10) || 1)))}
                                 min={1}
                                 max={10}
-                                className="bg-white/20 text-white placeholder:text-white/70 border-white/50 focus:bg-white/30 focus-visible:ring-white"
+                                className="bg-white/20 text-black placeholder:text-black/70 border-black/50 focus:bg-white/30 focus-visible:ring-black"
                             />
                         </div>
                         <div className="space-y-2">
-                             <Label htmlFor="difficulty" className="text-white">Difficulty</Label>
+                             <Label htmlFor="difficulty">Difficulty</Label>
                              <Select value={difficulty} onValueChange={(value) => setDifficulty(value as 'easy' | 'medium' | 'hard')}>
-                                <SelectTrigger id="difficulty" className="bg-white/20 text-white border-white/50 focus:bg-white/30 focus:ring-white">
+                                <SelectTrigger id="difficulty" className="bg-white/20 text-black border-black/50 focus:bg-white/30 focus:ring-black">
                                     <SelectValue placeholder="Select difficulty" />
                                 </SelectTrigger>
                                 <SelectContent>
@@ -198,7 +198,7 @@ export default function DashboardPage() {
                             </Select>
                         </div>
                     </div>
-                     <Button size="lg" className="w-full bg-white text-[#00CC99] hover:bg-gray-200" disabled={!canGenerate} onClick={handleGenerateQuiz}>
+                     <Button size="lg" className="w-full bg-white text-black hover:bg-gray-200" disabled={!canGenerate} onClick={handleGenerateQuiz}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
