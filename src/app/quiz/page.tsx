@@ -11,7 +11,7 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { analyzeQuizAction } from '../actions';
 import { CheckCircle, XCircle, BrainCircuit, Target, Loader2 } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { motion, AnimatePresence } from 'framer-motion';
 
 type QuizData = {
     topic: string;
@@ -84,29 +84,37 @@ export default function QuizPage() {
 
     if (quizState === 'instructions') {
         return (
-            <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] text-center">
+            <motion.div 
+                initial={{ opacity: 0, y: 20 }}
+                animate={{ opacity: 1, y: 0 }}
+                transition={{ duration: 0.5 }}
+                className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] text-center p-4">
                 <Card className="max-w-2xl w-full">
                     <CardHeader>
                         <CardTitle className="text-3xl">Quiz on {quizData.topic}</CardTitle>
                         <CardDescription>You are about to start a quiz with {quizData.mcqs.length} questions.</CardDescription>
                     </CardHeader>
                     <CardContent className="space-y-4">
-                        <p>Read each question carefully and select the best answer.</p>
-                        <p>Your results and a concept analysis will be provided at the end.</p>
+                        <p>Read each question carefully and select the best answer for each one.</p>
+                        <p>Your results and a personalized concept analysis will be provided at the end.</p>
                         <p className="font-bold">Good luck!</p>
                     </CardContent>
                     <CardFooter>
                         <Button size="lg" className="w-full" onClick={() => setQuizState('in-progress')}>Start Quiz</Button>
                     </CardFooter>
                 </Card>
-            </div>
+            </motion.div>
         );
     }
     
     if (quizState === 'submitted') {
         const score = calculateScore();
         return (
-             <div className="max-w-4xl mx-auto space-y-8 my-8">
+             <motion.div 
+                initial={{ opacity: 0 }}
+                animate={{ opacity: 1 }}
+                transition={{ duration: 0.5 }}
+                className="max-w-4xl mx-auto space-y-8 my-8 p-4">
                 <Card className="text-center">
                      <CardHeader>
                         <CardTitle className="text-4xl">Quiz Complete!</CardTitle>
@@ -128,25 +136,25 @@ export default function QuizPage() {
                 {analysis && (
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <Card>
-                            <CardHeader className="flex flex-row items-center gap-2">
+                            <CardHeader className="flex flex-row items-center gap-3">
                                 <Target className="h-6 w-6 text-green-500" />
                                 <CardTitle>Strong Concepts</CardTitle>
                             </CardHeader>
-                             <CardContent className="space-y-2">
-                                {analysis.strongConcepts.map((concept, i) => (
-                                    <p key={i} className="text-muted-foreground">{concept}</p>
-                                ))}
+                             <CardContent className="space-y-2 pl-9">
+                                {analysis.strongConcepts.length > 0 ? analysis.strongConcepts.map((concept, i) => (
+                                    <p key={i} className="text-muted-foreground">- {concept}</p>
+                                )) : <p className="text-muted-foreground">No specific strong concepts identified.</p>}
                             </CardContent>
                         </Card>
                         <Card>
-                            <CardHeader className="flex flex-row items-center gap-2">
+                            <CardHeader className="flex flex-row items-center gap-3">
                                  <BrainCircuit className="h-6 w-6 text-orange-500" />
                                 <CardTitle>Areas for Improvement</CardTitle>
                             </CardHeader>
-                             <CardContent className="space-y-2">
-                                {analysis.weakConcepts.map((concept, i) => (
-                                    <p key={i} className="text-muted-foreground">{concept}</p>
-                                ))}
+                             <CardContent className="space-y-2 pl-9">
+                                {analysis.weakConcepts.length > 0 ? analysis.weakConcepts.map((concept, i) => (
+                                    <p key={i} className="text-muted-foreground">- {concept}</p>
+                                )) : <p className="text-muted-foreground">No specific areas for improvement identified. Great job!</p>}
                             </CardContent>
                         </Card>
                     </div>
@@ -184,32 +192,42 @@ export default function QuizPage() {
     const progress = ((currentQuestionIndex + 1) / quizData.mcqs.length) * 100;
     
     return (
-        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)]">
+        <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] p-4">
             <div className="w-full max-w-2xl space-y-6">
                 <div>
                    <p className="text-center text-muted-foreground text-sm mb-2">Question {currentQuestionIndex + 1} of {quizData.mcqs.length}</p>
                    <Progress value={progress} />
                 </div>
-
-                <Card>
-                    <CardHeader>
-                        <CardTitle className="text-2xl">{currentMcq.question}</CardTitle>
-                    </CardHeader>
-                    <CardContent>
-                         <RadioGroup
-                            onValueChange={(value) => setSelectedAnswer(value)}
-                            value={selectedAnswer ?? ''}
-                            className="space-y-4"
-                         >
-                            {currentMcq.options.map((option, i) => (
-                                <Label key={i} htmlFor={`q${currentQuestionIndex}-o${i}`} className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer hover:bg-accent has-[:checked]:bg-primary/20 has-[:checked]:border-primary">
-                                    <RadioGroupItem value={option} id={`q${currentQuestionIndex}-o${i}`} />
-                                    <span>{option}</span>
-                                </Label>
-                            ))}
-                        </RadioGroup>
-                    </CardContent>
-                </Card>
+                
+                <AnimatePresence mode="wait">
+                    <motion.div
+                        key={currentQuestionIndex}
+                        initial={{ opacity: 0, x: 50 }}
+                        animate={{ opacity: 1, x: 0 }}
+                        exit={{ opacity: 0, x: -50 }}
+                        transition={{ duration: 0.3 }}
+                    >
+                        <Card>
+                            <CardHeader>
+                                <CardTitle className="text-2xl">{currentMcq.question}</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <RadioGroup
+                                    onValueChange={(value) => setSelectedAnswer(value)}
+                                    value={selectedAnswer ?? ''}
+                                    className="space-y-4"
+                                >
+                                    {currentMcq.options.map((option, i) => (
+                                        <Label key={i} htmlFor={`q${currentQuestionIndex}-o${i}`} className="flex items-center space-x-3 p-4 border rounded-lg cursor-pointer transition-colors hover:bg-accent has-[:checked]:bg-primary/20 has-[:checked]:border-primary">
+                                            <RadioGroupItem value={option} id={`q${currentQuestionIndex}-o${i}`} />
+                                            <span>{option}</span>
+                                        </Label>
+                                    ))}
+                                </RadioGroup>
+                            </CardContent>
+                        </Card>
+                    </motion.div>
+                </AnimatePresence>
 
                 <div className="flex justify-end">
                     <Button size="lg" onClick={handleNextQuestion} disabled={!selectedAnswer}>
