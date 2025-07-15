@@ -1,4 +1,3 @@
-
 // src/app/quiz/page.tsx
 'use client';
 
@@ -38,7 +37,12 @@ export default function QuizPage() {
     useEffect(() => {
         const storedData = sessionStorage.getItem('currentQuiz');
         if (storedData) {
-            setQuizData(JSON.parse(storedData));
+            try {
+                setQuizData(JSON.parse(storedData));
+            } catch (error) {
+                console.error("Failed to parse quiz data from session storage", error);
+                router.push('/dashboard');
+            }
         } else {
             // If no quiz data is found, redirect to dashboard
             router.push('/dashboard');
@@ -57,7 +61,11 @@ export default function QuizPage() {
                 setQuizState('submitted');
                 setIsAnalyzing(true);
                 const result = await analyzeQuizAction({
-                    questions: quizData!.mcqs,
+                    questions: quizData!.mcqs.map(mcq => ({
+                        question: mcq.question,
+                        options: mcq.options,
+                        correctAnswer: mcq.correctAnswer,
+                    })),
                     userAnswers: newAnswers
                 });
                 if (result.analysis) {
@@ -185,7 +193,7 @@ export default function QuizPage() {
                 <div className="text-center">
                     <Button onClick={() => router.push('/dashboard')}>Back to Dashboard</Button>
                 </div>
-            </div>
+            </motion.div>
         );
     }
     
