@@ -1,6 +1,6 @@
 // src/app/(app)/onboarding/[step]/page.tsx
 'use client';
-import { useRouter } from 'next/navigation';
+import { useRouter, useParams } from 'next/navigation';
 import { useOnboarding } from '@/hooks/use-onboarding';
 import { WelcomeStep } from '@/components/onboarding/welcome-step';
 import { GoalStep } from '@/components/onboarding/goal-step';
@@ -8,9 +8,10 @@ import { ExamsStep } from '@/components/onboarding/exams-step';
 import { FinishStep } from '@/components/onboarding/finish-step';
 import { useEffect, useState } from 'react';
 
-export default function OnboardingStepPage({ params }: { params: { step: string } }) {
+export default function OnboardingStepPage() {
   const router = useRouter();
-  const { step } = params;
+  const params = useParams();
+  const step = Array.isArray(params.step) ? params.step[0] : params.step;
   const [isReady, setIsReady] = useState(false);
   const {
     onboardingData,
