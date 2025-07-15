@@ -4,7 +4,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { LearnMcq } from '@/lib/types';
+import type { LearnMcq, BookmarkItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -12,8 +12,10 @@ import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { Badge } from '@/components/ui/badge';
 import { cn } from '@/lib/utils';
-import { CheckCircle, XCircle, Lightbulb, Loader2, PartyPopper } from 'lucide-react';
+import { CheckCircle, XCircle, Lightbulb, Loader2, PartyPopper, Bookmark as BookmarkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
+import { useToast } from "@/hooks/use-toast";
+
 
 type LearnQuizData = {
     topic: string;
@@ -22,12 +24,15 @@ type LearnQuizData = {
 
 export default function LearnQuizPage() {
     const router = useRouter();
+    const { toast } = useToast();
     const [quizData, setQuizData] = useState<LearnQuizData | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
     const [isAnswered, setIsAnswered] = useState(false);
     const [correctCount, setCorrectCount] = useState(0);
     const [quizState, setQuizState] = useState<'loading' | 'active' | 'finished'>('loading');
+    const [bookmarkedTimestamps, setBookmarkedTimestamps] = useState<Set<number>>(new Set());
+
 
     useEffect(() => {
         const storedData = sessionStorage.getItem('learnQuiz');
@@ -55,6 +60,8 @@ export default function LearnQuizPage() {
     
     const currentMcq = quizData.mcqs[currentQuestionIndex];
     const isCorrect = selectedAnswer === currentMcq.correctAnswer;
+    const isBookmarked = bookmarkedTimestamps.has(currentQuestionIndex);
+
 
     const handleAnswerSubmit = () => {
         if (!selectedAnswer) return;
@@ -71,6 +78,39 @@ export default function LearnQuizPage() {
             setIsAnswered(false);
         } else {
             setQuizState('finished');
+        }
+    };
+
+    const handleBookmark = () => {
+        if (!quizData) return;
+
+        const newBookmark: BookmarkItem = {
+            topic: quizData.topic,
+            question: currentMcq.question,
+            correctAnswer: currentMcq.correctAnswer,
+            explanation: currentMcq.explanation,
+            timestamp: Date.now() + currentQuestionIndex, // ensure uniqueness
+        };
+
+        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        
+        // Prevent duplicates for the same question in the same session
+        const alreadyExists = existingBookmarks.some(b => b.question === newBookmark.question);
+        
+        if (!alreadyExists) {
+            const updatedBookmarks = [...existingBookmarks, newBookmark];
+            localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+            setBookmarkedTimestamps(prev => new Set(prev).add(currentQuestionIndex));
+            toast({
+              title: "Bookmarked!",
+              description: "The explanation has been saved to your bookmarks.",
+            });
+        } else {
+            toast({
+                variant: 'destructive',
+                title: "Already Bookmarked",
+                description: "You've already saved this explanation.",
+            });
         }
     };
     
@@ -176,6 +216,16 @@ export default function LearnQuizPage() {
                                     <Lightbulb className={cn("h-6 w-6", isCorrect ? "text-green-500" : "text-red-500")} />
                                 </div>
                                 <CardTitle>{isCorrect ? "Correct!" : "Not Quite"}</CardTitle>
+                                <div className="flex-grow" />
+                                <Button
+                                    variant="ghost"
+                                    size="sm"
+                                    onClick={handleBookmark}
+                                    disabled={isBookmarked}
+                                >
+                                    <BookmarkIcon className={cn("mr-2 h-4 w-4", isBookmarked && "fill-current")}/>
+                                    {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+                                </Button>
                             </CardHeader>
                             <CardContent>
                                 <p className="text-muted-foreground">{currentMcq.explanation}</p>

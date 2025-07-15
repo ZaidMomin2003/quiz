@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppLayout({
@@ -70,6 +70,14 @@ export default function AppLayout({
                     <a href="/learn">
                        <BookOpen />
                         <span>Learn</span>
+                    </a>
+                   </SidebarMenuButton>
+                 </SidebarMenuItem>
+                  <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="Bookmarks">
+                    <a href="/bookmarks">
+                       <Bookmark />
+                        <span>Bookmarks</span>
                     </a>
                    </SidebarMenuButton>
                  </SidebarMenuItem>

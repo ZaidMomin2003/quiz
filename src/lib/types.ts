@@ -71,3 +71,11 @@ export type GenerateLearnQuizInput = {
 export type GenerateLearnQuizOutput = {
   mcqs: LearnMcq[];
 };
+
+export type BookmarkItem = {
+  topic: string;
+  question: string;
+  correctAnswer: string;
+  explanation: string;
+  timestamp: number;
+};
