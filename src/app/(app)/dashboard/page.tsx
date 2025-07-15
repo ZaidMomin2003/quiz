@@ -203,38 +203,40 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                     {history.length > 0 ? (
-                        <Table>
-                            <TableHeader>
-                                <TableRow>
-                                    <TableHead>Topic</TableHead>
-                                    <TableHead>Difficulty</TableHead>
-                                    <TableHead>Score</TableHead>
-                                    <TableHead>Date</TableHead>
-                                    <TableHead className="text-right">Action</TableHead>
-                                </TableRow>
-                            </TableHeader>
-                            <TableBody>
-                                {history.map((item) => (
-                                    <TableRow key={item.timestamp}>
-                                        <TableCell className="font-medium">{item.topic}</TableCell>
-                                        <TableCell>
-                                            <Badge variant={
-                                                item.difficulty === 'easy' ? 'secondary' : 
-                                                item.difficulty === 'medium' ? 'outline' : 'destructive'
-                                            } className="capitalize">{item.difficulty}</Badge>
-                                        </TableCell>
-                                        <TableCell>{item.score} / {item.totalQuestions}</TableCell>
-                                        <TableCell>{new Date(item.timestamp).toLocaleDateString()}</TableCell>
-                                        <TableCell className="text-right">
-                                            <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
-                                                <RefreshCw className="mr-2 h-4 w-4" />
-                                                Retake
-                                            </Button>
-                                        </TableCell>
+                        <div className="w-full overflow-x-auto">
+                            <Table>
+                                <TableHeader>
+                                    <TableRow>
+                                        <TableHead>Topic</TableHead>
+                                        <TableHead>Difficulty</TableHead>
+                                        <TableHead>Score</TableHead>
+                                        <TableHead>Date</TableHead>
+                                        <TableHead className="text-right">Action</TableHead>
                                     </TableRow>
-                                ))}
-                            </TableBody>
-                        </Table>
+                                </TableHeader>
+                                <TableBody>
+                                    {history.map((item) => (
+                                        <TableRow key={item.timestamp}>
+                                            <TableCell className="font-medium">{item.topic}</TableCell>
+                                            <TableCell>
+                                                <Badge variant={
+                                                    item.difficulty === 'easy' ? 'secondary' : 
+                                                    item.difficulty === 'medium' ? 'outline' : 'destructive'
+                                                } className="capitalize">{item.difficulty}</Badge>
+                                            </TableCell>
+                                            <TableCell>{item.score} / {item.totalQuestions}</TableCell>
+                                            <TableCell>{new Date(item.timestamp).toLocaleDateString()}</TableCell>
+                                            <TableCell className="text-right">
+                                                <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
+                                                    <RefreshCw className="mr-2 h-4 w-4" />
+                                                    Retake
+                                                </Button>
+                                            </TableCell>
+                                        </TableRow>
+                                    ))}
+                                </TableBody>
+                            </Table>
+                        </div>
                     ) : (
                         <p className="text-center text-muted-foreground py-8">You haven't taken any quizzes yet. Generate one above to get started!</p>
                     )}
