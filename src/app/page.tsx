@@ -307,11 +307,9 @@ export default function Home() {
                     <Label htmlFor="message">Message</Label>
                     <Textarea id="message" placeholder="Your message..." rows={5} />
                   </div>
+                  <Button type="submit" className="w-full">Send Message</Button>
                 </form>
               </CardContent>
-              <CardFooter>
-                <Button type="submit" className="w-full">Send Message</Button>
-              </CardFooter>
             </Card>
           </div>
         </section>
