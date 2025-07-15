@@ -184,65 +184,88 @@ export default function Home() {
 
         {/* Pricing Section */}
         <section id="pricing" className="w-full py-20 md:py-28">
-          <div className="container mx-auto text-center">
-            <Badge variant="secondary" className="mb-2">Pricing</Badge>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Simple Plans for Everyone</h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-              Choose a plan that fits your needs. Start for free, and upgrade when you're ready for more power.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle>Basic</CardTitle>
+          <div className="container mx-auto">
+            <div className="text-center max-w-2xl mx-auto">
+                <Badge variant="secondary" className="mb-2">Pricing</Badge>
+                <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Choose the Perfect Plan for Your Needs</h2>
+                <p className="text-muted-foreground mb-12">
+                Whether you're just starting or scaling up, QuizForge has a plan that fits your needs.
+                </p>
+            </div>
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start max-w-5xl mx-auto">
+              {/* Basic Plan */}
+              <Card className="flex flex-col h-full border-border">
+                <CardHeader className="flex-grow">
+                  <CardTitle className="text-2xl font-bold">Basic</CardTitle>
                   <CardDescription>For individuals and casual use.</CardDescription>
-                  <p className="text-4xl font-bold pt-4">$0 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                  <div className="pt-4">
+                    <span className="text-4xl font-bold">$0</span>
+                    <span className="text-sm font-normal text-muted-foreground">/month</span>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4 text-left">
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />5 Quizzes per month</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Up to 10 questions per quiz</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Standard AI model</li>
-                    </ul>
+                <CardContent className="flex-grow">
+                  <Button className="w-full" variant="outline" asChild><Link href="/signup">Get Started</Link></Button>
+                  <p className="text-xs text-muted-foreground text-center mt-2">Billed monthly.</p>
+                  <div className="mt-6 space-y-3">
+                      <p className="font-semibold text-sm">Free Plan includes:</p>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />5 Quizzes per month</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Up to 10 questions per quiz</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Standard AI model</li>
+                      </ul>
+                  </div>
                 </CardContent>
-                <CardFooter>
-                   <Button className="w-full" variant="ghost" asChild><Link href="/signup">Get Started</Link></Button>
-                </CardFooter>
               </Card>
-              <Card className="border-primary/50 ring-2 ring-primary/50 shadow-lg">
-                 <CardHeader>
-                  <CardTitle>Pro</CardTitle>
+              
+              {/* Pro Plan */}
+              <Card className="relative flex flex-col h-full border-primary/50 ring-2 ring-primary/50 shadow-lg">
+                <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                   <Badge>Most Popular</Badge>
+                </div>
+                <CardHeader className="flex-grow">
+                  <CardTitle className="text-2xl font-bold">Pro</CardTitle>
                   <CardDescription>For educators, trainers, and power users.</CardDescription>
-                  <p className="text-4xl font-bold pt-4">$10 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                  <div className="pt-4">
+                    <span className="text-4xl font-bold">$10</span>
+                    <span className="text-sm font-normal text-muted-foreground">/month</span>
+                  </div>
                 </CardHeader>
-                <CardContent className="space-y-4 text-left">
-                     <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Unlimited Quizzes</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Up to 50 questions per quiz</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Advanced AI model</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Priority Support</li>
-                    </ul>
-                </CardContent>
-                <CardFooter>
+                <CardContent className="flex-grow">
                    <Button className="w-full" asChild><Link href="/signup">Choose Pro</Link></Button>
-                </CardFooter>
-              </Card>
-              <Card className="border-border">
-                <CardHeader>
-                  <CardTitle>Team</CardTitle>
-                  <CardDescription>For schools and organizations.</CardDescription>
-                  <p className="text-4xl font-bold pt-4">Contact Us</p>
-                </CardHeader>
-                <CardContent className="space-y-4 text-left">
-                    <ul className="space-y-2 text-sm text-muted-foreground">
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Everything in Pro</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Multi-user accounts</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Centralized billing</li>
-                      <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Dedicated Support</li>
-                    </ul>
+                   <p className="text-xs text-muted-foreground text-center mt-2">Billed monthly.</p>
+                   <div className="mt-6 space-y-3">
+                      <p className="font-semibold text-sm">All Free plan features, plus:</p>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Unlimited Quizzes</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Up to 50 questions per quiz</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Advanced AI model</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Priority Support</li>
+                      </ul>
+                   </div>
                 </CardContent>
-                <CardFooter>
-                   <Button className="w-full" variant="ghost">Contact Sales</Button>
-                </CardFooter>
+              </Card>
+
+              {/* Team Plan */}
+              <Card className="flex flex-col h-full border-border">
+                <CardHeader className="flex-grow">
+                  <CardTitle className="text-2xl font-bold">Team</CardTitle>
+                  <CardDescription>For schools and organizations.</CardDescription>
+                  <div className="pt-4">
+                    <p className="text-4xl font-bold">Contact Us</p>
+                  </div>
+                </CardHeader>
+                <CardContent className="flex-grow">
+                   <Button className="w-full" variant="outline">Contact Sales</Button>
+                   <p className="text-xs text-muted-foreground text-center mt-2">Billed annually.</p>
+                   <div className="mt-6 space-y-3">
+                      <p className="font-semibold text-sm">All Pro plan features, plus:</p>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Multi-user accounts</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Centralized billing</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Dedicated Support</li>
+                      </ul>
+                   </div>
+                </CardContent>
               </Card>
             </div>
           </div>
