@@ -1,20 +1,80 @@
-
 // src/app/(app)/dashboard/page.tsx
 'use client';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import Link from 'next/link';
 import { useState } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { generateMcqAction } from "@/app/actions";
+import type { Mcq } from "@/lib/types";
+import { Loader2 } from "lucide-react";
+import { useToast } from "@/hooks/use-toast";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Badge } from "@/components/ui/badge";
 
 export default function DashboardPage() {
     const [topic, setTopic] = useState('');
     const [questionCount, setQuestionCount] = useState(5);
-    const [difficulty, setDifficulty] = useState('easy');
+    const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
 
-    const canGenerate = topic.trim().length > 1;
+    const [mcqs, setMcqs] = useState<Mcq[]>([]);
+    const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
+    const [submitted, setSubmitted] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+    const { toast } = useToast();
+
+    const canGenerate = topic.trim().length > 1 && !isLoading;
+
+    async function handleGenerateQuiz() {
+        if (!canGenerate) return;
+
+        setIsLoading(true);
+        setMcqs([]);
+        setUserAnswers({});
+        setSubmitted(false);
+
+        const result = await generateMcqAction({
+            topic,
+            questionCount,
+            difficulty,
+        });
+
+        setIsLoading(false);
+
+        if (result.error) {
+            toast({
+                variant: "destructive",
+                title: "Error",
+                description: result.error,
+            });
+        } else if (result.mcqs) {
+            setMcqs(result.mcqs);
+        }
+    }
+
+    const handleAnswerChange = (questionIndex: number, answer: string) => {
+        setUserAnswers((prev) => ({ ...prev, [questionIndex]: answer }));
+    };
+    
+    const calculateScore = () => {
+        let score = 0;
+        mcqs.forEach((mcq, index) => {
+            if (userAnswers[index] === mcq.correctAnswer) {
+                score++;
+            }
+        });
+        return score;
+    };
+
+    const score = calculateScore();
+
+    const resetQuizState = () => {
+        setMcqs([]);
+        setSubmitted(false);
+        setUserAnswers({});
+        setTopic('');
+    };
 
     return (
         <div className="flex flex-col gap-6">
@@ -83,7 +143,7 @@ export default function DashboardPage() {
                         </div>
                         <div className="space-y-2">
                              <Label htmlFor="difficulty">Difficulty</Label>
-                             <Select value={difficulty} onValueChange={setDifficulty}>
+                             <Select value={difficulty} onValueChange={(value) => setDifficulty(value as 'easy' | 'medium' | 'hard')}>
                                 <SelectTrigger id="difficulty">
                                     <SelectValue placeholder="Select difficulty" />
                                 </SelectTrigger>
@@ -95,13 +155,71 @@ export default function DashboardPage() {
                             </Select>
                         </div>
                     </div>
-                     <Button asChild size="lg" className="w-full" disabled={!canGenerate}>
-                        <Link href={`/practice-quiz?topic=${encodeURIComponent(topic)}&count=${questionCount}&difficulty=${difficulty}`}>
-                            Generate Quiz
-                        </Link>
+                     <Button size="lg" className="w-full" disabled={!canGenerate} onClick={handleGenerateQuiz}>
+                        {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
+                        {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
                 </CardContent>
             </Card>
+
+            {isLoading && (
+                <div className="mt-8 flex flex-col items-center justify-center text-center">
+                    <Loader2 className="h-12 w-12 animate-spin text-primary" />
+                    <p className="mt-4 text-muted-foreground">Summoning questions from the digital ether...</p>
+                </div>
+            )}
+
+            {mcqs.length > 0 && (
+                <div className="mt-8 space-y-6">
+                    <h2 className="text-2xl font-bold text-center">Your Quiz on "{topic}"</h2>
+                    {mcqs.map((mcq, index) => (
+                        <Card key={index} className="mb-4">
+                        <CardHeader>
+                            <CardTitle>
+                            Question {index + 1}: {mcq.question}
+                            </CardTitle>
+                        </CardHeader>
+                        <CardContent>
+                            <RadioGroup
+                            onValueChange={(value) => handleAnswerChange(index, value)}
+                            disabled={submitted}
+                            className="space-y-2"
+                            >
+                            {mcq.options.map((option, i) => (
+                                <div key={i} className="flex items-center space-x-2">
+                                <RadioGroupItem value={option} id={`q${index}-o${i}`} />
+                                <Label htmlFor={`q${index}-o${i}`} className="cursor-pointer">{option}</Label>
+                                </div>
+                            ))}
+                            </RadioGroup>
+                        </CardContent>
+                        {submitted && (
+                            <CardFooter className="flex flex-col items-start bg-muted/50 p-4 rounded-b-lg">
+                               <p className={`text-sm font-semibold ${userAnswers[index] === mcq.correctAnswer ? "text-green-500" : "text-red-500"}`}>
+                                {userAnswers[index] === mcq.correctAnswer ? "✅ Correct" : "❌ Incorrect"}
+                              </p>
+                              <p className="text-sm text-muted-foreground">Correct Answer: {mcq.correctAnswer}</p>
+                            </CardFooter>
+                        )}
+                        </Card>
+                    ))}
+                    {!submitted ? (
+                        <Button onClick={() => setSubmitted(true)} className="w-full" size="lg">Submit Answers</Button>
+                    ) : (
+                        <Card className="mt-6 text-center p-6">
+                            <CardHeader>
+                                <CardTitle className="text-3xl">Quiz Complete!</CardTitle>
+                            </CardHeader>
+                            <CardContent>
+                                <p className="text-xl mt-2">Your Score: <Badge variant="secondary" className="text-2xl py-1 px-3">{score} / {mcqs.length}</Badge></p>
+                                <Button onClick={resetQuizState} className="mt-6">
+                                    Create a New Quiz
+                                </Button>
+                            </CardContent>
+                        </Card>
+                    )}
+                </div>
+            )}
         </div>
     );
 }
