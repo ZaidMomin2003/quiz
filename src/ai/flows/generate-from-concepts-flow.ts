@@ -10,6 +10,7 @@
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import { GenerateMcqOutputSchema } from './generate-mcq';
 
 const GenerateFromConceptsInputSchema = z.object({
   concepts: z.array(z.string()).describe('The list of weak concepts to generate questions about.'),
@@ -17,17 +18,7 @@ const GenerateFromConceptsInputSchema = z.object({
 });
 export type GenerateFromConceptsInput = z.infer<typeof GenerateFromConceptsInputSchema>;
 
-const GenerateFromConceptsOutputSchema = z.object({
-  mcqs: z.array(
-    z.object({
-      question: z.string().describe('The multiple choice question.'),
-      options: z.array(z.string()).describe('The possible answers to the question.'),
-      correctAnswer: z.string().describe('The correct answer to the question.'),
-    })
-  ).
-describe('An array of multiple choice questions.')
-});
-export type GenerateFromConceptsOutput = z.infer<typeof GenerateFromConceptsOutputSchema>;
+export type GenerateFromConceptsOutput = z.infer<typeof GenerateMcqOutputSchema>;
 
 export async function generateFromConcepts(input: GenerateFromConceptsInput): Promise<GenerateFromConceptsOutput> {
   return generateFromConceptsFlow(input);
@@ -36,7 +27,7 @@ export async function generateFromConcepts(input: GenerateFromConceptsInput): Pr
 const prompt = ai.definePrompt({
   name: 'generateFromConceptsPrompt',
   input: {schema: GenerateFromConceptsInputSchema},
-  output: {schema: GenerateFromConceptsOutputSchema},
+  output: {schema: GenerateMcqOutputSchema},
   prompt: `You are an expert quiz generator. A user has identified the following as weak areas in their knowledge. Generate multiple-choice questions that will help them practice these specific concepts.
 
 Concepts to cover:
@@ -56,7 +47,7 @@ const generateFromConceptsFlow = ai.defineFlow(
   {
     name: 'generateFromConceptsFlow',
     inputSchema: GenerateFromConceptsInputSchema,
-    outputSchema: GenerateFromConceptsOutputSchema,
+    outputSchema: GenerateMcqOutputSchema,
   },
   async input => {
     const {output} = await prompt(input);

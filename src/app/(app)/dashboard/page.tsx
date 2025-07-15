@@ -112,7 +112,7 @@ export default function DashboardPage() {
         } else if (result.mcqs) {
             const quizData = {
                 topic: "Practice Your Weaknesses",
-                difficulty: 'medium',
+                difficulty: 'medium' as 'easy' | 'medium' | 'hard',
                 mcqs: result.mcqs
             };
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));

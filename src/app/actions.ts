@@ -2,7 +2,7 @@
 
 import { generateMcq, type GenerateMcqInput, type GenerateMcqOutput } from '@/ai/flows/generate-mcq';
 import { analyzeQuiz, type AnalyzeQuizInput, type AnalyzeQuizOutput } from '@/ai/flows/analyze-quiz-flow';
-import { generateFromConcepts, type GenerateFromConceptsInput } from '@/ai/flows/generate-from-concepts-flow';
+import { generateFromConcepts, type GenerateFromConceptsInput, type GenerateFromConceptsOutput } from '@/ai/flows/generate-from-concepts-flow';
 
 
 export async function generateMcqAction(
@@ -22,7 +22,7 @@ export async function generateMcqAction(
 
 export async function generateFromConceptsAction(
   input: GenerateFromConceptsInput
-): Promise<{ mcqs?: GenerateMcqOutput['mcqs']; error?: string }> {
+): Promise<{ mcqs?: GenerateFromConceptsOutput['mcqs']; error?: string }> {
     try {
         const result = await generateFromConcepts(input);
         if (!result || !result.mcqs || result.mcqs.length === 0) {

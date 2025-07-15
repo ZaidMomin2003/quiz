@@ -230,7 +230,7 @@ export default function QuizPage() {
                             const explanationData = analysis?.detailedExplanations.find(ex => ex.question === mcq.question);
 
                             return (
-                                <AccordionItem key={index} value={`item-${index}`} className="border-b-0">
+                                <AccordionItem key={index} value={`item-${index}`} className="border-b-0 mb-2 last:mb-0">
                                     <div className="p-4 border rounded-lg">
                                         <div className="flex items-center justify-between">
                                              <p className="font-semibold">{index + 1}. {mcq.question}</p>
