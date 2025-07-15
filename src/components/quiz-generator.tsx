@@ -1,9 +1,11 @@
+
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
+import { useSearchParams } from 'next/navigation';
 
 import { Button } from "@/components/ui/button";
 import {
@@ -48,6 +50,7 @@ export function QuizGenerator() {
   const [submitted, setSubmitted] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
   const { toast } = useToast();
+  const searchParams = useSearchParams();
 
   const form = useForm<QuizFormValues>({
     resolver: zodResolver(formSchema),
@@ -57,6 +60,14 @@ export function QuizGenerator() {
       difficulty: "easy",
     },
   });
+
+  useEffect(() => {
+    const topicFromUrl = searchParams.get('topic');
+    if (topicFromUrl) {
+      form.setValue('topic', decodeURIComponent(topicFromUrl));
+    }
+  }, [searchParams, form]);
+
 
   async function onSubmit(values: QuizFormValues) {
     setIsLoading(true);

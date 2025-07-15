@@ -1,9 +1,11 @@
+
 // src/app/(app)/practice-quiz/page.tsx
 'use client';
 import { QuizGenerator } from "@/components/quiz-generator";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Suspense } from 'react';
 
-export default function PracticeQuizPage() {
+function PracticeQuizContent() {
   return (
     <div>
       <Card className="max-w-4xl mx-auto">
@@ -18,5 +20,13 @@ export default function PracticeQuizPage() {
         </CardContent>
       </Card>
     </div>
+  );
+}
+
+export default function PracticeQuizPage() {
+  return (
+    <Suspense fallback={<div>Loading...</div>}>
+      <PracticeQuizContent />
+    </Suspense>
   );
 }
