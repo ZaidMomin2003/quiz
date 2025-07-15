@@ -72,6 +72,7 @@ export function PublicPageLayout({
           </div>
           <div className="mt-8 border-t border-border/40 pt-8 flex justify-between items-center">
             <p className="text-sm text-muted-foreground">&copy; {new Date().getFullYear()} QuizForge. All rights reserved.</p>
+            <p className="text-sm text-muted-foreground">Made by Arshad with 💓</p>
           </div>
         </div>
       </footer>
