@@ -6,12 +6,6 @@ import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts'
 import type { ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
-  { day: 'Mon', score: 55 },
-  { day: 'Tue', score: 48 },
-  { day: 'Wed', score: 62 },
-  { day: 'Thu', score: 75 },
-  { day: 'Fri', score: 90 },
-  { day: 'Sat', score: 85 },
   { day: 'Sun', score: 95 },
   { day: 'Mon', score: 88 },
   { day: 'Tue', score: 78 },
