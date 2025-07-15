@@ -189,7 +189,7 @@ export default function DashboardPage() {
                             </Select>
                         </div>
                     </div>
-                     <Button size="lg" className="w-full" style={{ backgroundColor: '#8A2BE2' }} disabled={!canGenerate} onClick={handleGenerateQuiz}>
+                     <Button size="lg" className="w-full bg-[#8A2BE2] hover:bg-[#8A2BE2]/90 text-white" disabled={!canGenerate} onClick={handleGenerateQuiz}>
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
