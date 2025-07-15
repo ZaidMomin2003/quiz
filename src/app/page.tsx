@@ -65,7 +65,7 @@ export default function Home() {
               <Star className="w-3 h-3 mr-1.5 fill-current" />
               Powered by the latest AI models
             </Badge>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4 max-w-4xl mx-auto">
               Create Engaging Quizzes in Seconds with AI
             </h1>
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground mb-8">
@@ -76,9 +76,6 @@ export default function Home() {
                 <Link href="/signup">
                   Get Started For Free <ChevronRight className="ml-2 h-4 w-4" />
                 </Link>
-              </Button>
-              <Button asChild size="lg" variant="ghost" className="w-full sm:w-auto">
-                <Link href="#features">Learn More</Link>
               </Button>
             </div>
           </div>
