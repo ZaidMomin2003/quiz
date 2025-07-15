@@ -8,33 +8,39 @@ import { Progress } from '@/components/ui/progress';
 import { syllabusData } from '@/lib/syllabus';
 import { generateQuestionSetAction } from '@/app/actions';
 import { useToast } from '@/hooks/use-toast';
-import { CheckCircle, Download, FileJson, FlaskConical, Loader2, Play } from 'lucide-react';
+import { CheckCircle, Download, FileJson, FlaskConical, Loader2, Play, Save, Settings } from 'lucide-react';
 import type { Mcq } from '@/lib/types';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
+import { Input } from '@/components/ui/input';
+import { Label } from '@/components/ui/label';
 
 type Syllabus = typeof syllabusData.jee;
 type Subject = Syllabus['subjects'][0];
 type Chapter = Subject['chapters'][0];
 
 const GENERATION_STATE_KEY = 'generationState';
-const GENERATED_QUESTIONS_KEY = 'generatedQuestions';
+
+type GenerationConfig = {
+    easy: number;
+    moderate: number;
+    difficult: number;
+    extreme: number;
+}
 
 export default function GeneratorPage() {
     const { toast } = useToast();
     const [generatedTopics, setGeneratedTopics] = useState<Set<string>>(new Set());
-    const [generatedQuestions, setGeneratedQuestions] = useState<Mcq[]>([]);
     const [isGenerating, setIsGenerating] = useState(false);
     const [currentStatus, setCurrentStatus] = useState('');
     const [progress, setProgress] = useState(0);
+    const [config, setConfig] = useState<GenerationConfig>({ easy: 30, moderate: 30, difficult: 20, extreme: 20 });
+    
+    const totalQuestions = config.easy + config.moderate + config.difficult + config.extreme;
 
     useEffect(() => {
         const savedState = localStorage.getItem(GENERATION_STATE_KEY);
         if (savedState) {
             setGeneratedTopics(new Set(JSON.parse(savedState)));
-        }
-        const savedQuestions = localStorage.getItem(GENERATED_QUESTIONS_KEY);
-        if (savedQuestions) {
-            setGeneratedQuestions(JSON.parse(savedQuestions));
         }
     }, []);
 
@@ -46,14 +52,6 @@ export default function GeneratorPage() {
             return newSet;
         });
     };
-
-    const updateAndSaveGeneratedQuestions = (newQuestions: Mcq[]) => {
-        setGeneratedQuestions(prev => {
-            const updatedQuestions = [...prev, ...newQuestions];
-            localStorage.setItem(GENERATED_QUESTIONS_KEY, JSON.stringify(updatedQuestions));
-            return updatedQuestions;
-        });
-    }
 
     const generateForTopics = async (topicsToGenerate: { name: string; id: string }[]) => {
         setIsGenerating(true);
@@ -68,12 +66,13 @@ export default function GeneratorPage() {
             }
 
             setCurrentStatus(`Generating for: ${topic.name}...`);
-            const result = await generateQuestionSetAction({ topic: topic.name });
+            const result = await generateQuestionSetAction({ topic: topic.name, ...config });
 
             if (result.mcqs) {
                 toast({ title: `Success`, description: `Generated ${result.mcqs.length} questions for ${topic.name}.` });
                 updateAndSaveGeneratedTopics(topic.id);
-                updateAndSaveGeneratedQuestions(result.mcqs);
+                // Here you would save 'result.mcqs' to your database
+                console.log(`Generated ${result.mcqs.length} questions for ${topic.name}`);
             } else {
                 toast({ variant: 'destructive', title: `Error`, description: `Failed to generate for ${topic.name}: ${result.error}` });
             }
@@ -107,19 +106,21 @@ export default function GeneratorPage() {
     };
 
     const handleGenerate = (scope: 'jee' | 'neet' | string) => {
+        if (totalQuestions <= 0) {
+            toast({ variant: 'destructive', title: 'Invalid Configuration', description: 'Total questions must be greater than zero.'});
+            return;
+        }
         const topics = getTopicsForScope(scope);
         generateForTopics(topics);
     };
 
-    const downloadJson = () => {
-        const jsonString = `data:text/json;charset=utf-8,${encodeURIComponent(
-            JSON.stringify(generatedQuestions, null, 2)
-        )}`;
-        const link = document.createElement('a');
-        link.href = jsonString;
-        link.download = 'database.json';
-        link.click();
-    };
+    const handleConfigChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+        const { name, value } = e.target;
+        setConfig(prev => ({
+            ...prev,
+            [name]: Math.max(0, parseInt(value, 10) || 0)
+        }))
+    }
 
     const renderSyllabus = (exam: 'jee' | 'neet', examData: Syllabus) => {
         return (
@@ -181,10 +182,45 @@ export default function GeneratorPage() {
                 <FlaskConical className="h-4 w-4" />
                 <AlertTitle>This is a powerful tool!</AlertTitle>
                 <AlertDescription>
-                   Use this page to generate a large database of questions. This process can take a long time and will consume a significant amount of your API quota. Once generated, you can download the JSON file to use as an external database.
+                   Use this page to generate a large database of questions. This process can take a long time and will consume a significant amount of your API quota.
                 </AlertDescription>
             </Alert>
             
+            <Card>
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <Settings className="h-5 w-5" />
+                        <CardTitle>Generation Configuration</CardTitle>
+                    </div>
+                    <CardDescription>Specify how many questions of each difficulty to generate per topic.</CardDescription>
+                </CardHeader>
+                <CardContent className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                    <div className="space-y-2">
+                        <Label htmlFor="easy-count">Easy</Label>
+                        <Input id="easy-count" name="easy" type="number" value={config.easy} onChange={handleConfigChange} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="moderate-count">Moderate</Label>
+                        <Input id="moderate-count" name="moderate" type="number" value={config.moderate} onChange={handleConfigChange} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="difficult-count">Difficult</Label>
+                        <Input id="difficult-count" name="difficult" type="number" value={config.difficult} onChange={handleConfigChange} />
+                    </div>
+                     <div className="space-y-2">
+                        <Label htmlFor="extreme-count">Extreme</Label>
+                        <Input id="extreme-count" name="extreme" type="number" value={config.extreme} onChange={handleConfigChange} />
+                    </div>
+                    <div className="space-y-2 col-span-2 md:col-span-1">
+                        <Label>Total</Label>
+                        <div className="flex items-center justify-center h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm">
+                            {totalQuestions}
+                        </div>
+                    </div>
+                </CardContent>
+            </Card>
+
+
             <Card>
                 <CardHeader>
                     <CardTitle>Generation Status</CardTitle>
@@ -200,9 +236,9 @@ export default function GeneratorPage() {
                     )}
                 </CardContent>
                 <CardFooter>
-                     <Button onClick={downloadJson} disabled={generatedQuestions.length === 0}>
-                        <Download className="mr-2 h-4 w-4" />
-                        Download database.json ({generatedQuestions.length} questions)
+                     <Button onClick={() => {}} disabled={true}>
+                        <Save className="mr-2 h-4 w-4" />
+                        Save to Database (Requires DB Integration)
                     </Button>
                 </CardFooter>
             </Card>

@@ -91,6 +91,10 @@ export type QuizData = {
 // For Question Set Generation
 export type GenerateQuestionSetInput = {
   topic: string;
+  easy: number;
+  moderate: number;
+  difficult: number;
+  extreme: number;
 };
 
 export type GenerateQuestionSetOutput = {

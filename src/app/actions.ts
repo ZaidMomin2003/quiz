@@ -88,6 +88,10 @@ export async function generateQuestionSetAction(
     try {
         const result = await generateQuestionSet(input);
         if (!result || !result.mcqs || result.mcqs.length === 0) {
+            const totalQuestions = input.easy + input.moderate + input.difficult + input.extreme;
+            if (totalQuestions === 0) {
+                 return { error: 'Total questions must be greater than zero.' };
+            }
             return { error: 'Could not generate the question set for this topic.' };
         }
         return { mcqs: result.mcqs };
