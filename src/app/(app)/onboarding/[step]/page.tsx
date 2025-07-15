@@ -6,10 +6,12 @@ import { WelcomeStep } from '@/components/onboarding/welcome-step';
 import { GoalStep } from '@/components/onboarding/goal-step';
 import { ExamsStep } from '@/components/onboarding/exams-step';
 import { FinishStep } from '@/components/onboarding/finish-step';
+import { useEffect, useState } from 'react';
 
 export default function OnboardingStepPage({ params }: { params: { step: string } }) {
   const router = useRouter();
   const { step } = params;
+  const [isReady, setIsReady] = useState(false);
   const {
     onboardingData,
     updateOnboardingData,
@@ -17,12 +19,28 @@ export default function OnboardingStepPage({ params }: { params: { step: string 
     isStepCompleted,
   } = useOnboarding();
 
+  useEffect(() => {
+    // Check if user is trying to access a step prematurely
+    if (step === 'exams' && !isStepCompleted('goal')) {
+      router.replace('/onboarding/goal');
+    } else if (step === 'finish' && !isStepCompleted('exams')) {
+      router.replace('/onboarding/exams');
+    } else {
+        setIsReady(true);
+    }
+  }, [step, isStepCompleted, router]);
+
+
   const handleNext = (data: any) => {
     updateOnboardingData(data);
     goToNextStep();
   };
 
   const renderStep = () => {
+    if (!isReady) {
+        return null; // Render nothing while we verify the step access
+    }
+
     switch (step) {
       case 'welcome':
         return <WelcomeStep onNext={() => goToNextStep()} />;
@@ -34,10 +52,6 @@ export default function OnboardingStepPage({ params }: { params: { step: string 
           />
         );
       case 'exams':
-        if (!isStepCompleted('goal')) {
-            router.replace('/onboarding/goal');
-            return null;
-        }
         return (
           <ExamsStep
             onNext={(data) => handleNext({ exams: data })}
@@ -45,12 +59,10 @@ export default function OnboardingStepPage({ params }: { params: { step: string 
           />
         );
       case 'finish':
-         if (!isStepCompleted('exams')) {
-            router.replace('/onboarding/exams');
-            return null;
-        }
         return <FinishStep />;
       default:
+        // This default case will now be handled gracefully by a redirect
+        // if the step is not one of the defined ones.
         router.replace('/onboarding/welcome');
         return null;
     }
