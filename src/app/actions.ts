@@ -100,3 +100,13 @@ export async function generateQuestionSetAction(
         return { error: 'An unexpected error occurred while generating the question set.' };
     }
 }
+
+export async function verifyAdminPassword(password: string): Promise<{ success: boolean }> {
+    // In a real app, use a secure, hashed password comparison from a secret store
+    const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'admin123';
+    return { success: password === ADMIN_PASSWORD };
+}
+
+export async function checkApiKey(): Promise<{ isSet: boolean }> {
+  return { isSet: !!process.env.GOOGLE_API_KEY };
+}

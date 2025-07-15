@@ -73,8 +73,8 @@ export default function AppLayout({
     }
   }, []);
 
-  // Don't render sidebar layout for onboarding pages
-  if (pathname.startsWith('/onboarding')) {
+  // Don't render sidebar layout for onboarding or admin pages
+  if (pathname.startsWith('/onboarding') || pathname.startsWith('/admin')) {
     return <>{children}</>;
   }
 
@@ -142,14 +142,6 @@ export default function AppLayout({
                         </a>
                     </SidebarMenuButton>
                     {bookmarkCount > 0 && <SidebarMenuBadge className="bg-primary text-primary-foreground">{bookmarkCount}</SidebarMenuBadge>}
-                 </SidebarMenuItem>
-                 <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Generator">
-                    <a href="/generator">
-                       <FlaskConical />
-                        <span>Generator</span>
-                    </a>
-                   </SidebarMenuButton>
                  </SidebarMenuItem>
               </SidebarMenu>
             </div>
