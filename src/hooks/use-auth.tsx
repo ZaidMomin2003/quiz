@@ -47,13 +47,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             const loggedInUser = { email, name: users[email].name };
             setUser(loggedInUser);
             sessionStorage.setItem('quizforge_user', JSON.stringify(loggedInUser));
-            
-            const hasOnboarded = localStorage.getItem(`onboarding_complete_${email}`);
-            if (hasOnboarded) {
-                router.push("/dashboard");
-            } else {
-                router.push("/onboarding/welcome");
-            }
+            router.push("/dashboard");
             resolve();
         } else {
             reject(new Error("Invalid email or password"));
