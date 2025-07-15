@@ -4,12 +4,11 @@
  * @fileOverview A flow for analyzing a user's quiz performance to identify strong and weak concepts and provide explanations.
  *
  * - analyzeQuiz - A function that analyzes quiz results.
- * - AnalyzeQuizInput - The input type for the analyzeQuiz function.
- * - AnalyzeQuizOutput - The return type for the analyzeQuiz function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type { AnalyzeQuizInput, AnalyzeQuizOutput } from '@/lib/types';
 
 const QuestionResultSchema = z.object({
   question: z.string(),
@@ -28,7 +27,6 @@ const AnalyzeQuizInputSchema = z.object({
   ),
   userAnswers: z.record(z.string()), // Maps question index to user's answer
 });
-export type AnalyzeQuizInput = z.infer<typeof AnalyzeQuizInputSchema>;
 
 const AnalyzeQuizOutputSchema = z.object({
   strongConcepts: z
@@ -50,7 +48,6 @@ const AnalyzeQuizOutputSchema = z.object({
     })
   ).describe("An array of explanations for each question the user answered incorrectly.")
 });
-export type AnalyzeQuizOutput = z.infer<typeof AnalyzeQuizOutputSchema>;
 
 export async function analyzeQuiz(input: AnalyzeQuizInput): Promise<AnalyzeQuizOutput> {
   return analyzeQuizFlow(input);

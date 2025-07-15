@@ -4,6 +4,12 @@ export type Mcq = {
   correctAnswer: string;
 };
 
+export type GenerateMcqInput = {
+  topic: string;
+  questionCount: number;
+  difficulty: 'easy' | 'medium' | 'hard';
+};
+
 export type GenerateMcqOutput = {
   mcqs: Mcq[];
 };
@@ -16,4 +22,35 @@ export type QuizHistoryItem = {
   score: number;
   totalQuestions: number;
   timestamp: number;
+};
+
+export type AnalyzeQuizInput = {
+  questions: {
+    question: string;
+    options: string[];
+    correctAnswer: string;
+  }[];
+  userAnswers: Record<string, string>;
+};
+
+export type DetailedExplanation = {
+    question: string;
+    userAnswer: string;
+    correctAnswer: string;
+    explanation: string;
+};
+
+export type AnalyzeQuizOutput = {
+  strongConcepts: string[];
+  weakConcepts: string[];
+  detailedExplanations: DetailedExplanation[];
+};
+
+export type GenerateFromConceptsInput = {
+    concepts: string[];
+    questionCount: number;
+};
+
+export type GenerateFromConceptsOutput = {
+    mcqs: Mcq[];
 };

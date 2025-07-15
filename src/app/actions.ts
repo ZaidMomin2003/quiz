@@ -1,8 +1,9 @@
 'use server';
 
-import { generateMcq, type GenerateMcqInput, type GenerateMcqOutput } from '@/ai/flows/generate-mcq';
-import { analyzeQuiz, type AnalyzeQuizInput, type AnalyzeQuizOutput } from '@/ai/flows/analyze-quiz-flow';
-import { generateFromConcepts, type GenerateFromConceptsInput, type GenerateFromConceptsOutput } from '@/ai/flows/generate-from-concepts-flow';
+import { generateMcq } from '@/ai/flows/generate-mcq';
+import { analyzeQuiz } from '@/ai/flows/analyze-quiz-flow';
+import { generateFromConcepts } from '@/ai/flows/generate-from-concepts-flow';
+import type { GenerateMcqInput, GenerateMcqOutput, AnalyzeQuizInput, AnalyzeQuizOutput, GenerateFromConceptsInput, GenerateFromConceptsOutput } from '@/lib/types';
 
 
 export async function generateMcqAction(

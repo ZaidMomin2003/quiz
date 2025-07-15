@@ -4,12 +4,11 @@
  * @fileOverview Flow for generating multiple-choice questions (MCQs) based on a given topic and difficulty level.
  *
  * - generateMcq - A function that generates MCQs.
- * - GenerateMcqInput - The input type for the generateMcq function.
- * - GenerateMcqOutput - The return type for the generateMcq function.
  */
 
 import {ai} from '@/ai/genkit';
 import {z} from 'genkit';
+import type { GenerateMcqInput, GenerateMcqOutput } from '@/lib/types';
 
 const GenerateMcqInputSchema = z.object({
   topic: z.string().describe('The topic for which to generate MCQs.'),
@@ -18,9 +17,8 @@ const GenerateMcqInputSchema = z.object({
     .enum(['easy', 'medium', 'hard'])
     .describe('The difficulty level of the MCQs.'),
 });
-export type GenerateMcqInput = z.infer<typeof GenerateMcqInputSchema>;
 
-export const GenerateMcqOutputSchema = z.object({
+const GenerateMcqOutputSchema = z.object({
   mcqs: z.array(
     z.object({
       question: z.string().describe('The multiple choice question.'),
@@ -30,7 +28,6 @@ export const GenerateMcqOutputSchema = z.object({
   ).
 describe('An array of multiple choice questions.')
 });
-export type GenerateMcqOutput = z.infer<typeof GenerateMcqOutputSchema>;
 
 export async function generateMcq(input: GenerateMcqInput): Promise<GenerateMcqOutput> {
   return generateMcqFlow(input);
