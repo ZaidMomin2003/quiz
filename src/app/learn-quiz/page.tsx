@@ -58,7 +58,7 @@ export default function LearnQuizPage() {
     const handleAnswerSubmit = () => {
         if (!selectedAnswer) return;
         setIsAnswered(true);
-        if (isCorrect) {
+        if (selectedAnswer === currentMcq.correctAnswer) {
             setCorrectCount(correctCount + 1);
         }
     };
@@ -147,6 +147,7 @@ export default function LearnQuizPage() {
                                             isAnswered && isTheCorrectAnswer && "border-green-500 bg-green-500/10",
                                             isAnswered && isSelected && !isTheCorrectAnswer && "border-red-500 bg-red-500/10",
                                             isAnswered && !isSelected && "opacity-60",
+                                            isAnswered && isSelected && "bg-white/10"
                                         )}>
                                             <RadioGroupItem value={option} id={`q-o-${i}`} className="hidden" />
                                             <span>{option}</span>
