@@ -41,7 +41,7 @@ export default function AppLayout({
             <div className="p-2 mb-2">
               <Link className="flex items-center gap-2" href="/dashboard">
                 <Bot className="h-6 w-6" />
-                <span className="font-bold text-lg">QuizForge</span>
+                <span className="font-bold text-lg group-data-[collapsible=icon]:hidden">QuizForge</span>
               </Link>
             </div>
             <div className="flex-1">
@@ -76,9 +76,9 @@ export default function AppLayout({
           </div>
       </Sidebar>
       <SidebarInset>
-        <header className="flex items-center justify-between p-4 border-b">
+        <header className="flex items-center justify-between p-4 border-b h-16">
            <SidebarTrigger className="md:hidden" />
-           <p className="text-lg font-bold tracking-tight text-foreground">Welcome back, {user.email}</p>
+           <p className="text-lg font-black tracking-tighter text-foreground sm:text-xl">Welcome back, {user.email}</p>
         </header>
         <main className="p-4 md:p-6">
             {children}
