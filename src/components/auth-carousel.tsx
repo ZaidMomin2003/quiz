@@ -56,9 +56,9 @@ export function AuthCarousel() {
                 loop: true,
             }}
             orientation="vertical"
-            className="w-full max-w-md h-full"
+            className="w-full max-w-md"
             >
-            <CarouselContent className="-mt-4 h-full">
+            <CarouselContent className="-mt-4 h-[32rem] md:h-[40rem]">
                 {testimonials.map((testimonial, index) => (
                 <CarouselItem key={index} className="pt-4 md:basis-1/3">
                     <div className="p-1 h-full">
