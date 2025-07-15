@@ -37,15 +37,19 @@ const prompt = ai.definePrompt({
   name: 'generateMcqPrompt',
   input: {schema: GenerateMcqInputSchema},
   output: {schema: GenerateMcqOutputSchema},
-  prompt: `You are an expert quiz generator. Generate multiple-choice questions based on the following criteria:
+  prompt: `You are an expert question setter for competitive exams like NEET and JEE. Your task is to create highly challenging, 'hard' difficulty multiple-choice questions.
 
 Topic: {{{topic}}}
 Number of Questions: {{{questionCount}}}
 Difficulty: {{{difficulty}}}
 
-Each question should have 4 possible answers, with one correct answer.
+Instructions:
+1.  Analyze the typical patterns and styles of questions asked in previous years for the given topic.
+2.  Do NOT copy past questions. Instead, create new, original questions that are of a similar or slightly higher difficulty level.
+3.  The questions should test deep conceptual understanding, application of formulas, and problem-solving skills, not just rote memorization.
+4.  Each question must have 4 plausible options, with only one being correct. The incorrect options should be common mistakes or misconceptions.
 
-Output the questions in a JSON format.
+Output the questions in the required JSON format.
 `,
 });
 
