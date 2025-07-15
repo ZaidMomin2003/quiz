@@ -1,9 +1,10 @@
+
 // src/app/(app)/syllabus/page.tsx
 'use client';
 
 import { useState, useEffect } from 'react';
 import { useAuth } from '@/hooks/use-auth';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
+import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import {
   Accordion,
   AccordionContent,
@@ -11,8 +12,13 @@ import {
   AccordionTrigger,
 } from '@/components/ui/accordion';
 import { syllabusData } from '@/lib/syllabus';
-import { BookMarked, AlertTriangle } from 'lucide-react';
+import { BookMarked, AlertTriangle, ClipboardCheck, Target, Loader2 } from 'lucide-react';
 import Link from 'next/link';
+import { Button } from '@/components/ui/button';
+import { useRouter } from 'next/navigation';
+import { generateMcqAction } from '@/app/actions';
+import { useToast } from '@/hooks/use-toast';
+
 
 type Syllabus = {
   subjects: {
@@ -26,8 +32,11 @@ type Syllabus = {
 
 export default function SyllabusPage() {
   const { user } = useAuth();
+  const router = useRouter();
+  const { toast } = useToast();
   const [selectedExams, setSelectedExams] = useState<string[]>([]);
   const [hydrated, setHydrated] = useState(false);
+  const [loadingTopic, setLoadingTopic] = useState<string | null>(null);
 
   useEffect(() => {
     if (user) {
@@ -40,10 +49,6 @@ export default function SyllabusPage() {
     setHydrated(true);
   }, [user]);
 
-  if (!hydrated) {
-    return null; // or a loading skeleton
-  }
-  
   const getSyllabusForExam = (examName: string): Syllabus | undefined => {
     const key = examName.toLowerCase().replace(/ /g, '');
     if (key.includes('jee')) return syllabusData.jee;
@@ -51,6 +56,36 @@ export default function SyllabusPage() {
     return undefined;
   };
 
+  const handlePracticeQuiz = async (topic: string, examName: string) => {
+    setLoadingTopic(topic);
+    const difficulty = 'hard';
+
+    const result = await generateMcqAction({ 
+        topic: `${topic} (for ${examName})`, 
+        questionCount: 20, 
+        difficulty: difficulty 
+    });
+    
+    setLoadingTopic(null);
+
+    if (result.error) {
+        toast({ variant: "destructive", title: "Error", description: result.error });
+    } else if (result.mcqs) {
+        const quizData = { 
+            topic: topic, 
+            difficulty: difficulty,
+            mcqs: result.mcqs,
+            totalTime: 20 * 1 * 60, // 20 questions, 1 min each
+        };
+        sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
+        router.push('/quiz');
+    }
+  }
+
+  if (!hydrated) {
+    return null; // or a loading skeleton
+  }
+  
   return (
     <div className="space-y-6">
       <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Syllabus</h1>
@@ -83,11 +118,34 @@ export default function SyllabusPage() {
                                                             {chapter.name}
                                                         </AccordionTrigger>
                                                         <AccordionContent>
-                                                            <ul className="list-disc pl-10 pt-2 text-sm text-muted-foreground space-y-1.5">
+                                                            <div className="pt-2 grid grid-cols-1 md:grid-cols-2 gap-3">
                                                                 {chapter.topics.map((topic) => (
-                                                                    <li key={topic}>{topic}</li>
+                                                                    <Card key={topic} className="bg-background/50">
+                                                                        <CardHeader className="p-4">
+                                                                            <CardTitle className="text-sm font-medium">{topic}</CardTitle>
+                                                                        </CardHeader>
+                                                                        <CardFooter className="p-4 pt-0 flex gap-2">
+                                                                            <Button 
+                                                                                size="sm" 
+                                                                                className="flex-1"
+                                                                                onClick={() => handlePracticeQuiz(topic, examName)}
+                                                                                disabled={loadingTopic === topic}
+                                                                            >
+                                                                                {loadingTopic === topic ? (
+                                                                                    <Loader2 className="mr-2 h-4 w-4 animate-spin" />
+                                                                                ) : (
+                                                                                    <ClipboardCheck className="mr-2 h-4 w-4" />
+                                                                                )}
+                                                                                Practice Quiz
+                                                                            </Button>
+                                                                            <Button size="sm" variant="secondary" className="flex-1" disabled>
+                                                                                <Target className="mr-2 h-4 w-4" />
+                                                                                Proficiency
+                                                                            </Button>
+                                                                        </CardFooter>
+                                                                    </Card>
                                                                 ))}
-                                                            </ul>
+                                                            </div>
                                                         </AccordionContent>
                                                     </AccordionItem>
                                                 ))}
@@ -112,9 +170,9 @@ export default function SyllabusPage() {
                     You haven't selected any exams you're preparing for. Please update your profile to view the relevant syllabus.
                 </p>
                  <Link href="/profile">
-                    <button className="bg-primary text-primary-foreground hover:bg-primary/90 px-4 py-2 rounded-md">
+                    <Button>
                         Go to Profile
-                    </button>
+                    </Button>
                 </Link>
             </CardContent>
         </Card>
