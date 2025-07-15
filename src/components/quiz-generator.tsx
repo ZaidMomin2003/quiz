@@ -63,8 +63,17 @@ export function QuizGenerator() {
 
   useEffect(() => {
     const topicFromUrl = searchParams.get('topic');
+    const countFromUrl = searchParams.get('count');
+    const difficultyFromUrl = searchParams.get('difficulty');
+
     if (topicFromUrl) {
       form.setValue('topic', decodeURIComponent(topicFromUrl));
+    }
+    if (countFromUrl) {
+      form.setValue('questionCount', parseInt(countFromUrl, 10));
+    }
+    if (difficultyFromUrl && ["easy", "medium", "hard"].includes(difficultyFromUrl)) {
+      form.setValue('difficulty', difficultyFromUrl as "easy" | "medium" | "hard");
     }
   }, [searchParams, form]);
 
@@ -148,6 +157,7 @@ export function QuizGenerator() {
                 <Select
                   onValueChange={field.onChange}
                   defaultValue={field.value}
+                  value={field.value}
                 >
                   <FormControl>
                     <SelectTrigger>

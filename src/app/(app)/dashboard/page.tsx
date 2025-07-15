@@ -6,9 +6,15 @@ import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
 import Link from 'next/link';
 import { useState } from 'react';
+import { Label } from '@/components/ui/label';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 
 export default function DashboardPage() {
     const [topic, setTopic] = useState('');
+    const [questionCount, setQuestionCount] = useState(5);
+    const [difficulty, setDifficulty] = useState('easy');
+
+    const canGenerate = topic.trim().length > 1;
 
     return (
         <div className="flex flex-col gap-6">
@@ -46,25 +52,54 @@ export default function DashboardPage() {
             </div>
 
             {/* Start Quiz Section */}
-            <Card>
-                <CardHeader>
-                    <CardTitle>Start a New Quiz</CardTitle>
-                    <CardDescription>What topic do you want to practice today?</CardDescription>
+            <Card className="relative shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow duration-300">
+                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg blur-sm opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
+                <CardHeader className="relative">
+                    <CardTitle>Create Your Next Challenge</CardTitle>
+                    <CardDescription>Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
                 </CardHeader>
-                <CardContent>
-                    <div className="flex flex-col sm:flex-row gap-4">
+                <CardContent className="relative space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="topic-input">What topic do you want to practice today?</Label>
                         <Input 
-                            placeholder="e.g., The Renaissance" 
+                            id="topic-input"
+                            placeholder="e.g., The Renaissance, JavaScript Promises, or Quantum Physics" 
                             className="flex-grow"
                             value={topic}
                             onChange={(e) => setTopic(e.target.value)}
                         />
-                        <Button asChild>
-                            <Link href={`/practice-quiz?topic=${encodeURIComponent(topic)}`}>
-                                Generate Quiz
-                            </Link>
-                        </Button>
                     </div>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div className="space-y-2">
+                            <Label htmlFor="question-count">Number of Questions</Label>
+                             <Input 
+                                id="question-count"
+                                type="number"
+                                value={questionCount}
+                                onChange={(e) => setQuestionCount(Math.min(10, Math.max(1, parseInt(e.target.value, 10) || 1)))}
+                                min={1}
+                                max={10}
+                            />
+                        </div>
+                        <div className="space-y-2">
+                             <Label htmlFor="difficulty">Difficulty</Label>
+                             <Select value={difficulty} onValueChange={setDifficulty}>
+                                <SelectTrigger id="difficulty">
+                                    <SelectValue placeholder="Select difficulty" />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="easy">Easy</SelectItem>
+                                    <SelectItem value="medium">Medium</SelectItem>
+                                    <SelectItem value="hard">Hard</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                     <Button asChild size="lg" className="w-full" disabled={!canGenerate}>
+                        <Link href={`/practice-quiz?topic=${encodeURIComponent(topic)}&count=${questionCount}&difficulty=${difficulty}`}>
+                            Generate Quiz
+                        </Link>
+                    </Button>
                 </CardContent>
             </Card>
         </div>
