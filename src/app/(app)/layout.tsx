@@ -1,10 +1,12 @@
 // src/app/(app)/layout.tsx
 'use client';
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent, DropdownMenuItem, DropdownMenuSeparator, DropdownMenuLabel } from '@/components/ui/dropdown-menu';
+import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Pencil, Bot, LogOut } from 'lucide-react';
+import { LayoutDashboard, Pencil, Bot, LogOut, User as UserIcon, Settings } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppLayout({
@@ -64,16 +66,42 @@ export default function AppLayout({
                  </SidebarMenuItem>
               </SidebarMenu>
             </div>
-            <div className="p-2">
-               <SidebarMenu>
-                <SidebarMenuItem>
-                   <SidebarMenuButton onClick={handleLogout}>
-                      <LogOut />
-                      <span>Sign Out</span>
-                   </SidebarMenuButton>
-                 </SidebarMenuItem>
-               </SidebarMenu>
-            </div>
+            
+            <DropdownMenu>
+              <DropdownMenuTrigger asChild>
+                <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent">
+                   <Avatar className="h-8 w-8">
+                     <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
+                      <AvatarFallback>{user.email.charAt(0).toUpperCase()}</AvatarFallback>
+                   </Avatar>
+                   <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                     <span className="text-sm font-medium text-sidebar-foreground">
+                       {user.email.split('@')[0]}
+                     </span>
+                     <span className="text-xs text-sidebar-foreground/70">
+                        {user.email}
+                     </span>
+                   </div>
+                </button>
+              </DropdownMenuTrigger>
+              <DropdownMenuContent className="mb-2 w-56" side="top" align="start">
+                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem>
+                  <UserIcon className="mr-2 h-4 w-4" />
+                  <span>Profile</span>
+                </DropdownMenuItem>
+                <DropdownMenuItem>
+                   <Settings className="mr-2 h-4 w-4" />
+                   <span>Settings</span>
+                </DropdownMenuItem>
+                <DropdownMenuSeparator />
+                <DropdownMenuItem onClick={handleLogout}>
+                   <LogOut className="mr-2 h-4 w-4" />
+                   <span>Sign Out</span>
+                </DropdownMenuItem>
+              </DropdownMenuContent>
+            </DropdownMenu>
           </div>
       </Sidebar>
       <SidebarInset>
@@ -82,9 +110,7 @@ export default function AppLayout({
            <div />
         </header>
         <main className="p-4 md:p-6">
-            <div className="w-full">
-              {children}
-            </div>
+            {children}
         </main>
       </SidebarInset>
     </SidebarProvider>
