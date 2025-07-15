@@ -4,7 +4,7 @@ import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, Si
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Pencil, Bot } from 'lucide-react';
+import { LayoutDashboard, Pencil, Bot, LogOut } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppLayout({
@@ -68,6 +68,7 @@ export default function AppLayout({
                <SidebarMenu>
                 <SidebarMenuItem>
                    <SidebarMenuButton onClick={handleLogout}>
+                      <LogOut />
                       <span>Sign Out</span>
                    </SidebarMenuButton>
                  </SidebarMenuItem>
@@ -81,7 +82,9 @@ export default function AppLayout({
            <div />
         </header>
         <main className="p-4 md:p-6">
-            {children}
+            <div className="w-full">
+              {children}
+            </div>
         </main>
       </SidebarInset>
     </SidebarProvider>
