@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp, Lightbulb } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp, Lightbulb, Bot } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
@@ -17,6 +17,93 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
+import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { Slider } from "@/components/ui/slider";
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+
+
+function QuizGeneratorPrototype() {
+  const router = useRouter();
+  const [topic, setTopic] = useState('The Solar System');
+  const [questionCount, setQuestionCount] = useState(5);
+  const [difficulty, setDifficulty] = useState('medium');
+
+  const handleGenerate = () => {
+    router.push('/signup');
+  };
+
+  return (
+     <section className="w-full py-16 md:py-24 bg-card/30">
+        <div className="container mx-auto">
+             <div className="text-center max-w-2xl mx-auto">
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Experience It Live</h2>
+                <p className="text-muted-foreground mb-12">
+                Interact with the generator below to see how easy it is to create a quiz. When you're ready, hit "Generate" to sign up and get your results.
+                </p>
+            </div>
+            <Card className="max-w-2xl mx-auto bg-background/50 shadow-lg">
+                <CardHeader>
+                    <div className="flex items-center gap-3">
+                        <div className="p-2 bg-primary/10 rounded-full">
+                            <Bot className="h-6 w-6 text-primary" />
+                        </div>
+                        <div>
+                             <CardTitle>Quiz Generator</CardTitle>
+                             <CardDescription>Create your quiz in an instant.</CardDescription>
+                        </div>
+                    </div>
+                </CardHeader>
+                <CardContent className="space-y-6">
+                    <div className="space-y-2">
+                        <Label htmlFor="prototype-topic">Topic</Label>
+                        <Input 
+                            id="prototype-topic" 
+                            value={topic} 
+                            onChange={(e) => setTopic(e.target.value)}
+                            placeholder="e.g., The Renaissance"
+                        />
+                    </div>
+                     <div className="space-y-4">
+                        <div className="flex justify-between items-center">
+                            <Label>Number of Questions</Label>
+                            <span className="w-12 text-center text-lg font-bold text-primary tabular-nums">{questionCount}</span>
+                        </div>
+                        <Slider
+                            value={[questionCount]}
+                            onValueChange={(value) => setQuestionCount(value[0])}
+                            min={1}
+                            max={10}
+                            step={1}
+                        />
+                    </div>
+                    <div className="space-y-2">
+                         <Label>Difficulty</Label>
+                         <ToggleGroup
+                            type="single"
+                            value={difficulty}
+                            onValueChange={(value) => {
+                                if (value) setDifficulty(value)
+                            }}
+                            className="grid grid-cols-3"
+                         >
+                            <ToggleGroupItem value="easy" aria-label="Easy">Easy</ToggleGroupItem>
+                            <ToggleGroupItem value="medium" aria-label="Medium">Medium</ToggleGroupItem>
+                            <ToggleGroupItem value="hard" aria-label="Hard">Hard</ToggleGroupItem>
+                         </ToggleGroup>
+                    </div>
+                </CardContent>
+                <CardFooter>
+                    <Button size="lg" className="w-full" onClick={handleGenerate}>
+                        Generate Quiz & Sign Up
+                    </Button>
+                </CardFooter>
+            </Card>
+        </div>
+     </section>
+  )
+}
+
 
 export default function Home() {
   const testimonials = [
@@ -79,6 +166,9 @@ export default function Home() {
             </div>
           </div>
         </section>
+        
+        <QuizGeneratorPrototype />
+
 
         {/* New Modern Features Section */}
         <section id="features" className="relative w-full py-16 md:py-24 overflow-hidden">
