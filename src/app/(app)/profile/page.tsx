@@ -11,7 +11,9 @@ import { Textarea } from '@/components/ui/textarea';
 export default function ProfilePage() {
     const { user } = useAuth();
 
-    if (!user) return null;
+    if (!user) {
+        return null;
+    }
 
     const userInitial = user.name.charAt(0).toUpperCase();
 
@@ -64,7 +66,7 @@ export default function ProfilePage() {
                         <CardHeader>
                             <CardTitle>Account Settings</CardTitle>
                             <CardDescription>Manage your account settings.</CardDescription>
-                        </Header>
+                        </CardHeader>
                         <CardContent>
                             <Button variant="destructive" className="w-full">Delete Account</Button>
                         </CardContent>
