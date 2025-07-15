@@ -43,7 +43,7 @@ export function useOnboarding() {
 
     // Check if a new step has been added
     if (currentCompleted.length > prevCompleted.length) {
-      const lastCompletedStep = currentCompleted.find(step => !prevCompleted.includes(step));
+      const lastCompletedStep = currentCompleted[currentCompleted.length - 1];
 
       if(lastCompletedStep) {
          const nextStepIndex = ONBOARDING_STEPS.indexOf(lastCompletedStep) + 1;
@@ -58,28 +58,22 @@ export function useOnboarding() {
   }, [onboardingData.completedSteps, router]);
 
   const updateOnboardingData = (newData: Partial<OnboardingData>) => {
-    const completed = onboardingData.completedSteps || [];
+    if (!user) return;
+
+    const currentData = JSON.parse(localStorage.getItem(`onboarding_data_${user.email}`) || '{ "completedSteps": [] }');
+    const completed = currentData.completedSteps || [];
     const newCompletedSteps = completed.includes(currentStep) ? completed : [...completed, currentStep];
 
     const updatedData = { 
-        ...onboardingData, 
+        ...currentData, 
         ...newData,
         completedSteps: newCompletedSteps,
     };
     
     setOnboardingData(updatedData);
-    if (user) {
-      localStorage.setItem(`onboarding_data_${user.email}`, JSON.stringify(updatedData));
-    }
+    localStorage.setItem(`onboarding_data_${user.email}`, JSON.stringify(updatedData));
   };
   
-  const goToNextStep = () => {
-    const nextStepIndex = currentStepIndex + 1;
-    if (nextStepIndex < ONBOARDING_STEPS.length) {
-      router.push(`/onboarding/${ONBOARDING_STEPS[nextStepIndex]}`);
-    }
-  };
-
   const isStepCompleted = (step: string) => {
     return onboardingData.completedSteps?.includes(step) ?? false;
   };
@@ -89,7 +83,6 @@ export function useOnboarding() {
   return {
     onboardingData,
     updateOnboardingData,
-    goToNextStep,
     isStepCompleted,
     currentStep,
     progress,
