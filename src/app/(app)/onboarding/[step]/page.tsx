@@ -62,9 +62,11 @@ export default function OnboardingStepPage() {
       case 'finish':
         return <FinishStep />;
       default:
-        // This default case will now be handled gracefully by a redirect
-        // if the step is not one of the defined ones.
-        router.replace('/onboarding/welcome');
+        // This handles invalid steps by redirecting to the start.
+        // It's placed here to avoid a render-loop with useEffect.
+        if (isReady) {
+          router.replace('/onboarding/welcome');
+        }
         return null;
     }
   };
