@@ -3,7 +3,7 @@
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { ChartContainer } from '@/components/ui/chart';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
 import type { ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
@@ -66,66 +66,64 @@ export default function DashboardPage() {
                     <CardDescription>Your quiz scores over the last week.</CardDescription>
                 </CardHeader>
                 <CardContent>
-                   <div className="w-full overflow-x-auto">
-                        <div className="h-[350px]" style={{minWidth: '600px'}}>
-                            <ChartContainer config={chartConfig} className="w-full h-full">
-                                <AreaChart
-                                    data={chartData}
-                                    margin={{
-                                        top: 10,
-                                        right: 30,
-                                        left: 0,
-                                        bottom: 0,
+                   <div className="h-[350px] w-full">
+                        <ChartContainer config={chartConfig} className="w-full h-full">
+                            <AreaChart
+                                data={chartData}
+                                margin={{
+                                    top: 10,
+                                    right: 30,
+                                    left: 0,
+                                    bottom: 0,
+                                }}
+                            >
+                                <defs>
+                                    <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
+                                        <stop offset="5%" stopColor="#06D6A0" stopOpacity={0.8}/>
+                                        <stop offset="95%" stopColor="#06D6A0" stopOpacity={0}/>
+                                    </linearGradient>
+                                </defs>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border) / 0.5)" />
+                                <XAxis dataKey="day" tickLine={false} axisLine={false} />
+                                <YAxis tickLine={false} axisLine={false} domain={[0, 100]} />
+                                <Tooltip
+                                    cursor={{ stroke: '#06D6A0', strokeWidth: 2, strokeDasharray: '5 5' }}
+                                    content={({ active, payload }) => {
+                                        if (active && payload && payload.length) {
+                                            return (
+                                                <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-2 px-3 backdrop-blur-sm bg-background/50">
+                                                    <p className="text-sm font-bold">{`${payload[0].value}%`}</p>
+                                                </div>
+                                            );
+                                        }
+                                        return null;
                                     }}
-                                >
-                                    <defs>
-                                        <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="#06D6A0" stopOpacity={0.8}/>
-                                            <stop offset="95%" stopColor="#06D6A0" stopOpacity={0}/>
-                                        </linearGradient>
-                                    </defs>
-                                    <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border) / 0.5)" />
-                                    <XAxis dataKey="day" tickLine={false} axisLine={false} />
-                                    <YAxis tickLine={false} axisLine={false} domain={[0, 100]} />
-                                    <Tooltip
-                                        cursor={{ stroke: '#06D6A0', strokeWidth: 2, strokeDasharray: '5 5' }}
-                                        content={({ active, payload }) => {
-                                            if (active && payload && payload.length) {
-                                                return (
-                                                    <div className="rounded-lg border bg-card text-card-foreground shadow-sm p-2 px-3 backdrop-blur-sm bg-background/50">
-                                                        <p className="text-sm font-bold">{`${payload[0].value}%`}</p>
-                                                    </div>
-                                                );
-                                            }
-                                            return null;
-                                        }}
-                                    />
-                                    <Area
-                                        type="monotone"
-                                        dataKey="score"
-                                        strokeWidth={3}
-                                        stroke="#06D6A0"
-                                        fillOpacity={1}
-                                        fill="url(#colorScore)"
-                                        dot={{
-                                          r: 6,
-                                          stroke: '#06D6A0',
-                                          fill: 'hsl(var(--background))',
-                                          strokeWidth: 2,
-                                        }}
-                                        activeDot={{
-                                          r: 8,
-                                          stroke: 'hsl(var(--background))',
-                                          fill: '#06D6A0',
-                                          strokeWidth: 2,
-                                          style: {
-                                            filter: 'drop-shadow(0 0 5px #06D6A0)',
-                                          }
-                                        }}
-                                    />
-                                </AreaChart>
-                            </ChartContainer>
-                        </div>
+                                />
+                                <Area
+                                    type="monotone"
+                                    dataKey="score"
+                                    strokeWidth={3}
+                                    stroke="#06D6A0"
+                                    fillOpacity={1}
+                                    fill="url(#colorScore)"
+                                    dot={{
+                                      r: 6,
+                                      stroke: '#06D6A0',
+                                      fill: 'hsl(var(--background))',
+                                      strokeWidth: 2,
+                                    }}
+                                    activeDot={{
+                                      r: 8,
+                                      stroke: 'hsl(var(--background))',
+                                      fill: '#06D6A0',
+                                      strokeWidth: 2,
+                                      style: {
+                                        filter: 'drop-shadow(0 0 5px #06D6A0)',
+                                      }
+                                    }}
+                                />
+                            </AreaChart>
+                        </ChartContainer>
                     </div>
                 </CardContent>
             </Card>
