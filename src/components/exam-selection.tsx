@@ -3,16 +3,9 @@
 import { Card, CardContent } from '@/components/ui/card';
 import { cn } from '@/lib/utils';
 import {
-  Stethoscope,
   Atom,
   GraduationCap,
-  Languages,
-  BookOpen,
-  Calculator,
-  Briefcase,
-  Globe,
-  Landmark,
-  PenSquare,
+  FlaskConical,
   type LucideIcon,
 } from 'lucide-react';
 
@@ -22,18 +15,9 @@ type Exam = {
 };
 
 const exams: Exam[] = [
-  { name: 'NEET', icon: Stethoscope },
-  { name: 'JEE', icon: Atom },
-  { name: 'GATE', icon: GraduationCap },
-  { name: 'CAT', icon: Briefcase },
-  { name: 'SAT', icon: BookOpen },
-  { name: 'ACT', icon: PenSquare },
-  { name: 'IELTS', icon: Languages },
-  { name: 'TOEFL', icon: Globe },
-  { name: 'NEET PG', icon: Stethoscope },
-  { name: 'UPSC', icon: Landmark },
-  { name: 'KCET', icon: Calculator },
-  { name: 'Other', icon: GraduationCap },
+  { name: 'NEET', icon: FlaskConical },
+  { name: 'JEE Mains', icon: Atom },
+  { name: 'JEE Mains + Advanced', icon: GraduationCap },
 ];
 
 type ExamSelectionProps = {
@@ -52,7 +36,7 @@ export function ExamSelection({ selectedExams, onSelectionChange }: ExamSelectio
   };
 
   return (
-    <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 gap-4">
+    <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
       {exams.map((exam) => {
         const isSelected = selectedExams.includes(exam.name);
         return (

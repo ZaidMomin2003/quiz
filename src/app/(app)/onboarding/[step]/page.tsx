@@ -4,6 +4,7 @@ import { useRouter, useParams } from 'next/navigation';
 import { useOnboarding } from '@/hooks/use-onboarding';
 import { WelcomeStep } from '@/components/onboarding/welcome-step';
 import { GoalStep } from '@/components/onboarding/goal-step';
+import { YearStep } from '@/components/onboarding/year-step';
 import { ExamsStep } from '@/components/onboarding/exams-step';
 import { FinishStep } from '@/components/onboarding/finish-step';
 import { useEffect, useState } from 'react';
@@ -16,18 +17,21 @@ export default function OnboardingStepPage() {
   const {
     onboardingData,
     updateOnboardingData,
-    goToNextStep,
     isStepCompleted,
   } = useOnboarding();
 
  useEffect(() => {
     // This effect ensures that we only render the step component after verifying access rights.
     // It prevents navigation calls during the render phase.
-    if (step === 'exams' && !isStepCompleted('goal')) {
-      router.replace('/onboarding/goal');
+    if (step === 'goal' && !isStepCompleted('welcome')) {
+      router.replace('/onboarding/welcome');
+    } else if (step === 'year' && !isStepCompleted('goal')) {
+        router.replace('/onboarding/goal');
+    } else if (step === 'exams' && !isStepCompleted('year')) {
+      router.replace('/onboarding/year');
     } else if (step === 'finish' && !isStepCompleted('exams')) {
       router.replace('/onboarding/exams');
-    } else if (step && !['welcome', 'goal', 'exams', 'finish'].includes(step)) {
+    } else if (step && !['welcome', 'goal', 'year', 'exams', 'finish'].includes(step)) {
       router.replace('/onboarding/welcome');
     } else {
         setIsReady(true);
@@ -58,6 +62,13 @@ export default function OnboardingStepPage() {
             onNext={(data) => handleNext({ goal: data })}
             initialValue={onboardingData.goal}
           />
+        );
+       case 'year':
+        return (
+            <YearStep
+                onNext={(data) => handleNext({ year: data })}
+                initialValue={onboardingData.year}
+            />
         );
       case 'exams':
         return (

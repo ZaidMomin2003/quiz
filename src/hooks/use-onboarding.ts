@@ -3,10 +3,11 @@ import { useState, useEffect, useRef } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAuth } from './use-auth';
 
-const ONBOARDING_STEPS = ['welcome', 'goal', 'exams', 'finish'];
+const ONBOARDING_STEPS = ['welcome', 'goal', 'year', 'exams', 'finish'];
 
 type OnboardingData = {
   goal?: string;
+  year?: string;
   exams?: string[];
   completedSteps?: string[];
 };
@@ -40,12 +41,15 @@ export function useOnboarding() {
     const currentCompleted = onboardingData.completedSteps || [];
     const prevCompleted = previousCompletedSteps.current;
 
+    // Check if a new step has been added
     if (currentCompleted.length > prevCompleted.length) {
-      const lastCompletedStep = currentCompleted[currentCompleted.length - 1];
-      const nextStepIndex = ONBOARDING_STEPS.indexOf(lastCompletedStep) + 1;
-      
-      if (nextStepIndex < ONBOARDING_STEPS.length) {
-        router.push(`/onboarding/${ONBOARDING_STEPS[nextStepIndex]}`);
+      const lastCompletedStep = currentCompleted.find(step => !prevCompleted.includes(step));
+
+      if(lastCompletedStep) {
+         const nextStepIndex = ONBOARDING_STEPS.indexOf(lastCompletedStep) + 1;
+        if (nextStepIndex < ONBOARDING_STEPS.length) {
+          router.push(`/onboarding/${ONBOARDING_STEPS[nextStepIndex]}`);
+        }
       }
     }
 

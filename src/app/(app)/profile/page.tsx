@@ -9,14 +9,15 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { BookCopy, Target as TargetIcon } from 'lucide-react';
+import { BookCopy, Target as TargetIcon, Calendar } from 'lucide-react';
 import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
     const { user } = useAuth();
     const router = useRouter();
-    const [userData, setUserData] = useState<{ goal: string; exams: string[] }>({
+    const [userData, setUserData] = useState<{ goal: string; year: string; exams: string[] }>({
         goal: '',
+        year: '',
         exams: [],
     });
 
@@ -39,6 +40,12 @@ export default function ProfilePage() {
         'ace-exams': 'Ace Exams',
         'learn-skill': 'Learn a New Skill',
         'just-for-fun': 'Just for Fun'
+    }
+
+    const yearDisplay: { [key: string]: string } = {
+        'first-year': 'First Year',
+        'second-year': 'Second Year',
+        'repeater': 'Repeater'
     }
 
     return (
@@ -70,19 +77,33 @@ export default function ProfilePage() {
                         </CardFooter>
                     </Card>
 
-                    <Card>
-                        <CardHeader>
-                            <div className="flex items-center gap-3">
-                                <TargetIcon className="h-6 w-6 text-primary" />
-                                <CardTitle>My Goal</CardTitle>
-                            </div>
-                        </CardHeader>
-                        <CardContent>
-                            <Badge variant="secondary">{goalDisplay[userData.goal] || 'Not set'}</Badge>
-                        </CardContent>
-                    </Card>
+                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-3">
+                                    <TargetIcon className="h-6 w-6 text-primary" />
+                                    <CardTitle>My Goal</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <Badge variant="secondary">{goalDisplay[userData.goal] || 'Not set'}</Badge>
+                            </CardContent>
+                        </Card>
+                         <Card>
+                            <CardHeader>
+                                <div className="flex items-center gap-3">
+                                    <Calendar className="h-6 w-6 text-primary" />
+                                    <CardTitle>My Year</CardTitle>
+                                </div>
+                            </CardHeader>
+                            <CardContent>
+                                <Badge variant="secondary">{yearDisplay[userData.year] || 'Not set'}</Badge>
+                            </CardContent>
+                        </Card>
+                    </div>
 
-                    {userData.exams.length > 0 && (
+
+                    {userData.exams && userData.exams.length > 0 && (
                         <Card>
                             <CardHeader>
                                 <div className="flex items-center gap-3">
