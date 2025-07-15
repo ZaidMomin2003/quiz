@@ -123,7 +123,7 @@ export default function SyllabusPage() {
                                                                         <CardHeader className="p-4">
                                                                             <CardTitle className="text-sm font-medium">{topic}</CardTitle>
                                                                         </CardHeader>
-                                                                        <CardFooter className="p-4 pt-0 flex gap-2">
+                                                                        <CardFooter className="p-4 pt-0 flex flex-col sm:flex-row gap-2">
                                                                             <Button 
                                                                                 size="sm" 
                                                                                 className="flex-1"
