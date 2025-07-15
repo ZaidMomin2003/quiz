@@ -29,7 +29,7 @@ export default function OnboardingStepPage() {
     } else {
         setIsReady(true);
     }
-  }, [step, isStepCompleted, router]);
+  }, [step, isStepCompleted, router, onboardingData]);
 
 
   const handleNext = (data: any) => {
