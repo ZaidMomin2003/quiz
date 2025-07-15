@@ -1,3 +1,4 @@
+
 // src/app/page.tsx
 'use client';
 
@@ -54,17 +55,17 @@ export default function Home() {
 
   return (
     <PublicPageLayout>
-        <div className="flex flex-col items-center">
+        <div className="flex flex-col items-center w-full">
 
         {/* Hero Section */}
         <section className="w-full grid-bg relative">
            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
-           <div className="container mx-auto text-center py-24 md:py-32 relative z-10">
+           <div className="container mx-auto text-center py-20 md:py-28 relative z-10">
             <Badge variant="outline" className="mb-4 bg-card/50 backdrop-blur">
               <Star className="w-3 h-3 mr-1.5 fill-current" />
               Powered by the latest AI models
             </Badge>
-            <h1 className="text-4xl sm:text-5xl md:text-7xl font-black tracking-tighter mb-4">
+            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4">
               Create Engaging Quizzes in Seconds with AI
             </h1>
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground mb-8">
@@ -84,10 +85,10 @@ export default function Home() {
         </section>
 
         {/* Features Section */}
-        <section id="features" className="w-full py-20 md:py-28">
+        <section id="features" className="w-full py-16 md:py-24">
           <div className="container mx-auto text-center">
             <Badge variant="secondary" className="mb-2">Features</Badge>
-            <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">The Smartest Way to Build Quizzes</h2>
+            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">The Smartest Way to Build Quizzes</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
               QuizForge is packed with features designed to make quiz creation effortless and effective.
             </p>
@@ -136,11 +137,11 @@ export default function Home() {
         </section>
         
         {/* How it Works Section */}
-        <section className="w-full py-20 md:py-28 bg-card/30">
+        <section className="w-full py-16 md:py-24 bg-card/30">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <Badge variant="secondary" className="mb-2">How It Works</Badge>
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Create a Quiz in 3 Simple Steps</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Create a Quiz in 3 Simple Steps</h2>
               <p className="text-muted-foreground mb-8">
                 We've simplified the quiz creation process so you can focus on what matters most: learning and assessment.
               </p>
@@ -183,11 +184,11 @@ export default function Home() {
         </section>
 
         {/* Pricing Section */}
-        <section id="pricing" className="w-full py-20 md:py-28">
+        <section id="pricing" className="w-full py-16 md:py-24">
           <div className="container mx-auto">
             <div className="text-center max-w-2xl mx-auto">
                 <Badge variant="secondary" className="mb-2">Pricing</Badge>
-                <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Choose the Perfect Plan for Your Needs</h2>
+                <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Choose the Perfect Plan</h2>
                 <p className="text-muted-foreground mb-12">
                 Whether you're just starting or scaling up, QuizForge has a plan that fits your needs.
                 </p>
@@ -272,9 +273,9 @@ export default function Home() {
         </section>
         
         {/* Testimonials Section */}
-        <section className="w-full py-20 md:py-28 bg-card/30">
+        <section className="w-full py-16 md:py-24 bg-card/30">
           <div className="container mx-auto text-center">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Loved by Educators and Learners</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Loved by Educators and Learners</h2>
               <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
                 Don't just take our word for it. Here's what our users have to say.
               </p>
@@ -316,10 +317,10 @@ export default function Home() {
         </section>
         
         {/* FAQ Section */}
-        <section id="faq" className="w-full py-20 md:py-28">
+        <section id="faq" className="w-full py-16 md:py-24">
           <div className="container mx-auto max-w-3xl">
             <div className="text-center">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Your Questions, Answered</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Your Questions, Answered</h2>
               <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
                 Find answers to common questions about QuizForge.
               </p>
@@ -348,10 +349,10 @@ export default function Home() {
         </section>
 
         {/* Contact Section */}
-        <section id="contact" className="w-full py-20 md:py-28 bg-card/30">
+        <section id="contact" className="w-full py-16 md:py-24 bg-card/30">
           <div className="container mx-auto">
             <div className="max-w-2xl mx-auto text-center">
-              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Get in Touch</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Get in Touch</h2>
               <p className="text-muted-foreground mb-12">
                 Have questions or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
               </p>
