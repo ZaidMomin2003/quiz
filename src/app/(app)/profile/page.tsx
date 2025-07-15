@@ -26,7 +26,7 @@ export default function ProfilePage() {
                             <CardDescription>Update your account's profile information and email address.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
-                             <div className="space-y-2">
+                            <div className="space-y-2">
                                 <Label htmlFor="username">Username</Label>
                                 <Input id="username" defaultValue={user.name} />
                             </div>
@@ -46,9 +46,9 @@ export default function ProfilePage() {
                 </div>
 
                 <div className="space-y-6">
-                     <Card className="flex flex-col items-center text-center p-6">
+                    <Card className="flex flex-col items-center text-center p-6">
                         <CardHeader className="p-0 mb-4">
-                             <Avatar className="h-24 w-24 mb-4">
+                            <Avatar className="h-24 w-24 mb-4">
                                 <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
                                 <AvatarFallback className="text-3xl">{userInitial}</AvatarFallback>
                             </Avatar>
@@ -63,7 +63,7 @@ export default function ProfilePage() {
                     <Card>
                         <CardHeader>
                             <CardTitle>Account Settings</CardTitle>
-                             <CardDescription>Manage your account settings.</CardDescription>
+                            <CardDescription>Manage your account settings.</CardDescription>
                         </Header>
                         <CardContent>
                             <Button variant="destructive" className="w-full">Delete Account</Button>

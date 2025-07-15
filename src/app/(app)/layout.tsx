@@ -128,18 +128,20 @@ export default function AppLayout({
                      <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
                       <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
                    </Avatar>
-                   <div className="flex flex-col group-data-[collapsible=icon]:hidden">
+                   <div className="flex flex-col justify-center group-data-[collapsible=icon]:hidden">
                      <span className="text-sm font-medium text-sidebar-foreground">
                        {user.name}
-                     </span>
-                     <span className="text-xs text-sidebar-foreground/70">
-                        {user.email}
                      </span>
                    </div>
                 </button>
               </DropdownMenuTrigger>
               <DropdownMenuContent className="mb-2 w-56" side="top" align="start">
-                <DropdownMenuLabel>My Account</DropdownMenuLabel>
+                <DropdownMenuLabel>
+                    <div className="flex flex-col">
+                        <span className="text-sm font-medium">{user.name}</span>
+                        <span className="text-xs text-muted-foreground font-normal">{user.email}</span>
+                    </div>
+                </DropdownMenuLabel>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem asChild>
                   <Link href="/profile">
