@@ -1,8 +1,8 @@
 // src/app/(app)/dashboard/page.tsx
 'use client';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { ChartContainer, ChartTooltip, ChartTooltipContent } from '@/components/ui/chart';
-import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip, ResponsiveContainer } from 'recharts';
+import { ChartContainer } from '@/components/ui/chart';
+import { Area, AreaChart, CartesianGrid, XAxis, YAxis, Tooltip } from 'recharts';
 import type { ChartConfig } from '@/components/ui/chart';
 
 const chartData = [
@@ -29,6 +29,8 @@ export default function DashboardPage() {
     return (
         <div className="space-y-6">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
+            
+            {/* Analytics Cards Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                     <CardHeader>
@@ -59,6 +61,7 @@ export default function DashboardPage() {
                 </Card>
             </div>
 
+            {/* Progress Chart Section */}
             <Card>
                 <CardHeader>
                     <CardTitle>Weekly Progress</CardTitle>
@@ -66,7 +69,7 @@ export default function DashboardPage() {
                 </CardHeader>
                 <CardContent>
                    <div className="w-full overflow-x-auto">
-                        <div className="h-[350px] min-w-[600px]">
+                        <div className="h-[350px]" style={{minWidth: '600px'}}>
                             <ChartContainer config={chartConfig} className="w-full h-full">
                                 <AreaChart
                                     data={chartData}
@@ -114,7 +117,7 @@ export default function DashboardPage() {
                                         }}
                                         activeDot={{
                                           r: 8,
-                                          stroke: '#fff',
+                                          stroke: 'hsl(var(--background))',
                                           fill: '#06D6A0',
                                           strokeWidth: 2,
                                           style: {
