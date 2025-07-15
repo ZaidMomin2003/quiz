@@ -3,16 +3,18 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Mcq, QuizHistoryItem } from '@/lib/types';
+import type { Mcq, QuizHistoryItem, BookmarkItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { analyzeQuizAction } from '../actions';
-import { CheckCircle, XCircle, BrainCircuit, Target, Loader2, Lightbulb, Clock } from 'lucide-react';
+import { CheckCircle, XCircle, BrainCircuit, Target, Loader2, Lightbulb, Clock, Bookmark as BookmarkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
+import { useToast } from "@/hooks/use-toast";
+import { cn } from '@/lib/utils';
 
 
 type QuizData = {
@@ -37,6 +39,7 @@ type Analysis = {
 
 export default function QuizPage() {
     const router = useRouter();
+    const { toast } = useToast();
     const [quizData, setQuizData] = useState<QuizData | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
@@ -45,6 +48,8 @@ export default function QuizPage() {
     const [analysis, setAnalysis] = useState<Analysis | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
     const [timeLeft, setTimeLeft] = useState<number | null>(null);
+    const [bookmarkedTimestamps, setBookmarkedTimestamps] = useState<Set<number>>(new Set());
+
 
     const submitQuiz = useCallback(async (finalAnswers: Record<number, string>) => {
         if (!quizData || quizState === 'submitted') return;
@@ -173,6 +178,39 @@ export default function QuizPage() {
         return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     };
 
+    const handleBookmark = (index: number, explanation: Explanation) => {
+        if (!quizData) return;
+
+        const newBookmark: BookmarkItem = {
+            topic: quizData.topic,
+            question: explanation.question,
+            correctAnswer: explanation.correctAnswer,
+            explanation: explanation.explanation,
+            timestamp: Date.now() + index, // ensure uniqueness
+        };
+
+        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        
+        const alreadyExists = existingBookmarks.some(b => b.question === newBookmark.question);
+        
+        if (!alreadyExists) {
+            const updatedBookmarks = [...existingBookmarks, newBookmark];
+            localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+            setBookmarkedTimestamps(prev => new Set(prev).add(index));
+            toast({
+              title: "Bookmarked!",
+              description: "The explanation has been saved to your bookmarks.",
+            });
+        } else {
+             toast({
+                variant: 'destructive',
+                title: "Already Bookmarked",
+                description: "You've already saved this explanation.",
+            });
+        }
+    };
+
+
     if (!quizData) {
         return (
             <div className="flex h-screen items-center justify-center">
@@ -271,6 +309,7 @@ export default function QuizPage() {
                             const userAnswer = userAnswers[index];
                             const isCorrect = userAnswer === mcq.correctAnswer;
                             const explanationData = analysis?.detailedExplanations.find(ex => ex.question === mcq.question);
+                            const isBookmarked = bookmarkedTimestamps.has(index);
 
                             return (
                                 <AccordionItem key={index} value={`item-${index}`} className="border-b-0 mb-2 last:mb-0">
@@ -287,18 +326,31 @@ export default function QuizPage() {
                                                 <p className="text-muted-foreground">Correct answer: {mcq.correctAnswer}</p>
                                             )}
                                         </div>
-                                        {!isCorrect && explanationData && (
-                                            <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline pt-2">
-                                                <div className="flex items-center gap-2">
-                                                    <Lightbulb className="h-4 w-4" /> 
-                                                    Show Explanation
-                                                </div>
-                                            </AccordionTrigger>
+                                        {explanationData && (
+                                            <div className="flex items-center justify-start mt-2">
+                                                <AccordionTrigger className="text-sm text-muted-foreground hover:no-underline p-0">
+                                                    <div className="flex items-center gap-2">
+                                                        <Lightbulb className="h-4 w-4" /> 
+                                                        Show Explanation
+                                                    </div>
+                                                </AccordionTrigger>
+                                            </div>
                                         )}
                                     </div>
                                     <AccordionContent>
                                         {explanationData && (
-                                             <div className="p-4 bg-accent/50 rounded-b-lg mt-[-8px]">
+                                             <div className="p-4 bg-accent/50 rounded-b-lg mt-[-8px] border border-t-0">
+                                                <div className="flex justify-end mb-2">
+                                                     <Button
+                                                        variant="ghost"
+                                                        size="sm"
+                                                        onClick={() => handleBookmark(index, explanationData)}
+                                                        disabled={isBookmarked}
+                                                    >
+                                                        <BookmarkIcon className={cn("mr-2 h-4 w-4", isBookmarked && "fill-current")}/>
+                                                        {isBookmarked ? 'Bookmarked' : 'Bookmark'}
+                                                    </Button>
+                                                </div>
                                                 <p className="text-sm text-foreground">{explanationData.explanation}</p>
                                              </div>
                                         )}

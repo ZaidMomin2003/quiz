@@ -9,6 +9,9 @@ import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
 import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History, Bookmark } from 'lucide-react';
 import Link from 'next/link';
+import { useTheme } from '@/components/theme-provider';
+import { Switch } from '@/components/ui/switch';
+import { Label } from '@/components/ui/label';
 
 export default function AppLayout({
   children,
@@ -17,6 +20,8 @@ export default function AppLayout({
 }) {
   const { user, loading, logout } = useAuth();
   const router = useRouter();
+  const { theme, setTheme } = useTheme();
+
 
   useEffect(() => {
     if (!loading && !user) {
@@ -110,9 +115,18 @@ export default function AppLayout({
                     <span>Profile</span>
                   </Link>
                 </DropdownMenuItem>
-                <DropdownMenuItem>
-                   <Settings className="mr-2 h-4 w-4" />
-                   <span>Settings</span>
+                <DropdownMenuItem onSelect={(e) => e.preventDefault()}>
+                   <div className="flex items-center justify-between w-full">
+                     <Label htmlFor="theme-toggle" className="flex items-center gap-2 cursor-pointer">
+                        <Settings className="mr-2 h-4 w-4" />
+                        <span>Theme</span>
+                     </Label>
+                     <Switch 
+                        id="theme-toggle"
+                        checked={theme === 'dark'}
+                        onCheckedChange={(checked) => setTheme(checked ? 'dark' : 'light')}
+                     />
+                   </div>
                 </DropdownMenuItem>
                 <DropdownMenuSeparator />
                 <DropdownMenuItem onClick={handleLogout}>
