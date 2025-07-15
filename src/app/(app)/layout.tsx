@@ -7,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Pencil, Bot, LogOut, User as UserIcon, Settings, History } from 'lucide-react';
+import { LayoutDashboard, BookOpen, Bot, LogOut, User as UserIcon, Settings, History } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppLayout({
@@ -66,10 +66,10 @@ export default function AppLayout({
                    </SidebarMenuButton>
                  </SidebarMenuItem>
                  <SidebarMenuItem>
-                  <SidebarMenuButton asChild tooltip="Practice Quiz">
-                    <a href="/practice-quiz">
-                       <Pencil />
-                        <span>Practice Quiz</span>
+                  <SidebarMenuButton asChild tooltip="Learn">
+                    <a href="/learn">
+                       <BookOpen />
+                        <span>Learn</span>
                     </a>
                    </SidebarMenuButton>
                  </SidebarMenuItem>

@@ -3,7 +3,18 @@
 import { generateMcq } from '@/ai/flows/generate-mcq';
 import { analyzeQuiz } from '@/ai/flows/analyze-quiz-flow';
 import { generateFromConcepts } from '@/ai/flows/generate-from-concepts-flow';
-import type { GenerateMcqInput, GenerateMcqOutput, AnalyzeQuizInput, AnalyzeQuizOutput, GenerateFromConceptsInput, GenerateFromConceptsOutput } from '@/lib/types';
+import { generateLearnQuiz } from '@/ai/flows/generate-learn-quiz';
+
+import type { 
+    GenerateMcqInput, 
+    GenerateMcqOutput, 
+    AnalyzeQuizInput, 
+    AnalyzeQuizOutput, 
+    GenerateFromConceptsInput, 
+    GenerateFromConceptsOutput,
+    GenerateLearnQuizInput,
+    GenerateLearnQuizOutput
+} from '@/lib/types';
 
 
 export async function generateMcqAction(
@@ -50,4 +61,19 @@ export async function analyzeQuizAction(
     console.error('Error analyzing quiz:', error);
     return { error: 'An unexpected error occurred during analysis.' };
   }
+}
+
+export async function generateLearnQuizAction(
+  input: GenerateLearnQuizInput
+): Promise<{ mcqs?: GenerateLearnQuizOutput['mcqs']; error?: string }> {
+    try {
+        const result = await generateLearnQuiz(input);
+        if (!result || !result.mcqs || result.mcqs.length === 0) {
+            return { error: 'Could not generate a lesson for this topic. Please try again.' };
+        }
+        return { mcqs: result.mcqs };
+    } catch (error) {
+        console.error('Error generating learn quiz:', error);
+        return { error: 'An unexpected error occurred while generating your lesson.' };
+    }
 }

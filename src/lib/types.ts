@@ -54,3 +54,20 @@ export type GenerateFromConceptsInput = {
 export type GenerateFromConceptsOutput = {
     mcqs: Mcq[];
 };
+
+// Types for the new Learn Quiz feature
+export type LearnMcq = {
+  question: string;
+  options: string[];
+  correctAnswer: string;
+  explanation: string;
+  difficulty: 'easy' | 'medium' | 'hard';
+};
+
+export type GenerateLearnQuizInput = {
+  topic: string;
+};
+
+export type GenerateLearnQuizOutput = {
+  mcqs: LearnMcq[];
+};
