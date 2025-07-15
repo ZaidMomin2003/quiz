@@ -6,9 +6,10 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Badge } from '@/components/ui/badge';
-import { RefreshCw } from "lucide-react";
+import { RefreshCw, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { QuizHistoryItem } from '@/lib/types';
+import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
 
 export default function HistoryPage() {
     const [history, setHistory] = useState<QuizHistoryItem[]>([]);
@@ -48,9 +49,9 @@ export default function HistoryPage() {
                                 <TableHeader>
                                     <TableRow>
                                         <TableHead>Topic</TableHead>
-                                        <TableHead>Difficulty</TableHead>
+                                        <TableHead className="hidden md:table-cell">Difficulty</TableHead>
                                         <TableHead>Score</TableHead>
-                                        <TableHead>Date</TableHead>
+                                        <TableHead className="hidden md:table-cell">Date</TableHead>
                                         <TableHead className="text-right">Action</TableHead>
                                     </TableRow>
                                 </TableHeader>
@@ -58,19 +59,50 @@ export default function HistoryPage() {
                                     {history.map((item) => (
                                         <TableRow key={item.timestamp}>
                                             <TableCell className="font-medium">{item.topic}</TableCell>
-                                            <TableCell>
+                                            <TableCell className="hidden md:table-cell">
                                                 <Badge variant={
                                                     item.difficulty === 'easy' ? 'secondary' : 
                                                     item.difficulty === 'medium' ? 'outline' : 'destructive'
                                                 } className="capitalize">{item.difficulty}</Badge>
                                             </TableCell>
                                             <TableCell>{item.score} / {item.totalQuestions}</TableCell>
-                                            <TableCell>{new Date(item.timestamp).toLocaleDateString()}</TableCell>
+                                            <TableCell className="hidden md:table-cell">{new Date(item.timestamp).toLocaleDateString()}</TableCell>
                                             <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
-                                                    <RefreshCw className="mr-2 h-4 w-4" />
-                                                    Retake
-                                                </Button>
+                                                <div className="hidden md:block">
+                                                    <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
+                                                        <RefreshCw className="mr-2 h-4 w-4" />
+                                                        Retake
+                                                    </Button>
+                                                </div>
+                                                <div className="md:hidden">
+                                                    <DropdownMenu>
+                                                        <DropdownMenuTrigger asChild>
+                                                            <Button variant="ghost" size="icon">
+                                                                <MoreHorizontal className="h-4 w-4" />
+                                                                <span className="sr-only">More</span>
+                                                            </Button>
+                                                        </DropdownMenuTrigger>
+                                                        <DropdownMenuContent align="end">
+                                                            <DropdownMenuLabel>Details</DropdownMenuLabel>
+                                                            <DropdownMenuItem>
+                                                                <span className="font-semibold mr-2">Difficulty:</span>
+                                                                <Badge variant={
+                                                                    item.difficulty === 'easy' ? 'secondary' : 
+                                                                    item.difficulty === 'medium' ? 'outline' : 'destructive'
+                                                                } className="capitalize">{item.difficulty}</Badge>
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuItem>
+                                                                <span className="font-semibold mr-2">Date:</span>
+                                                                {new Date(item.timestamp).toLocaleDateString()}
+                                                            </DropdownMenuItem>
+                                                            <DropdownMenuSeparator />
+                                                            <DropdownMenuItem onClick={() => handleRetakeQuiz(item)}>
+                                                                <RefreshCw className="mr-2 h-4 w-4" />
+                                                                Retake
+                                                            </DropdownMenuItem>
+                                                        </DropdownMenuContent>
+                                                    </DropdownMenu>
+                                                </div>
                                             </TableCell>
                                         </TableRow>
                                     ))}
