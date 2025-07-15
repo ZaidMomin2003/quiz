@@ -79,3 +79,10 @@ export type BookmarkItem = {
   explanation: string;
   timestamp: number;
 };
+
+export type QuizData = {
+    topic: string;
+    difficulty: 'easy' | 'medium' | 'hard';
+    mcqs: Mcq[];
+    totalTime?: number;
+};

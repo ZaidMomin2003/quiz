@@ -22,6 +22,7 @@ type DashboardStats = {
 export default function DashboardPage() {
     const [topic, setTopic] = useState('');
     const [questionCount, setQuestionCount] = useState(5);
+    const [timePerQuestion, setTimePerQuestion] = useState(1);
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [isLoading, setIsLoading] = useState(false);
     const [isWeaknessLoading, setIsWeaknessLoading] = useState(false);
@@ -91,7 +92,13 @@ export default function DashboardPage() {
         if (result.error) {
             toast({ variant: "destructive", title: "Error", description: result.error });
         } else if (result.mcqs) {
-            const quizData = { topic, difficulty, mcqs: result.mcqs };
+            const totalTimeInSeconds = questionCount * timePerQuestion * 60;
+            const quizData = { 
+                topic, 
+                difficulty, 
+                mcqs: result.mcqs,
+                totalTime: totalTimeInSeconds,
+            };
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
             router.push('/quiz');
         }
@@ -113,7 +120,8 @@ export default function DashboardPage() {
             const quizData = {
                 topic: "Practice Your Weaknesses",
                 difficulty: 'medium' as 'easy' | 'medium' | 'hard',
-                mcqs: result.mcqs
+                mcqs: result.mcqs,
+                totalTime: 5 * 1 * 60 // 5 questions, 1 minute each
             };
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
             router.push('/quiz');
@@ -203,7 +211,7 @@ export default function DashboardPage() {
                             onChange={(e) => setTopic(e.target.value)}
                         />
                     </div>
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                    <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                         <div className="space-y-2">
                             <Label htmlFor="question-count">Number of Questions</Label>
                              <Input 
@@ -213,6 +221,17 @@ export default function DashboardPage() {
                                 onChange={(e) => setQuestionCount(Math.min(10, Math.max(1, parseInt(e.target.value, 10) || 1)))}
                                 min={1}
                                 max={10}
+                            />
+                        </div>
+                         <div className="space-y-2">
+                            <Label htmlFor="time-per-question">Time per question (mins)</Label>
+                             <Input 
+                                id="time-per-question"
+                                type="number"
+                                value={timePerQuestion}
+                                onChange={(e) => setTimePerQuestion(Math.min(5, Math.max(1, parseInt(e.target.value, 10) || 1)))}
+                                min={1}
+                                max={5}
                             />
                         </div>
                         <div className="space-y-2">

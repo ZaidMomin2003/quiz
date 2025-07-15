@@ -1,7 +1,7 @@
 // src/app/quiz/page.tsx
 'use client';
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { useRouter } from 'next/navigation';
 import type { Mcq, QuizHistoryItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
@@ -10,7 +10,7 @@ import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
 import { Label } from '@/components/ui/label';
 import { Progress } from '@/components/ui/progress';
 import { analyzeQuizAction } from '../actions';
-import { CheckCircle, XCircle, BrainCircuit, Target, Loader2, Lightbulb } from 'lucide-react';
+import { CheckCircle, XCircle, BrainCircuit, Target, Loader2, Lightbulb, Clock } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 
@@ -19,6 +19,7 @@ type QuizData = {
     topic: string;
     difficulty: 'easy' | 'medium' | 'hard';
     mcqs: Mcq[];
+    totalTime?: number;
 };
 
 type Explanation = {
@@ -43,17 +44,50 @@ export default function QuizPage() {
     const [quizState, setQuizState] = useState<'instructions' | 'in-progress' | 'submitted'>('instructions');
     const [analysis, setAnalysis] = useState<Analysis | null>(null);
     const [isAnalyzing, setIsAnalyzing] = useState(false);
+    const [timeLeft, setTimeLeft] = useState<number | null>(null);
+
+    const submitQuiz = useCallback(async (finalAnswers: Record<number, string>) => {
+        if (!quizData || quizState === 'submitted') return;
+
+        setQuizState('submitted');
+        setIsAnalyzing(true);
+        
+        const score = quizData.mcqs.reduce((score, mcq, index) => {
+            return finalAnswers[index] === mcq.correctAnswer ? score + 1 : score;
+        }, 0);
+
+        const result = await analyzeQuizAction({
+            questions: quizData!.mcqs.map(mcq => ({
+                question: mcq.question,
+                options: mcq.options,
+                correctAnswer: mcq.correctAnswer,
+            })),
+            userAnswers: finalAnswers
+        });
+        
+        if (result.analysis) {
+            setAnalysis(result.analysis);
+            saveQuizToHistory(score, result.analysis, finalAnswers);
+        } else {
+            saveQuizToHistory(score, null, finalAnswers);
+        }
+        setIsAnalyzing(false);
+
+    }, [quizData, quizState]);
 
 
     useEffect(() => {
         const storedData = sessionStorage.getItem('currentQuiz');
         if (storedData) {
             try {
-                const parsedData = JSON.parse(storedData);
+                const parsedData: QuizData = JSON.parse(storedData);
                 if (!parsedData.difficulty) {
                     parsedData.difficulty = 'medium';
                 }
                 setQuizData(parsedData);
+                if (parsedData.totalTime) {
+                    setTimeLeft(parsedData.totalTime);
+                }
             } catch (error) {
                 console.error("Failed to parse quiz data from session storage", error);
                 router.push('/dashboard');
@@ -62,15 +96,36 @@ export default function QuizPage() {
             router.push('/dashboard');
         }
     }, [router]);
+    
+    useEffect(() => {
+        if (quizState !== 'in-progress' || timeLeft === null || timeLeft <= 0) {
+            return;
+        }
 
-    const saveQuizToHistory = (score: number, analysisResult: Analysis | null) => {
+        const timer = setInterval(() => {
+            setTimeLeft(prevTime => {
+                if (prevTime !== null && prevTime > 1) {
+                    return prevTime - 1;
+                } else {
+                    clearInterval(timer);
+                    submitQuiz(userAnswers);
+                    return 0;
+                }
+            });
+        }, 1000);
+
+        return () => clearInterval(timer);
+    }, [quizState, timeLeft, userAnswers, submitQuiz]);
+
+
+    const saveQuizToHistory = (score: number, analysisResult: Analysis | null, finalAnswers: Record<number, string>) => {
         if (!quizData) return;
 
         const newHistoryItem: QuizHistoryItem = {
             topic: quizData.topic,
             difficulty: quizData.difficulty,
             mcqs: quizData.mcqs,
-            userAnswers,
+            userAnswers: finalAnswers,
             score,
             totalQuestions: quizData.mcqs.length,
             timestamp: Date.now(),
@@ -99,28 +154,7 @@ export default function QuizPage() {
             if (currentQuestionIndex < quizData!.mcqs.length - 1) {
                 setCurrentQuestionIndex(currentQuestionIndex + 1);
             } else {
-                setQuizState('submitted');
-                setIsAnalyzing(true);
-                
-                const score = calculateScore(newAnswers);
-
-                const result = await analyzeQuizAction({
-                    questions: quizData!.mcqs.map(mcq => ({
-                        question: mcq.question,
-                        options: mcq.options,
-                        correctAnswer: mcq.correctAnswer,
-                    })),
-                    userAnswers: newAnswers
-                });
-                
-                if (result.analysis) {
-                    setAnalysis(result.analysis);
-                    saveQuizToHistory(score, result.analysis);
-                } else {
-                    // Save history even if analysis fails
-                    saveQuizToHistory(score, null);
-                }
-                setIsAnalyzing(false);
+                await submitQuiz(newAnswers);
             }
         }
     };
@@ -130,6 +164,13 @@ export default function QuizPage() {
         return quizData.mcqs.reduce((score, mcq, index) => {
             return answers[index] === mcq.correctAnswer ? score + 1 : score;
         }, 0);
+    };
+
+    const formatTime = (seconds: number | null) => {
+        if (seconds === null) return '...';
+        const minutes = Math.floor(seconds / 60);
+        const remainingSeconds = seconds % 60;
+        return `${minutes.toString().padStart(2, '0')}:${remainingSeconds.toString().padStart(2, '0')}`;
     };
 
     if (!quizData) {
@@ -154,7 +195,9 @@ export default function QuizPage() {
                     </CardHeader>
                     <CardContent className="space-y-4">
                         <p>Read each question carefully and select the best answer for each one.</p>
-                        <p>Your results and a personalized concept analysis will be provided at the end.</p>
+                        {quizData.totalTime && (
+                             <p>You will have <span className="font-bold">{formatTime(quizData.totalTime)}</span> to complete the quiz.</p>
+                        )}
                         <p className="font-bold">Good luck!</p>
                     </CardContent>
                     <CardFooter>
@@ -238,7 +281,7 @@ export default function QuizPage() {
                                         </div>
                                         <div className="mt-2 text-sm space-y-1">
                                             <p className={isCorrect ? 'text-green-500' : 'text-red-500'}>
-                                                Your answer: {userAnswer}
+                                                Your answer: {userAnswer || 'Not answered'}
                                             </p>
                                             {!isCorrect && (
                                                 <p className="text-muted-foreground">Correct answer: {mcq.correctAnswer}</p>
@@ -280,10 +323,17 @@ export default function QuizPage() {
     return (
         <div className="flex flex-col items-center justify-center min-h-[calc(100vh-10rem)] p-4">
             <div className="w-full max-w-2xl space-y-6">
-                <div>
-                   <p className="text-center text-muted-foreground text-sm mb-2">Question {currentQuestionIndex + 1} of {quizData.mcqs.length}</p>
-                   <Progress value={progress} />
+                <div className="flex justify-between items-center text-sm text-muted-foreground">
+                   <p>Question {currentQuestionIndex + 1} of {quizData.mcqs.length}</p>
+                   {timeLeft !== null && (
+                        <div className="flex items-center gap-2 font-mono text-base font-semibold">
+                            <Clock className="h-4 w-4" />
+                            <span>{formatTime(timeLeft)}</span>
+                        </div>
+                   )}
+                   <div />
                 </div>
+                <Progress value={progress} />
                 
                 <AnimatePresence mode="wait">
                     <motion.div
