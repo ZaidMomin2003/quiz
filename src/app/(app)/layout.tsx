@@ -78,7 +78,7 @@ export default function AppLayout({
       <SidebarInset>
         <header className="flex items-center justify-between p-4 border-b h-16">
            <SidebarTrigger className="md:hidden" />
-           <p className="text-lg font-black tracking-tighter text-foreground sm:text-xl">Welcome back, {user.email}</p>
+           <div />
         </header>
         <main className="p-4 md:p-6">
             {children}
