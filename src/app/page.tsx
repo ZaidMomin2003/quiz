@@ -218,7 +218,7 @@ export default function Home() {
               </Card>
               
               {/* Pro Plan */}
-              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-blue-start to-gradient-blue-end border-0 text-white shadow-lg">
+              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-pro-start to-gradient-pro-end border-0 text-white shadow-lg shadow-emerald-500/30">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                    <Badge>Most Popular</Badge>
                 </div>
@@ -231,7 +231,7 @@ export default function Home() {
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                   <Button className="w-full bg-white text-blue-600 hover:bg-white/90" asChild><Link href="/signup">Choose Pro</Link></Button>
+                   <Button className="w-full bg-white text-emerald-600 hover:bg-white/90" asChild><Link href="/signup">Choose Pro</Link></Button>
                    <p className="text-xs text-white/80 text-center mt-2">Billed monthly.</p>
                    <div className="mt-6 space-y-3">
                       <p className="font-semibold text-sm text-white">All Free plan features, plus:</p>
