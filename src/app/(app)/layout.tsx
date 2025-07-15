@@ -1,4 +1,3 @@
-
 // src/app/(app)/layout.tsx
 'use client';
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton, SidebarMenuBadge } from '@/components/ui/sidebar';
@@ -24,7 +23,6 @@ export default function AppLayout({
   const { theme, setTheme } = useTheme();
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
-
   useEffect(() => {
     if (!loading && !user) {
       router.push('/login');
@@ -47,11 +45,7 @@ export default function AppLayout({
     }
 
     updateBookmarkCount();
-
-    // Listen for changes in localStorage from other tabs/windows
     window.addEventListener('storage', updateBookmarkCount);
-
-    // Also listen for a custom event for same-tab updates
     const handleBookmarkUpdate = () => updateBookmarkCount();
     window.addEventListener('bookmarksUpdated', handleBookmarkUpdate);
 
@@ -61,8 +55,8 @@ export default function AppLayout({
     }
   }, []);
 
-  // Don't render layout for onboarding page
-  if (pathname === '/onboarding') {
+  // Don't render sidebar layout for onboarding pages
+  if (pathname.startsWith('/onboarding')) {
     return <>{children}</>;
   }
 

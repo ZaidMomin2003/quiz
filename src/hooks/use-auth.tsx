@@ -48,12 +48,11 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
             setUser(loggedInUser);
             sessionStorage.setItem('quizforge_user', JSON.stringify(loggedInUser));
             
-            // Check if user has completed onboarding
             const hasOnboarded = localStorage.getItem(`onboarding_complete_${email}`);
             if (hasOnboarded) {
                 router.push("/dashboard");
             } else {
-                router.push("/onboarding");
+                router.push("/onboarding/welcome");
             }
             resolve();
         } else {
@@ -73,7 +72,9 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
           const newUser = { email, name };
           setUser(newUser);
           sessionStorage.setItem('quizforge_user', JSON.stringify(newUser));
-          router.push("/onboarding");
+          localStorage.removeItem(`onboarding_complete_${email}`);
+          localStorage.removeItem(`onboarding_data_${email}`);
+          router.push("/onboarding/welcome");
           resolve();
         }
       }, 500);

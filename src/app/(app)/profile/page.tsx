@@ -9,17 +9,22 @@ import { Button } from '@/components/ui/button';
 import { Textarea } from '@/components/ui/textarea';
 import { useEffect, useState } from 'react';
 import { Badge } from '@/components/ui/badge';
-import { BookCopy } from 'lucide-react';
+import { BookCopy, Target as TargetIcon } from 'lucide-react';
+import { useRouter } from 'next/navigation';
 
 export default function ProfilePage() {
     const { user } = useAuth();
-    const [userExams, setUserExams] = useState<string[]>([]);
+    const router = useRouter();
+    const [userData, setUserData] = useState<{ goal: string; exams: string[] }>({
+        goal: '',
+        exams: [],
+    });
 
     useEffect(() => {
         if (user) {
-            const storedExams = localStorage.getItem(`user_exams_${user.email}`);
-            if (storedExams) {
-                setUserExams(JSON.parse(storedExams));
+            const storedOnboardingData = localStorage.getItem(`onboarding_data_${user.email}`);
+            if (storedOnboardingData) {
+                setUserData(JSON.parse(storedOnboardingData));
             }
         }
     }, [user]);
@@ -30,15 +35,21 @@ export default function ProfilePage() {
 
     const userInitial = user.name.charAt(0).toUpperCase();
 
+    const goalDisplay: { [key: string]: string } = {
+        'ace-exams': 'Ace Exams',
+        'learn-skill': 'Learn a New Skill',
+        'just-for-fun': 'Just for Fun'
+    }
+
     return (
         <div className="space-y-6">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Profile</h1>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-                <div className="lg:col-span-2">
+                <div className="lg:col-span-2 space-y-6">
                     <Card>
                         <CardHeader>
                             <CardTitle>Profile Information</CardTitle>
-                            <CardDescription>Update your account's profile information and email address.</CardDescription>
+                            <CardDescription>Update your account's profile information.</CardDescription>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             <div className="space-y-2">
@@ -59,27 +70,47 @@ export default function ProfilePage() {
                         </CardFooter>
                     </Card>
 
-                     {userExams.length > 0 && (
+                    <Card>
+                        <CardHeader>
+                            <div className="flex items-center gap-3">
+                                <TargetIcon className="h-6 w-6 text-primary" />
+                                <CardTitle>My Goal</CardTitle>
+                            </div>
+                        </CardHeader>
+                        <CardContent>
+                            <Badge variant="secondary">{goalDisplay[userData.goal] || 'Not set'}</Badge>
+                        </CardContent>
+                    </Card>
+
+                    {userData.exams.length > 0 && (
                         <Card>
                             <CardHeader>
                                 <div className="flex items-center gap-3">
                                     <BookCopy className="h-6 w-6 text-primary" />
                                     <CardTitle>Exams I'm Preparing For</CardTitle>
                                 </div>
-                                <CardDescription>Your selected exams help us tailor your experience.</CardDescription>
                             </CardHeader>
                             <CardContent>
                                 <div className="flex flex-wrap gap-2">
-                                    {userExams.map(exam => (
+                                    {userData.exams.map(exam => (
                                         <Badge key={exam} variant="secondary">{exam}</Badge>
                                     ))}
                                 </div>
                             </CardContent>
-                            <CardFooter>
-                                <Button variant="outline">Change Selections</Button>
-                            </CardFooter>
                         </Card>
                     )}
+
+                     <Card>
+                         <CardHeader>
+                            <CardTitle>Onboarding</CardTitle>
+                            <CardDescription>Need to change your goals or exams? You can restart the onboarding process.</CardDescription>
+                        </CardHeader>
+                        <CardContent>
+                            <Button variant="outline" onClick={() => router.push('/onboarding/welcome')}>
+                                Restart Onboarding
+                            </Button>
+                        </CardContent>
+                    </Card>
                 </div>
 
                 <div className="space-y-6">
@@ -107,7 +138,6 @@ export default function ProfilePage() {
                         </CardContent>
                     </Card>
                 </div>
-
             </div>
         </div>
     );
