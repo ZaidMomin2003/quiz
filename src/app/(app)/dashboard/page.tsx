@@ -3,76 +3,119 @@
 import { Card, CardContent, CardDescription, CardHeader, CardTitle, CardFooter } from '@/components/ui/card';
 import { Input } from '@/components/ui/input';
 import { Button } from '@/components/ui/button';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
+import { Badge } from '@/components/ui/badge';
 import { generateMcqAction } from "@/app/actions";
-import { Loader2 } from "lucide-react";
+import { Loader2, RefreshCw } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
+import type { QuizHistoryItem } from '@/lib/types';
+
+type DashboardStats = {
+    quizzesTaken: number;
+    correctRatio: number;
+    averageScore: string;
+};
 
 export default function DashboardPage() {
     const [topic, setTopic] = useState('');
     const [questionCount, setQuestionCount] = useState(5);
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [isLoading, setIsLoading] = useState(false);
+    const [history, setHistory] = useState<QuizHistoryItem[]>([]);
+    const [stats, setStats] = useState<DashboardStats>({
+        quizzesTaken: 0,
+        correctRatio: 0,
+        averageScore: '0/0'
+    });
+    
     const { toast } = useToast();
     const router = useRouter();
+
+    useEffect(() => {
+        const storedHistory = localStorage.getItem('quizHistory');
+        if (storedHistory) {
+            const parsedHistory: QuizHistoryItem[] = JSON.parse(storedHistory);
+            setHistory(parsedHistory.sort((a, b) => b.timestamp - a.timestamp)); // Most recent first
+            calculateStats(parsedHistory);
+        }
+    }, []);
+
+    const calculateStats = (historyItems: QuizHistoryItem[]) => {
+        if (historyItems.length === 0) {
+            setStats({ quizzesTaken: 0, correctRatio: 0, averageScore: '0/0'});
+            return;
+        }
+
+        const totalQuizzes = historyItems.length;
+        const totalCorrect = historyItems.reduce((acc, item) => acc + item.score, 0);
+        const totalQuestions = historyItems.reduce((acc, item) => acc + item.totalQuestions, 0);
+
+        const correctRatio = totalQuestions > 0 ? Math.round((totalCorrect / totalQuestions) * 100) : 0;
+        
+        const avgScore = totalCorrect / totalQuizzes;
+        const avgTotal = totalQuestions / totalQuizzes;
+        const averageScore = `${avgScore.toFixed(1)}/${avgTotal.toFixed(1)}`;
+        
+        setStats({
+            quizzesTaken: totalQuizzes,
+            correctRatio,
+            averageScore,
+        });
+    };
 
     const canGenerate = topic.trim().length > 1 && !isLoading;
 
     async function handleGenerateQuiz() {
         if (!canGenerate) return;
-
         setIsLoading(true);
 
-        const result = await generateMcqAction({
-            topic,
-            questionCount,
-            difficulty,
-        });
-
+        const result = await generateMcqAction({ topic, questionCount, difficulty });
         setIsLoading(false);
 
         if (result.error) {
-            toast({
-                variant: "destructive",
-                title: "Error",
-                description: result.error,
-            });
+            toast({ variant: "destructive", title: "Error", description: result.error });
         } else if (result.mcqs) {
-            // Store quiz data in session storage to pass to the quiz page
-            const quizData = {
-                topic,
-                mcqs: result.mcqs,
-            };
+            const quizData = { topic, difficulty, mcqs: result.mcqs };
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
             router.push('/quiz');
         }
     }
+
+    function handleRetakeQuiz(quizToRetake: QuizHistoryItem) {
+        const quizData = {
+            topic: quizToRetake.topic,
+            difficulty: quizToRetake.difficulty,
+            mcqs: quizToRetake.mcqs,
+        };
+        sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
+        router.push('/quiz');
+    }
     
     return (
-        <div className="flex flex-col gap-6">
+        <div className="flex flex-col gap-8">
             <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Dashboard</h1>
             
-            {/* Analytics Cards Section */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
                 <Card>
                     <CardHeader>
-                        <CardTitle>Quizzes Generated</CardTitle>
-                        <CardDescription>Total quizzes you've created.</CardDescription>
+                        <CardTitle>Quizzes Taken</CardTitle>
+                        <CardDescription>Total quizzes you've completed.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-4xl font-bold">12</p>
+                        <p className="text-4xl font-bold">{stats.quizzesTaken}</p>
                     </CardContent>
                 </Card>
                 <Card>
                     <CardHeader>
                         <CardTitle>Correct Answers</CardTitle>
-                        <CardDescription>Ratio of correct to incorrect answers.</CardDescription>
+                        <CardDescription>Overall percentage of correct answers.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-4xl font-bold">78%</p>
+                        <p className="text-4xl font-bold">{stats.correctRatio}%</p>
                     </CardContent>
                 </Card>
                  <Card>
@@ -81,19 +124,17 @@ export default function DashboardPage() {
                         <CardDescription>Your average score across all quizzes.</CardDescription>
                     </CardHeader>
                     <CardContent>
-                        <p className="text-4xl font-bold">8/10</p>
+                        <p className="text-4xl font-bold">{stats.averageScore}</p>
                     </CardContent>
                 </Card>
             </div>
 
-            {/* Start Quiz Section */}
             <Card className="relative shadow-lg shadow-primary/20 hover:shadow-primary/30 transition-shadow duration-300">
-                <div className="absolute -inset-1 bg-gradient-to-r from-purple-600 to-indigo-600 rounded-lg blur-sm opacity-20 group-hover:opacity-30 transition duration-1000 group-hover:duration-200"></div>
-                <CardHeader className="relative">
+                <CardHeader>
                     <CardTitle>Create Your Next Challenge</CardTitle>
                     <CardDescription>Fine-tune the details and generate the perfect quiz for your needs.</CardDescription>
                 </CardHeader>
-                <CardContent className="relative space-y-6">
+                <CardContent className="space-y-6">
                     <div className="space-y-2">
                         <Label htmlFor="topic-input">What topic do you want to practice today?</Label>
                         <Input 
@@ -134,6 +175,51 @@ export default function DashboardPage() {
                         {isLoading && <Loader2 className="mr-2 h-4 w-4 animate-spin" />}
                         {isLoading ? 'Generating...' : 'Generate Quiz'}
                     </Button>
+                </CardContent>
+            </Card>
+
+            <Card>
+                <CardHeader>
+                    <CardTitle>Quiz History</CardTitle>
+                    <CardDescription>Review your past quizzes and retake them to improve.</CardDescription>
+                </CardHeader>
+                <CardContent>
+                    {history.length > 0 ? (
+                        <Table>
+                            <TableHeader>
+                                <TableRow>
+                                    <TableHead>Topic</TableHead>
+                                    <TableHead>Difficulty</TableHead>
+                                    <TableHead>Score</TableHead>
+                                    <TableHead>Date</TableHead>
+                                    <TableHead className="text-right">Action</TableHead>
+                                </TableRow>
+                            </TableHeader>
+                            <TableBody>
+                                {history.map((item) => (
+                                    <TableRow key={item.timestamp}>
+                                        <TableCell className="font-medium">{item.topic}</TableCell>
+                                        <TableCell>
+                                            <Badge variant={
+                                                item.difficulty === 'easy' ? 'secondary' : 
+                                                item.difficulty === 'medium' ? 'outline' : 'destructive'
+                                            } className="capitalize">{item.difficulty}</Badge>
+                                        </TableCell>
+                                        <TableCell>{item.score} / {item.totalQuestions}</TableCell>
+                                        <TableCell>{new Date(item.timestamp).toLocaleDateString()}</TableCell>
+                                        <TableCell className="text-right">
+                                            <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
+                                                <RefreshCw className="mr-2 h-4 w-4" />
+                                                Retake
+                                            </Button>
+                                        </TableCell>
+                                    </TableRow>
+                                ))}
+                            </TableBody>
+                        </Table>
+                    ) : (
+                        <p className="text-center text-muted-foreground py-8">You haven't taken any quizzes yet. Generate one above to get started!</p>
+                    )}
                 </CardContent>
             </Card>
         </div>

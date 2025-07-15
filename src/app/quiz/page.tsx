@@ -3,7 +3,7 @@
 
 import { useState, useEffect } from 'react';
 import { useRouter } from 'next/navigation';
-import type { Mcq } from '@/lib/types';
+import type { Mcq, QuizHistoryItem } from '@/lib/types';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from '@/components/ui/card';
 import { RadioGroup, RadioGroupItem } from '@/components/ui/radio-group';
@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 
 type QuizData = {
     topic: string;
+    difficulty: 'easy' | 'medium' | 'hard';
     mcqs: Mcq[];
 };
 
@@ -38,16 +39,39 @@ export default function QuizPage() {
         const storedData = sessionStorage.getItem('currentQuiz');
         if (storedData) {
             try {
-                setQuizData(JSON.parse(storedData));
+                const parsedData = JSON.parse(storedData);
+                // Ensure difficulty is part of the data, add default if not
+                if (!parsedData.difficulty) {
+                    parsedData.difficulty = 'easy';
+                }
+                setQuizData(parsedData);
             } catch (error) {
                 console.error("Failed to parse quiz data from session storage", error);
                 router.push('/dashboard');
             }
         } else {
-            // If no quiz data is found, redirect to dashboard
             router.push('/dashboard');
         }
     }, [router]);
+
+    const saveQuizToHistory = (score: number) => {
+        if (!quizData) return;
+
+        const newHistoryItem: QuizHistoryItem = {
+            topic: quizData.topic,
+            difficulty: quizData.difficulty,
+            mcqs: quizData.mcqs,
+            userAnswers,
+            score,
+            totalQuestions: quizData.mcqs.length,
+            timestamp: Date.now(),
+        };
+
+        const existingHistory = localStorage.getItem('quizHistory');
+        const history = existingHistory ? JSON.parse(existingHistory) : [];
+        history.push(newHistoryItem);
+        localStorage.setItem('quizHistory', JSON.stringify(history));
+    };
 
     const handleNextQuestion = async () => {
         if (selectedAnswer) {
@@ -60,6 +84,10 @@ export default function QuizPage() {
             } else {
                 setQuizState('submitted');
                 setIsAnalyzing(true);
+                
+                const score = calculateScore(newAnswers);
+                saveQuizToHistory(score);
+
                 const result = await analyzeQuizAction({
                     questions: quizData!.mcqs.map(mcq => ({
                         question: mcq.question,
@@ -76,10 +104,10 @@ export default function QuizPage() {
         }
     };
     
-    const calculateScore = () => {
+    const calculateScore = (answers: Record<number, string> = userAnswers) => {
         if (!quizData) return 0;
         return quizData.mcqs.reduce((score, mcq, index) => {
-            return userAnswers[index] === mcq.correctAnswer ? score + 1 : score;
+            return answers[index] === mcq.correctAnswer ? score + 1 : score;
         }, 0);
     };
 
