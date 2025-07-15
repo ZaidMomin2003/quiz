@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2 } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
@@ -81,58 +81,46 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Features Section */}
-        <section id="features" className="w-full py-16 md:py-24">
-          <div className="container mx-auto text-center">
-            <Badge variant="secondary" className="mb-2">Features</Badge>
-            <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">The Smartest Way to Build Quizzes</h2>
-            <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-              QuizForge is packed with features designed to make quiz creation effortless and effective.
-            </p>
-            <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
-              <Card className="bg-card/50">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <BrainCircuit className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">AI-Powered Generation</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Just provide a topic, and our advanced AI will generate relevant, high-quality multiple-choice questions and answers in an instant.</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/50">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <BookOpen className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">Customizable Difficulty</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Tailor your quizzes to any knowledge level. Choose from easy, medium, or hard difficulty settings to challenge your audience appropriately.</p>
-                </CardContent>
-              </Card>
-              <Card className="bg-card/50">
-                <CardHeader>
-                  <div className="flex items-center gap-4">
-                    <div className="bg-primary/10 p-3 rounded-lg">
-                      <Share2 className="h-6 w-6 text-primary" />
-                    </div>
-                    <CardTitle className="text-xl">Instant Results & Scoring</CardTitle>
-                  </div>
-                </CardHeader>
-                <CardContent>
-                  <p className="text-muted-foreground">Get immediate feedback with automatic scoring. Review answers, identify knowledge gaps, and track performance with ease.</p>
-                </CardContent>
-              </Card>
+        {/* New Modern Features Section */}
+        <section className="relative w-full py-16 md:py-24 overflow-hidden">
+            <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2">
+                <div className="absolute -z-10 w-96 h-96 bg-blue-500/20 blur-[120px] rounded-full"></div>
+                <div className="absolute -z-10 w-96 h-96 left-48 top-24 bg-purple-500/20 blur-[120px] rounded-full"></div>
             </div>
-          </div>
+
+            <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-8">
+                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">AI-Powered Generation</h3>
+                        <Zap className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds.</p>
+                </Card>
+                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Interactive Learning</h3>
+                        <BookOpen className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations to reinforce concepts.</p>
+                </Card>
+                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                     <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Performance Analytics</h3>
+                        <TrendingUp className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Track your progress, identify strengths, and pinpoint areas for improvement with our smart analytics.</p>
+                </Card>
+                <Card className="bg-card/50 backdrop-blur-lg border border-white/10 p-6 rounded-2xl flex flex-col items-start gap-4">
+                    <div className="flex items-center justify-between w-full">
+                        <h3 className="font-bold text-lg">Customizable Difficulty</h3>
+                        <Target className="text-primary" />
+                    </div>
+                    <p className="text-muted-foreground text-sm">Tailor quizzes to your needs. Choose from easy, medium, or hard difficulty levels for a perfect challenge.</p>
+                </Card>
+            </div>
         </section>
-        
+
+
         {/* How it Works Section */}
         <section className="w-full py-16 md:py-24 bg-card/30">
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
