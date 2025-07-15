@@ -5,6 +5,9 @@ import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/
 import { Check, ChevronRight, Star, Bot, BookOpen, Share2, BrainCircuit } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
+import { Label } from "@/components/ui/label";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
 
 export default function Home() {
   const testimonials = [
@@ -275,6 +278,41 @@ export default function Home() {
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
+          </div>
+        </section>
+
+        {/* Contact Section */}
+        <section id="contact" className="w-full py-20 md:py-28 bg-card/30">
+          <div className="container mx-auto">
+            <div className="max-w-2xl mx-auto text-center">
+              <h2 className="text-3xl md:text-5xl font-bold tracking-tight mb-4">Get in Touch</h2>
+              <p className="text-muted-foreground mb-12">
+                Have questions or feedback? We'd love to hear from you. Fill out the form below and we'll get back to you as soon as possible.
+              </p>
+            </div>
+            <Card className="max-w-xl mx-auto bg-background/50">
+              <CardContent className="pt-6">
+                <form className="space-y-4">
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div className="space-y-2">
+                      <Label htmlFor="name">Name</Label>
+                      <Input id="name" placeholder="Your Name" />
+                    </div>
+                    <div className="space-y-2">
+                      <Label htmlFor="email">Email</Label>
+                      <Input id="email" type="email" placeholder="your.email@example.com" />
+                    </div>
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="message">Message</Label>
+                    <Textarea id="message" placeholder="Your message..." rows={5} />
+                  </div>
+                </form>
+              </CardContent>
+              <CardFooter>
+                <Button type="submit" className="w-full">Send Message</Button>
+              </CardFooter>
+            </Card>
           </div>
         </section>
       </div>
