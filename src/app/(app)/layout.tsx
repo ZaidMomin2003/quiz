@@ -51,11 +51,12 @@ export default function AppLayout({
     window.addEventListener('storage', updateBookmarkCount);
 
     // Also listen for a custom event for same-tab updates
-    window.addEventListener('bookmarksUpdated', updateBookmarkCount);
+    const handleBookmarkUpdate = () => updateBookmarkCount();
+    window.addEventListener('bookmarksUpdated', handleBookmarkUpdate);
 
     return () => {
         window.removeEventListener('storage', updateBookmarkCount);
-        window.removeEventListener('bookmarksUpdated', updateBookmarkCount);
+        window.removeEventListener('bookmarksUpdated', handleBookmarkUpdate);
     }
   }, []);
 
@@ -115,7 +116,7 @@ export default function AppLayout({
                             <span>Bookmarks</span>
                         </a>
                     </SidebarMenuButton>
-                    {bookmarkCount > 0 && <SidebarMenuBadge>{bookmarkCount}</SidebarMenuBadge>}
+                    {bookmarkCount > 0 && <SidebarMenuBadge className="bg-primary text-primary-foreground">{bookmarkCount}</SidebarMenuBadge>}
                  </SidebarMenuItem>
               </SidebarMenu>
             </div>
