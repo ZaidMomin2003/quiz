@@ -42,7 +42,7 @@ export function SignupForm() {
     setError(null);
     try {
       await signup(values.email, values.password);
-      router.push("/quiz");
+      router.push("/dashboard");
     } catch (err: any) {
         setError(err.message || "Failed to create an account. Please try again.");
     } finally {

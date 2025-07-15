@@ -42,7 +42,7 @@ export function LoginForm() {
     setError(null);
     try {
       await login(values.email, values.password);
-      router.push("/quiz");
+      router.push("/dashboard");
     } catch (err: any) {
       setError(err.message || "Failed to sign in. Please check your credentials.");
     } finally {

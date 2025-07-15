@@ -1,10 +1,11 @@
 import { LoginForm } from "@/components/login-form";
+import { PublicPageLayout } from "@/components/public-page-layout";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
 import Link from "next/link";
 
 export default function LoginPage() {
     return (
-        <div className="container mx-auto py-12 flex justify-center">
+        <PublicPageLayout>
             <div className="w-full max-w-md">
                 <Card>
                     <CardHeader className="text-center">
@@ -22,6 +23,6 @@ export default function LoginPage() {
                     </CardContent>
                 </Card>
             </div>
-        </div>
+        </PublicPageLayout>
     );
 }
