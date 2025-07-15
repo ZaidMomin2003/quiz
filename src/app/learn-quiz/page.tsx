@@ -1,3 +1,4 @@
+
 // src/app/learn-quiz/page.tsx
 'use client';
 
@@ -147,10 +148,11 @@ export default function LearnQuizPage() {
                                             isAnswered && isTheCorrectAnswer && "border-green-500 bg-green-500/10",
                                             isAnswered && isSelected && !isTheCorrectAnswer && "border-red-500 bg-red-500/10",
                                             isAnswered && !isSelected && "opacity-60",
-                                            isAnswered && isSelected && "bg-white/10"
+                                            isAnswered && isSelected && isTheCorrectAnswer && "border-green-500 bg-green-500/10",
+                                            isAnswered && isSelected && !isTheCorrectAnswer && "border-red-500 bg-red-500/10"
                                         )}>
-                                            <RadioGroupItem value={option} id={`q-o-${i}`} className="hidden" />
-                                            <span>{option}</span>
+                                            <RadioGroupItem value={option} id={`q-o-${i}`} />
+                                            <span className="flex-1">{option}</span>
                                             {isAnswered && isTheCorrectAnswer && <CheckCircle className="ml-auto h-5 w-5 text-green-500" />}
                                             {isAnswered && isSelected && !isTheCorrectAnswer && <XCircle className="ml-auto h-5 w-5 text-red-500" />}
                                         </Label>
