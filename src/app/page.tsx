@@ -2,40 +2,25 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, Bot } from "lucide-react";
-import Image from "next/image";
+import { Check, ChevronRight, Star, Bot, BookOpen, Share2, BrainCircuit } from "lucide-react";
+import Link from "next/link";
 
 export default function Home() {
-  const companyLogos = [
-    { name: 'Google', src: 'https://placehold.co/100x40.png', hint: 'google logo' },
-    { name: 'Framer', src: 'https://placehold.co/100x40.png', hint: 'framer logo' },
-    { name: 'Apple', src: 'https://placehold.co/100x40.png', hint: 'apple logo' },
-    { name: 'Adobe', src: 'https://placehold.co/100x40.png', hint: 'adobe logo' },
-    { name: 'LinkedIn', src: 'https://placehold.co/100x40.png', hint: 'linkedin logo' },
-    { name: 'Microsoft', src: 'https://placehold.co/100x40.png', hint: 'microsoft logo' },
-  ];
-  
   const testimonials = [
     {
-      name: 'John Doe',
-      role: 'CEO, Company',
-      text: "This tool has been a game-changer for our SEO strategy. The insights are invaluable and have directly led to a significant increase in organic traffic. Highly recommended!",
-      avatar: 'https://placehold.co/40x40.png',
-      hint: 'portrait person'
+      name: 'Sarah K., Teacher',
+      role: 'High School Educator',
+      text: "QuizForge has revolutionized how I create assessments. I can generate a unique quiz on any topic in minutes, saving me hours of work each week. The students find it engaging too!",
     },
     {
-      name: 'Jane Smith',
-      role: 'Marketing Manager, Another Co',
-      text: "I was skeptical at first, but SEOtalos delivered. It's intuitive, powerful, and the customer support is top-notch. Our keyword rankings have never been better.",
-      avatar: 'https://placehold.co/40x40.png',
-      hint: 'portrait smiling'
+      name: 'Michael B., Corporate Trainer',
+      role: 'L&D Manager',
+      text: "We use QuizForge for our internal training programs. The AI's ability to create varied and challenging questions is impressive. It's a fantastic tool for reinforcing learning.",
     },
      {
-      name: 'Sam Wilson',
-      role: 'Founder, Startup Inc.',
-      text: "As a startup, we need tools that are both affordable and effective. SEOtalos fits the bill perfectly. It's helped us compete with much larger players in our niche.",
-      avatar: 'https://placehold.co/40x40.png',
-      hint: 'person glasses'
+      name: 'David L., Student',
+      role: 'University Student',
+      text: "I use QuizForge to create practice tests for myself. It's a great way to study and test my knowledge on different subjects before exams. Super easy to use!",
     },
   ];
 
@@ -48,90 +33,120 @@ export default function Home() {
          <div className="container mx-auto text-center py-24 md:py-32 relative z-10">
           <Badge variant="outline" className="mb-4 bg-card/50 backdrop-blur">
             <Star className="w-3 h-3 mr-1.5 fill-current" />
-            Latest AI Integration Just Arrived
+            Powered by the latest AI models
           </Badge>
           <h1 className="text-5xl md:text-7xl font-black tracking-tighter mb-4">
-            Boost your <br /> website&apos;s SEO
+            Create Engaging Quizzes <br /> in Seconds with AI
           </h1>
           <p className="max-w-2xl mx-auto text-lg text-muted-foreground mb-8">
-            Best analytics app for agencies, consultants, affiliates, e-commerce, and SaaS. Our proven methods help you achieve remarkable results.
+            Stop spending hours creating quizzes. With QuizForge, just enter a topic and let our AI do the hard work. Perfect for educators, trainers, and lifelong learners.
           </p>
           <div className="flex justify-center items-center gap-4">
-            <Button size="lg">Start a Free Trial <ChevronRight className="ml-2 h-4 w-4" /></Button>
-            <Button size="lg" variant="ghost">Watch Demo</Button>
+            <Button asChild size="lg">
+              <Link href="/signup">
+                Get Started For Free <ChevronRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+            <Button asChild size="lg" variant="ghost">
+              <Link href="#features">Learn More</Link>
+            </Button>
           </div>
         </div>
       </section>
-
-      {/* Company Logos */}
-      <div className="container mx-auto text-center -mt-12 relative z-10">
-        <p className="text-sm text-muted-foreground mb-6">Trusted by the world's best companies</p>
-        <div className="flex flex-wrap justify-center items-center gap-x-8 gap-y-4">
-          {companyLogos.map(logo => (
-            <Image key={logo.name} src={logo.src} alt={logo.name} width={100} height={40} className="opacity-50 hover:opacity-100 transition-opacity" data-ai-hint={logo.hint}/>
-          ))}
-        </div>
-      </div>
 
       {/* Features Section */}
       <section id="features" className="w-full py-20 md:py-28">
         <div className="container mx-auto text-center">
           <Badge variant="secondary" className="mb-2">Features</Badge>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">SEO Tool That Delivers Real Results</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">The Smartest Way to Build Quizzes</h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-            Our proven methods help you climb search rankings faster than ever, with no technical skills required.
+            QuizForge is packed with features designed to make quiz creation effortless and effective.
           </p>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
-            <Card className="bg-card/50 text-left">
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-6 text-left">
+            <Card className="bg-card/50">
               <CardHeader>
-                <CardTitle>Comprehensive Site Audits</CardTitle>
-                <CardDescription>Identify and fix technical SEO issues with a single click.</CardDescription>
+                <div className="flex items-center gap-4">
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <BrainCircuit className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>AI-Powered Generation</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
-                <Image src="https://placehold.co/600x400.png" width={600} height={400} alt="Site Audit Feature" className="rounded-lg" data-ai-hint="dashboard chart" />
+                <p className="text-muted-foreground">Just provide a topic, and our advanced AI will generate relevant, high-quality multiple-choice questions and answers in an instant.</p>
               </CardContent>
             </Card>
-            <Card className="bg-card/50 text-left">
+            <Card className="bg-card/50">
               <CardHeader>
-                <CardTitle>Keyword Rank Tracking</CardTitle>
-                <CardDescription>Monitor your keyword performance across multiple search engines.</CardDescription>
+                <div className="flex items-center gap-4">
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <BookOpen className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>Customizable Difficulty</CardTitle>
+                </div>
               </CardHeader>
               <CardContent>
-                <Image src="https://placehold.co/600x400.png" width={600} height={400} alt="Rank Tracking Feature" className="rounded-lg" data-ai-hint="analytics graph" />
+                <p className="text-muted-foreground">Tailor your quizzes to any knowledge level. Choose from easy, medium, or hard difficulty settings to challenge your audience appropriately.</p>
+              </CardContent>
+            </Card>
+            <Card className="bg-card/50">
+              <CardHeader>
+                <div className="flex items-center gap-4">
+                  <div className="bg-primary/10 p-3 rounded-lg">
+                    <Share2 className="h-6 w-6 text-primary" />
+                  </div>
+                  <CardTitle>Instant Results & Scoring</CardTitle>
+                </div>
+              </CardHeader>
+              <CardContent>
+                <p className="text-muted-foreground">Get immediate feedback with automatic scoring. Review answers, identify knowledge gaps, and track performance with ease.</p>
               </CardContent>
             </Card>
           </div>
         </div>
       </section>
       
-      {/* Proven Results Section */}
+      {/* How it Works Section */}
       <section className="w-full py-20 md:py-28 bg-card/30">
         <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
           <div>
-            <Badge variant="secondary" className="mb-2">Our Achievements</Badge>
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Proven SEO Results You Can Trust</h2>
+            <Badge variant="secondary" className="mb-2">How It Works</Badge>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Create a Quiz in 3 Simple Steps</h2>
             <p className="text-muted-foreground mb-8">
-              From startups to industry leaders, we've helped businesses achieve remarkable results in record time.
+              We've simplified the quiz creation process so you can focus on what matters most: learning and assessment.
             </p>
-            <Button variant="outline">Learn More</Button>
+            <ul className="space-y-4 text-muted-foreground">
+              <li className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">1</div>
+                <div><span className="font-semibold text-foreground">Enter Your Topic:</span> Simply type any subject, from "World War II" to "JavaScript Fundamentals".</div>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">2</div>
+                <div><span className="font-semibold text-foreground">Set Parameters:</span> Choose the number of questions and the desired difficulty level.</div>
+              </li>
+              <li className="flex items-start gap-4">
+                <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">3</div>
+                <div><span className="font-semibold text-foreground">Generate & Share:</span> Click generate! Your quiz is ready to be taken, shared, or even printed.</div>
+              </li>
+            </ul>
           </div>
-          <div className="grid grid-cols-2 gap-6">
+          <div className="grid grid-cols-1 gap-6">
               <Card className="bg-background/50">
                 <CardHeader>
-                  <CardTitle className="text-4xl font-bold">200%</CardTitle>
-                  <CardDescription>Organic Traffic Increase</CardDescription>
+                  <CardTitle className="text-4xl font-bold">95%</CardTitle>
+                  <CardDescription>Time Saved Compared to Manual Creation</CardDescription>
                 </CardHeader>
               </Card>
               <Card className="bg-background/50">
                  <CardHeader>
-                  <CardTitle className="text-4xl font-bold">50K+</CardTitle>
-                  <CardDescription>Keywords Ranked</CardDescription>
+                  <CardTitle className="text-4xl font-bold">10,000+</CardTitle>
+                  <CardDescription>Quizzes Generated by Our Users</CardDescription>
                 </CardHeader>
               </Card>
-              <Card className="bg-background/50 col-span-2">
+              <Card className="bg-background/50">
                  <CardHeader>
-                  <CardTitle className="text-4xl font-bold">1.5M+</CardTitle>
-                  <CardDescription>Backlinks Built</CardDescription>
+                  <CardTitle className="text-4xl font-bold">Infinite</CardTitle>
+                  <CardDescription>Topics at Your Fingertips</CardDescription>
                 </CardHeader>
               </Card>
           </div>
@@ -142,62 +157,62 @@ export default function Home() {
       <section id="pricing" className="w-full py-20 md:py-28">
         <div className="container mx-auto text-center">
           <Badge variant="secondary" className="mb-2">Pricing</Badge>
-          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Flexible Pricing for Every Business</h2>
+          <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Simple Plans for Everyone</h2>
           <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-            No hidden fees. Choose a plan that's right for you and supercharge your growth.
+            Choose a plan that fits your needs. Start for free, and upgrade when you're ready for more power.
           </p>
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8 max-w-5xl mx-auto">
             <Card className="border-border">
               <CardHeader>
                 <CardTitle>Basic</CardTitle>
-                <CardDescription>For individuals and small teams just getting started.</CardDescription>
+                <CardDescription>For individuals and casual use.</CardDescription>
                 <p className="text-4xl font-bold pt-4">$0 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
               </CardHeader>
               <CardContent className="space-y-4 text-left">
                   <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />1 Project</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />100 Keywords</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Weekly Audits</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />5 Quizzes per month</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Up to 10 questions per quiz</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Standard AI model</li>
                   </ul>
               </CardContent>
               <CardFooter>
-                 <Button className="w-full" variant="ghost">Get Started</Button>
+                 <Button className="w-full" variant="ghost" asChild><Link href="/signup">Get Started</Link></Button>
               </CardFooter>
             </Card>
             <Card className="border-primary/50 ring-2 ring-primary/50 shadow-lg">
                <CardHeader>
                 <CardTitle>Pro</CardTitle>
-                <CardDescription>For growing businesses that need more power and flexibility.</CardDescription>
-                <p className="text-4xl font-bold pt-4">$19 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                <CardDescription>For educators, trainers, and power users.</CardDescription>
+                <p className="text-4xl font-bold pt-4">$10 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
               </CardHeader>
               <CardContent className="space-y-4 text-left">
                    <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />5 Projects</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />1,000 Keywords</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Daily Audits</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />API Access</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Unlimited Quizzes</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Up to 50 questions per quiz</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Advanced AI model</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Priority Support</li>
                   </ul>
               </CardContent>
               <CardFooter>
-                 <Button className="w-full">Choose Pro</Button>
+                 <Button className="w-full" asChild><Link href="/signup">Choose Pro</Link></Button>
               </CardFooter>
             </Card>
             <Card className="border-border">
               <CardHeader>
-                <CardTitle>Enterprise</CardTitle>
-                <CardDescription>For large organizations with custom needs and dedicated support.</CardDescription>
-                <p className="text-4xl font-bold pt-4">$39 <span className="text-sm font-normal text-muted-foreground">/month</span></p>
+                <CardTitle>Team</CardTitle>
+                <CardDescription>For schools and organizations.</CardDescription>
+                <p className="text-4xl font-bold pt-4">Contact Us</p>
               </CardHeader>
               <CardContent className="space-y-4 text-left">
                   <ul className="space-y-2 text-sm text-muted-foreground">
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Unlimited Projects</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Unlimited Keywords</li>
-                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Real-time Audits</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Everything in Pro</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Multi-user accounts</li>
+                    <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Centralized billing</li>
                     <li className="flex items-center"><Check className="h-4 w-4 mr-2 text-primary/50" />Dedicated Support</li>
                   </ul>
               </CardContent>
               <CardFooter>
-                 <Button className="w-full" variant="ghost">Contact Us</Button>
+                 <Button className="w-full" variant="ghost">Contact Sales</Button>
               </CardFooter>
             </Card>
           </div>
@@ -207,9 +222,9 @@ export default function Home() {
       {/* Testimonials Section */}
       <section className="w-full py-20 md:py-28 bg-card/30">
         <div className="container mx-auto text-center">
-            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">What People Say About Us</h2>
+            <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Loved by Educators and Learners</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-              Don&apos;t just take our word for it. Here&apos;s what our users have to say.
+              Don't just take our word for it. Here's what our users have to say.
             </p>
             <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
               {testimonials.map((testimonial, index) => (
@@ -217,9 +232,8 @@ export default function Home() {
                     <CardContent className="pt-6">
                       <p className="italic">&quot;{testimonial.text}&quot;</p>
                     </CardContent>
-                    <CardFooter className="flex items-center gap-4">
-                      <Image src={testimonial.avatar} alt={testimonial.name} width={40} height={40} className="rounded-full" data-ai-hint={testimonial.hint} />
-                      <div>
+                    <CardFooter className="flex items-center gap-4 pt-4">
+                       <div className="flex flex-col">
                         <p className="font-semibold">{testimonial.name}</p>
                         <p className="text-sm text-muted-foreground">{testimonial.role}</p>
                       </div>
@@ -231,31 +245,31 @@ export default function Home() {
       </section>
       
       {/* FAQ Section */}
-      <section className="w-full py-20 md:py-28">
+      <section id="faq" className="w-full py-20 md:py-28">
         <div className="container mx-auto max-w-3xl">
           <div className="text-center">
             <h2 className="text-4xl md:text-5xl font-bold tracking-tight mb-4">Your Questions, Answered</h2>
             <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
-              Find answers to common questions about SEOtalos.
+              Find answers to common questions about QuizForge.
             </p>
           </div>
           <Accordion type="single" collapsible className="w-full">
             <AccordionItem value="item-1">
-              <AccordionTrigger>What services are included?</AccordionTrigger>
+              <AccordionTrigger>What kind of topics can I create quizzes on?</AccordionTrigger>
               <AccordionContent>
-                Our plans include comprehensive site audits, keyword rank tracking, backlink analysis, competitor research, and detailed reporting. Higher-tier plans offer API access and dedicated support.
+                Literally anything! Our AI is trained on a vast range of information. You can create quizzes on history, science, literature, coding, pop culture, and much more. If you can think of it, QuizForge can create a quiz for it.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-2">
               <AccordionTrigger>Is there a free trial?</AccordionTrigger>
               <AccordionContent>
-                Yes, we offer a 14-day free trial for our Pro plan. No credit card is required to get started. You can explore all the features and see the value for yourself.
+                We have a free "Basic" plan that you can use forever. It allows you to create up to 5 quizzes per month. If you need more, you can upgrade to our Pro plan.
               </AccordionContent>
             </AccordionItem>
             <AccordionItem value="item-3">
-              <AccordionTrigger>How do I contact you?</AccordionTrigger>
+              <AccordionTrigger>Can I share the quizzes I create?</AccordionTrigger>
               <AccordionContent>
-                You can reach our support team via email at support@seotalos.com or through the contact form on our website. Enterprise clients receive a dedicated support channel.
+                Yes! Once you generate a quiz, you can easily share it with others. We're working on features to provide a unique link for each quiz you create.
               </AccordionContent>
             </AccordionItem>
           </Accordion>
