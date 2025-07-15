@@ -35,7 +35,7 @@ export default function AppLayout({
     const onboardingComplete = localStorage.getItem(`onboarding_complete_${user.email}`);
     
     // If onboarding is NOT complete and we are not in an onboarding or login page, redirect to onboarding
-    if (!onboardingComplete && !pathname.startsWith('/onboarding')) {
+    if (!onboardingComplete && !pathname.startsWith('/onboarding') && !pathname.startsWith('/login')) {
       router.push('/onboarding/welcome');
       return;
     }
@@ -148,7 +148,7 @@ export default function AppLayout({
             
             <DropdownMenu>
               <DropdownMenuTrigger asChild>
-                <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent">
+                <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent/80 bg-sidebar-accent/40 border border-sidebar-border">
                    <Avatar className="h-8 w-8">
                      <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
                       <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
