@@ -79,15 +79,15 @@ export default function DashboardPage() {
                                 >
                                     <defs>
                                         <linearGradient id="colorScore" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="5%" stopColor="hsl(250 80% 60%)" stopOpacity={0.8}/>
-                                            <stop offset="95%" stopColor="hsl(250 80% 60%)" stopOpacity={0}/>
+                                            <stop offset="5%" stopColor="#06D6A0" stopOpacity={0.8}/>
+                                            <stop offset="95%" stopColor="#06D6A0" stopOpacity={0}/>
                                         </linearGradient>
                                     </defs>
                                     <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="hsl(var(--border) / 0.5)" />
                                     <XAxis dataKey="day" tickLine={false} axisLine={false} />
                                     <YAxis tickLine={false} axisLine={false} domain={[0, 100]} />
                                     <Tooltip
-                                        cursor={{ stroke: 'hsl(250 80% 70%)', strokeWidth: 2, strokeDasharray: '5 5' }}
+                                        cursor={{ stroke: '#06D6A0', strokeWidth: 2, strokeDasharray: '5 5' }}
                                         content={({ active, payload }) => {
                                             if (active && payload && payload.length) {
                                                 return (
@@ -103,22 +103,22 @@ export default function DashboardPage() {
                                         type="monotone"
                                         dataKey="score"
                                         strokeWidth={3}
-                                        stroke="hsl(250 80% 70%)"
+                                        stroke="#06D6A0"
                                         fillOpacity={1}
                                         fill="url(#colorScore)"
                                         dot={{
                                           r: 6,
-                                          stroke: 'hsl(250 80% 60%)',
+                                          stroke: '#06D6A0',
                                           fill: 'hsl(var(--background))',
                                           strokeWidth: 2,
                                         }}
                                         activeDot={{
                                           r: 8,
                                           stroke: '#fff',
-                                          fill: 'hsl(250 80% 60%)',
+                                          fill: '#06D6A0',
                                           strokeWidth: 2,
                                           style: {
-                                            filter: 'drop-shadow(0 0 5px hsl(250 80% 60%))',
+                                            filter: 'drop-shadow(0 0 5px #06D6A0)',
                                           }
                                         }}
                                     />
