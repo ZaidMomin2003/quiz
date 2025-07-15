@@ -13,16 +13,14 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
   const [theme, setTheme] = useState<Theme>('dark');
 
   useEffect(() => {
-    const storedTheme = localStorage.getItem('quizforge-theme') as Theme | null;
-    if (storedTheme) {
-      setTheme(storedTheme);
-    }
+    // Start with dark theme as default, don't check localStorage initially
+    // to avoid flash of wrong theme. Let the effect below handle it.
   }, []);
 
   useEffect(() => {
+    const isDark = theme === 'dark';
     document.documentElement.classList.remove('light', 'dark');
     document.documentElement.classList.add(theme);
-    localStorage.setItem('quizforge-theme', theme);
   }, [theme]);
 
   return (
