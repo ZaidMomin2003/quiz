@@ -7,10 +7,8 @@ import { Button } from '@/components/ui/button';
 import { useState, useEffect } from 'react';
 import { Label } from '@/components/ui/label';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
-import { Badge } from '@/components/ui/badge';
 import { generateMcqAction } from "@/app/actions";
-import { Loader2, RefreshCw } from "lucide-react";
+import { Loader2 } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import type { QuizHistoryItem } from '@/lib/types';
@@ -27,7 +25,6 @@ export default function DashboardPage() {
     const [questionCount, setQuestionCount] = useState(5);
     const [difficulty, setDifficulty] = useState<'easy' | 'medium' | 'hard'>('easy');
     const [isLoading, setIsLoading] = useState(false);
-    const [history, setHistory] = useState<QuizHistoryItem[]>([]);
     const [stats, setStats] = useState<DashboardStats>({
         quizzesTaken: 0,
         correctRatio: 0,
@@ -42,7 +39,6 @@ export default function DashboardPage() {
         const storedHistory = localStorage.getItem('quizHistory');
         if (storedHistory) {
             const parsedHistory: QuizHistoryItem[] = JSON.parse(storedHistory);
-            setHistory(parsedHistory.sort((a, b) => b.timestamp - a.timestamp)); // Most recent first
             calculateStats(parsedHistory);
         }
     }, []);
@@ -92,16 +88,6 @@ export default function DashboardPage() {
             sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
             router.push('/quiz');
         }
-    }
-
-    function handleRetakeQuiz(quizToRetake: QuizHistoryItem) {
-        const quizData = {
-            topic: quizToRetake.topic,
-            difficulty: quizToRetake.difficulty,
-            mcqs: quizToRetake.mcqs,
-        };
-        sessionStorage.setItem('currentQuiz', JSON.stringify(quizData));
-        router.push('/quiz');
     }
     
     return (
@@ -196,52 +182,6 @@ export default function DashboardPage() {
                 </CardContent>
             </Card>
 
-            <Card>
-                <CardHeader>
-                    <CardTitle>Quiz History</CardTitle>
-                    <CardDescription>Review your past quizzes and retake them to improve.</CardDescription>
-                </CardHeader>
-                <CardContent>
-                    {history.length > 0 ? (
-                        <div className="w-full overflow-x-auto">
-                            <Table>
-                                <TableHeader>
-                                    <TableRow>
-                                        <TableHead>Topic</TableHead>
-                                        <TableHead>Difficulty</TableHead>
-                                        <TableHead>Score</TableHead>
-                                        <TableHead>Date</TableHead>
-                                        <TableHead className="text-right">Action</TableHead>
-                                    </TableRow>
-                                </TableHeader>
-                                <TableBody>
-                                    {history.map((item) => (
-                                        <TableRow key={item.timestamp}>
-                                            <TableCell className="font-medium">{item.topic}</TableCell>
-                                            <TableCell>
-                                                <Badge variant={
-                                                    item.difficulty === 'easy' ? 'secondary' : 
-                                                    item.difficulty === 'medium' ? 'outline' : 'destructive'
-                                                } className="capitalize">{item.difficulty}</Badge>
-                                            </TableCell>
-                                            <TableCell>{item.score} / {item.totalQuestions}</TableCell>
-                                            <TableCell>{new Date(item.timestamp).toLocaleDateString()}</TableCell>
-                                            <TableCell className="text-right">
-                                                <Button variant="ghost" size="sm" onClick={() => handleRetakeQuiz(item)}>
-                                                    <RefreshCw className="mr-2 h-4 w-4" />
-                                                    Retake
-                                                </Button>
-                                            </TableCell>
-                                        </TableRow>
-                                    ))}
-                                </TableBody>
-                            </Table>
-                        </div>
-                    ) : (
-                        <p className="text-center text-muted-foreground py-8">You haven't taken any quizzes yet. Generate one above to get started!</p>
-                    )}
-                </CardContent>
-            </Card>
         </div>
     );
 }

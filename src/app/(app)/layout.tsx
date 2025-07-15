@@ -1,3 +1,4 @@
+
 // src/app/(app)/layout.tsx
 'use client';
 import { Sidebar, SidebarProvider, SidebarInset, SidebarTrigger, SidebarMenu, SidebarMenuItem, SidebarMenuButton } from '@/components/ui/sidebar';
@@ -6,7 +7,7 @@ import { Avatar, AvatarFallback, AvatarImage } from '@/components/ui/avatar';
 import { useAuth } from '@/hooks/use-auth';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
-import { LayoutDashboard, Pencil, Bot, LogOut, User as UserIcon, Settings } from 'lucide-react';
+import { LayoutDashboard, Pencil, Bot, LogOut, User as UserIcon, Settings, History } from 'lucide-react';
 import Link from 'next/link';
 
 export default function AppLayout({
@@ -53,6 +54,14 @@ export default function AppLayout({
                     <a href="/dashboard">
                        <LayoutDashboard />
                         <span>Dashboard</span>
+                    </a>
+                   </SidebarMenuButton>
+                 </SidebarMenuItem>
+                 <SidebarMenuItem>
+                  <SidebarMenuButton asChild tooltip="History">
+                    <a href="/history">
+                       <History />
+                        <span>History</span>
                     </a>
                    </SidebarMenuButton>
                  </SidebarMenuItem>
