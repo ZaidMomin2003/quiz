@@ -218,28 +218,28 @@ export default function Home() {
               </Card>
               
               {/* Pro Plan */}
-              <Card className="relative flex flex-col h-full border-primary/50 ring-2 ring-primary/50 shadow-lg">
+              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-blue-start to-gradient-blue-end border-0 text-white shadow-lg">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                    <Badge>Most Popular</Badge>
                 </div>
                 <CardHeader className="flex-grow">
                   <CardTitle className="text-2xl font-bold">Pro</CardTitle>
-                  <CardDescription>For educators, trainers, and power users.</CardDescription>
+                  <CardDescription className="text-white/80">For educators, trainers, and power users.</CardDescription>
                   <div className="pt-4">
                     <span className="text-4xl font-bold">$10</span>
-                    <span className="text-sm font-normal text-muted-foreground">/month</span>
+                    <span className="text-sm font-normal text-white/80">/month</span>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                   <Button className="w-full" asChild><Link href="/signup">Choose Pro</Link></Button>
-                   <p className="text-xs text-muted-foreground text-center mt-2">Billed monthly.</p>
+                   <Button className="w-full bg-white text-blue-600 hover:bg-white/90" asChild><Link href="/signup">Choose Pro</Link></Button>
+                   <p className="text-xs text-white/80 text-center mt-2">Billed monthly.</p>
                    <div className="mt-6 space-y-3">
-                      <p className="font-semibold text-sm">All Free plan features, plus:</p>
-                      <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Unlimited Quizzes</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Up to 50 questions per quiz</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Advanced AI model</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Priority Support</li>
+                      <p className="font-semibold text-sm text-white">All Free plan features, plus:</p>
+                      <ul className="space-y-2 text-sm text-white/80">
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Unlimited Quizzes</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Up to 50 questions per quiz</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Advanced AI model</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Priority Support</li>
                       </ul>
                    </div>
                 </CardContent>

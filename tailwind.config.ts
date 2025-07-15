@@ -72,6 +72,10 @@ export default {
           border: 'hsl(var(--sidebar-border))',
           ring: 'hsl(var(--sidebar-ring))',
         },
+         gradient: {
+          'blue-start': '#1E40AF',
+          'blue-end': '#3B82F6',
+        },
       },
       borderRadius: {
         lg: 'var(--radius)',
