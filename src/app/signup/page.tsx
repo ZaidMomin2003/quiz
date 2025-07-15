@@ -1,27 +1,43 @@
 import { SignupForm } from "@/components/signup-form";
 import { PublicPageLayout } from "@/components/public-page-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bot } from "lucide-react";
 import Link from "next/link";
 
 export default function SignupPage() {
     return (
-        <PublicPageLayout showFooter={false}>
-            <div className="w-full max-w-md mx-auto flex items-center min-h-[calc(100vh-4rem)]">
-                <Card className="w-full">
-                    <CardHeader className="text-center">
-                        <CardTitle>Create an Account</CardTitle>
-                        <CardDescription>Get started with QuizForge for free</CardDescription>
-                    </CardHeader>
-                    <CardContent>
+       <PublicPageLayout showHeader={false} showFooter={false}>
+            <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
+                 <div className="flex items-center justify-center py-12">
+                    <div className="mx-auto grid w-[350px] gap-6">
+                        <div className="grid gap-2 text-center">
+                            <h1 className="text-3xl font-bold">Create an account</h1>
+                            <p className="text-balance text-muted-foreground">
+                               Enter your information to get started
+                            </p>
+                        </div>
                         <SignupForm />
-                        <p className="text-center text-sm text-muted-foreground mt-4">
-                            Already have an account?{' '}
-                            <Link href="/login" className="font-semibold text-primary hover:underline">
-                                Sign In
+                        <div className="mt-4 text-center text-sm">
+                            Already have an account?{" "}
+                            <Link href="/login" className="underline font-semibold text-primary">
+                                Sign in
                             </Link>
-                        </p>
-                    </CardContent>
-                </Card>
+                        </div>
+                    </div>
+                </div>
+                <div className="hidden bg-muted lg:block">
+                   <div className="flex flex-col justify-between h-full p-8 text-white bg-gradient-to-br from-gray-900 to-gray-800">
+                        <Link className="flex items-center gap-2 font-semibold self-end" href="/">
+                            <Bot className="h-6 w-6" />
+                            <span className="font-headline text-xl">QuizForge</span>
+                        </Link>
+                        <div className="text-lg">
+                            <blockquote className="space-y-2">
+                                <p className="text-2xl font-medium">&ldquo;QuizForge has revolutionized my study habits. I can create targeted quizzes in seconds to master any subject.&rdquo;</p>
+                                <footer className="text-base text-white/70">David L., University Student</footer>
+                            </blockquote>
+                        </div>
+                   </div>
+                </div>
             </div>
         </PublicPageLayout>
     );

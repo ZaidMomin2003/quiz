@@ -1,27 +1,43 @@
 import { LoginForm } from "@/components/login-form";
 import { PublicPageLayout } from "@/components/public-page-layout";
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
+import { Bot } from "lucide-react";
 import Link from "next/link";
 
 export default function LoginPage() {
     return (
-        <PublicPageLayout showFooter={false}>
-            <div className="w-full max-w-md mx-auto flex items-center min-h-[calc(100vh-4rem)]">
-                <Card className="w-full">
-                    <CardHeader className="text-center">
-                        <CardTitle>Welcome Back!</CardTitle>
-                        <CardDescription>Sign in to continue to QuizForge</CardDescription>
-                    </CardHeader>
-                    <CardContent>
+        <PublicPageLayout showHeader={false} showFooter={false}>
+            <div className="w-full lg:grid lg:min-h-[100vh] lg:grid-cols-2 xl:min-h-[100vh]">
+                <div className="hidden bg-muted lg:block">
+                   <div className="flex flex-col justify-between h-full p-8 text-white bg-gradient-to-br from-gray-900 to-gray-800">
+                        <Link className="flex items-center gap-2 font-semibold" href="/">
+                            <Bot className="h-6 w-6" />
+                            <span className="font-headline text-xl">QuizForge</span>
+                        </Link>
+                        <div className="text-lg">
+                            <blockquote className="space-y-2">
+                                <p className="text-2xl font-medium">&ldquo;This is the best tool I've used to generate quizzes for my classroom. It saves me hours of work and my students love it!&rdquo;</p>
+                                <footer className="text-base text-white/70">Sarah K., High School Teacher</footer>
+                            </blockquote>
+                        </div>
+                   </div>
+                </div>
+                <div className="flex items-center justify-center py-12">
+                    <div className="mx-auto grid w-[350px] gap-6">
+                        <div className="grid gap-2 text-center">
+                            <h1 className="text-3xl font-bold">Welcome Back!</h1>
+                            <p className="text-balance text-muted-foreground">
+                                Enter your email below to login to your account
+                            </p>
+                        </div>
                         <LoginForm />
-                        <p className="text-center text-sm text-muted-foreground mt-4">
-                            Don't have an account?{' '}
-                            <Link href="/signup" className="font-semibold text-primary hover:underline">
-                                Sign Up
+                        <div className="mt-4 text-center text-sm">
+                            Don&apos;t have an account?{" "}
+                            <Link href="/signup" className="underline font-semibold text-primary">
+                                Sign up
                             </Link>
-                        </p>
-                    </CardContent>
-                </Card>
+                        </div>
+                    </div>
+                </div>
             </div>
         </PublicPageLayout>
     );
