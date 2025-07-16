@@ -18,18 +18,17 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { useState, useRef } from "react";
+import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
-import { cn } from "@/lib/utils";
 
 function DemoDashboard() {
     return (
         <div className="flex w-full h-full bg-[#121212] text-white overflow-hidden rounded-xl border border-white/10 shadow-2xl shadow-primary/20">
             {/* Sidebar */}
-            <aside className="w-1/5 bg-[#1a1a1a] p-4 flex flex-col justify-between">
+            <aside className="w-1/5 bg-[#1a1a1a] p-4 flex-col justify-between hidden lg:flex">
                 <div>
                     <div className="flex items-center gap-2 mb-8">
                         <Bot className="h-6 w-6 text-primary" />
@@ -67,37 +66,37 @@ function DemoDashboard() {
                 </div>
             </aside>
             {/* Main Content */}
-            <main className="w-4/5 p-8 overflow-y-auto">
-                <h2 className="text-3xl font-bold mb-6">Dashboard</h2>
-                <div className="grid grid-cols-4 gap-6 mb-6">
-                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
-                        <h3 className="text-sm text-gray-400">Quizzes Taken</h3>
-                        <p className="text-3xl font-bold mt-1">1</p>
+            <main className="w-full lg:w-4/5 p-4 md:p-8 overflow-y-auto">
+                <h2 className="text-2xl md:text-3xl font-bold mb-6">Dashboard</h2>
+                <div className="grid grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-6">
+                    <div className="bg-[#1a1a1a] p-3 md:p-4 rounded-lg">
+                        <h3 className="text-xs md:text-sm text-gray-400">Quizzes Taken</h3>
+                        <p className="text-2xl md:text-3xl font-bold mt-1">1</p>
                     </div>
-                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
-                        <h3 className="text-sm text-gray-400">Total Questions</h3>
-                        <p className="text-3xl font-bold mt-1">2</p>
+                    <div className="bg-[#1a1a1a] p-3 md:p-4 rounded-lg">
+                        <h3 className="text-xs md:text-sm text-gray-400">Total Questions</h3>
+                        <p className="text-2xl md:text-3xl font-bold mt-1">2</p>
                     </div>
-                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
-                        <h3 className="text-sm text-gray-400">Correct Answers</h3>
-                        <p className="text-3xl font-bold mt-1">50%</p>
+                    <div className="bg-[#1a1a1a] p-3 md:p-4 rounded-lg">
+                        <h3 className="text-xs md:text-sm text-gray-400">Correct Answers</h3>
+                        <p className="text-2xl md:text-3xl font-bold mt-1">50%</p>
                     </div>
-                     <div className="bg-[#1a1a1a] p-4 rounded-lg">
-                        <h3 className="text-sm text-gray-400">Average Score</h3>
-                        <p className="text-3xl font-bold mt-1">1.0/2.0</p>
+                     <div className="bg-[#1a1a1a] p-3 md:p-4 rounded-lg">
+                        <h3 className="text-xs md:text-sm text-gray-400">Average Score</h3>
+                        <p className="text-2xl md:text-3xl font-bold mt-1">1.0/2.0</p>
                     </div>
                 </div>
                 <div className="bg-[#1a1a1a] rounded-lg">
                     <div className="bg-primary p-4 rounded-t-lg">
-                        <h3 className="text-xl font-bold text-primary-foreground">Create Your Next Challenge</h3>
+                        <h3 className="text-lg md:text-xl font-bold text-primary-foreground">Create Your Next Challenge</h3>
                         <p className="text-sm text-primary-foreground/80">Fine-tune the details and generate the perfect quiz for your needs.</p>
                     </div>
-                    <div className="p-6 space-y-4">
+                    <div className="p-4 md:p-6 space-y-4">
                         <div>
                             <Label className="text-xs text-gray-400">What topic do you want to practice today?</Label>
-                            <Input type="text" placeholder="e.g., The Renaissance, JavaScript Promises, or Quantum Physics" className="bg-[#2a2a2a] border-gray-600 mt-1" />
+                            <Input type="text" placeholder="e.g., The Renaissance" className="bg-[#2a2a2a] border-gray-600 mt-1" />
                         </div>
-                        <div className="grid grid-cols-3 gap-4">
+                        <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
                             <div>
                                 <Label className="text-xs text-gray-400">Number of Questions</Label>
                                 <Input type="text" value="5" className="bg-[#2a2a2a] border-gray-600 mt-1" readOnly/>
@@ -131,6 +130,7 @@ function DemoDashboard() {
         </div>
     );
 }
+
 
 function QuizGeneratorPrototype() {
   const router = useRouter();
@@ -278,7 +278,7 @@ export default function Home() {
 
         {/* Static Dashboard Preview */}
         <div className="w-full h-[70vh] relative -mt-16 md:-mt-24">
-            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent z-10"></div>
+            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent z-10"></div>
             <div className="container mx-auto h-full p-4">
                 <DemoDashboard />
             </div>
