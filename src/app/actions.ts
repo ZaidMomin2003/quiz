@@ -27,39 +27,53 @@ export async function generateMcqAction(
   input: GenerateMcqInput
 ): Promise<{ mcqs?: GenerateMcqOutput['mcqs']; error?: string }> {
   try {
-    // This is where the caching logic will live.
-    // For now, it's simplified to show the structure.
+    const { topic, questionCount, difficulty } = input;
     
     // 1. Check how many questions we have in the DB for this topic.
-    const questionsInDb = await getQuestionCountForTopic(input.topic);
+    const questionsInDbCount = await getQuestionCountForTopic(topic, difficulty);
     
     // 2. Decide how many questions to fetch from DB vs. generate with AI.
     let questionsFromDb: GenerateMcqOutput['mcqs'] = [];
-    let questionsToGenerate = input.questionCount;
+    let questionsToGenerate = questionCount;
+    let fetchCount = 0;
 
-    // A simple version of the caching logic:
-    if (questionsInDb > 0) {
-        const fetchCount = Math.min(questionsInDb, Math.ceil(input.questionCount * 0.3)); // Fetch up to 30% from DB
-        questionsFromDb = await getQuestionsFromDb(input.topic, fetchCount);
-        questionsToGenerate = input.questionCount - questionsFromDb.length;
+    // This is the evolving caching logic
+    if (questionsInDbCount >= 200) {
+        // Mature State: We have a rich library. Use 70% from cache.
+        fetchCount = Math.min(questionsInDbCount, Math.ceil(questionCount * 0.7));
+    } else if (questionsInDbCount > 0) {
+        // Initial State: We're building the library. Use 30% from cache.
+        fetchCount = Math.min(questionsInDbCount, Math.ceil(questionCount * 0.3));
     }
-
+    
+    if (fetchCount > 0) {
+        questionsFromDb = await getQuestionsFromDb(topic, difficulty, fetchCount);
+    }
+    
+    questionsToGenerate = questionCount - questionsFromDb.length;
+    
     let generatedMcqs: GenerateMcqOutput['mcqs'] = [];
     if (questionsToGenerate > 0) {
         // 3. Generate the remaining questions using the AI flow.
+        console.log(`Generating ${questionsToGenerate} new questions for topic: ${topic}`);
         const result = await generateMcq({ ...input, questionCount: questionsToGenerate });
+        
         if (!result || !result.mcqs || result.mcqs.length === 0) {
+          // If AI fails but we have some from DB, return those. Otherwise, error.
+          if (questionsFromDb.length > 0) {
+              return { mcqs: questionsFromDb };
+          }
           return { error: 'The AI failed to generate new questions. Please try again.' };
         }
         generatedMcqs = result.mcqs;
 
         // 4. Add the newly generated questions to our database for future use.
-        await addQuestionsToDb(input.topic, generatedMcqs);
+        await addQuestionsToDb(topic, difficulty, generatedMcqs);
     }
     
     const finalMcqs = [...questionsFromDb, ...generatedMcqs];
 
-    // Optional: Shuffle the final list so the user doesn't know which were cached.
+    // 5. Shuffle the final list so the user doesn't know which were cached.
     finalMcqs.sort(() => Math.random() - 0.5);
 
     return { mcqs: finalMcqs };
