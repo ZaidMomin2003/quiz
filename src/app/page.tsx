@@ -162,10 +162,10 @@ export default function Home() {
               <Star className="w-3 h-3 mr-1.5 fill-current" />
               Perfect for NEET & JEE Aspirants
             </Badge>
-            <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4 max-w-4xl mx-auto">
+            <h1 className="text-4xl sm:text-5xl md:text-5xl font-black tracking-tighter mb-6 max-w-4xl mx-auto">
               Ace Your Competitive Exams with AI-Powered Practice
             </h1>
-            <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground mb-8">
+            <p className="max-w-2xl mx-auto text-lg md:text-xl text-muted-foreground mb-8">
               Stop searching for question banks. With QuizForge, instantly generate high-quality MCQs for any NEET or JEE topic. Master concepts, identify weaknesses, and conquer your exams.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
