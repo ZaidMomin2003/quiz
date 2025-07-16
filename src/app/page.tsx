@@ -6,7 +6,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, BrainCircuit, BookOpen, TrendingUp, Zap, Bot } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, TrendingUp, Zap, Bot, LayoutDashboard, History, BookMarked, Bookmark, User as UserIcon } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
@@ -23,8 +23,115 @@ import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
 import { motion, useScroll, useTransform } from "framer-motion";
-import Image from "next/image";
+import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import { cn } from "@/lib/utils";
 
+function DemoDashboard() {
+    return (
+        <div className="flex w-full h-full bg-[#121212] text-white overflow-hidden rounded-xl">
+            {/* Sidebar */}
+            <aside className="w-1/5 bg-[#1a1a1a] p-4 flex flex-col justify-between">
+                <div>
+                    <div className="flex items-center gap-2 mb-8">
+                        <Bot className="h-6 w-6 text-primary" />
+                        <h1 className="font-bold text-lg">QuizForge</h1>
+                    </div>
+                    <nav className="space-y-2">
+                        <a href="#" className="flex items-center gap-3 p-2 rounded-md bg-primary/10 text-primary font-semibold">
+                            <LayoutDashboard className="h-4 w-4" />
+                            <span>Dashboard</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-3 p-2 rounded-md text-gray-400 hover:bg-gray-700">
+                            <History className="h-4 w-4" />
+                            <span>History</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-3 p-2 rounded-md text-gray-400 hover:bg-gray-700">
+                            <BookMarked className="h-4 w-4" />
+                            <span>Syllabus</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-3 p-2 rounded-md text-gray-400 hover:bg-gray-700">
+                            <BookOpen className="h-4 w-4" />
+                            <span>Learn</span>
+                        </a>
+                        <a href="#" className="flex items-center gap-3 p-2 rounded-md text-gray-400 hover:bg-gray-700 relative">
+                            <Bookmark className="h-4 w-4" />
+                            <span>Bookmarks</span>
+                            <span className="absolute right-2 top-1/2 -translate-y-1/2 bg-primary text-primary-foreground text-xs font-bold w-4 h-4 flex items-center justify-center rounded-full">1</span>
+                        </a>
+                    </nav>
+                </div>
+                <div className="flex items-center gap-3 p-2 rounded-md bg-gray-700/50">
+                    <Avatar className="h-7 w-7">
+                        <AvatarFallback className="bg-gray-600 text-gray-300 text-xs">Z</AvatarFallback>
+                    </Avatar>
+                    <span className="text-sm font-medium">Zaid</span>
+                </div>
+            </aside>
+            {/* Main Content */}
+            <main className="w-4/5 p-8 overflow-y-auto">
+                <h2 className="text-3xl font-bold mb-6">Dashboard</h2>
+                <div className="grid grid-cols-4 gap-6 mb-6">
+                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
+                        <h3 className="text-sm text-gray-400">Quizzes Taken</h3>
+                        <p className="text-3xl font-bold mt-1">1</p>
+                    </div>
+                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
+                        <h3 className="text-sm text-gray-400">Total Questions</h3>
+                        <p className="text-3xl font-bold mt-1">2</p>
+                    </div>
+                    <div className="bg-[#1a1a1a] p-4 rounded-lg">
+                        <h3 className="text-sm text-gray-400">Correct Answers</h3>
+                        <p className="text-3xl font-bold mt-1">50%</p>
+                    </div>
+                     <div className="bg-[#1a1a1a] p-4 rounded-lg">
+                        <h3 className="text-sm text-gray-400">Average Score</h3>
+                        <p className="text-3xl font-bold mt-1">1.0/2.0</p>
+                    </div>
+                </div>
+                <div className="bg-[#1a1a1a] rounded-lg">
+                    <div className="bg-primary p-4 rounded-t-lg">
+                        <h3 className="text-xl font-bold text-primary-foreground">Create Your Next Challenge</h3>
+                        <p className="text-sm text-primary-foreground/80">Fine-tune the details and generate the perfect quiz for your needs.</p>
+                    </div>
+                    <div className="p-6 space-y-4">
+                        <div>
+                            <Label className="text-xs text-gray-400">What topic do you want to practice today?</Label>
+                            <Input type="text" placeholder="e.g., The Renaissance, JavaScript Promises, or Quantum Physics" className="bg-[#2a2a2a] border-gray-600 mt-1" />
+                        </div>
+                        <div className="grid grid-cols-3 gap-4">
+                            <div>
+                                <Label className="text-xs text-gray-400">Number of Questions</Label>
+                                <Input type="text" value="5" className="bg-[#2a2a2a] border-gray-600 mt-1" readOnly/>
+                            </div>
+                            <div>
+                                <Label className="text-xs text-gray-400">Time per question (mins)</Label>
+                                <Input type="text" value="1" className="bg-[#2a2a2a] border-gray-600 mt-1" readOnly/>
+                            </div>
+                             <div>
+                                <Label className="text-xs text-gray-400">Difficulty</Label>
+                                <div className="h-10 w-full mt-1 flex items-center justify-between rounded-md border border-gray-600 bg-[#2a2a2a] px-3 py-2 text-sm">
+                                    <span>Easy</span>
+                                    <ChevronRight className="h-4 w-4 opacity-50 -rotate-90" />
+                                </div>
+                            </div>
+                        </div>
+                        <Button className="w-full bg-primary/20 text-primary hover:bg-primary/30 border border-primary/30">Generate Quiz</Button>
+                    </div>
+                </div>
+                 <div className="mt-6 bg-[#2a2a2a] border border-amber-500/30 rounded-lg p-4">
+                    <div className="flex items-center gap-3 mb-2">
+                        <BrainCircuit className="h-6 w-6 text-amber-400" />
+                        <div>
+                            <h3 className="font-bold">Practice Your Weaknesses</h3>
+                            <p className="text-xs text-gray-400">We've identified some areas you can work on.</p>
+                        </div>
+                    </div>
+                    <Button className="w-full bg-amber-500 hover:bg-amber-600 text-black">Generate Practice Quiz</Button>
+                </div>
+            </main>
+        </div>
+    );
+}
 
 function QuizGeneratorPrototype() {
   const router = useRouter();
@@ -180,9 +287,9 @@ export default function Home() {
         </section>
 
         {/* Parallax Image Section */}
-        <div className="container mx-auto w-full relative h-[25vh] md:h-[60vh] mt-52">
+        <div className="container mx-auto w-full relative h-[60vh] mt-52">
             <motion.div
-                className="w-full mx-auto h-[150%] absolute -top-[50%] p-4"
+                className="w-full h-[150%] absolute -top-[50%] p-4"
                 style={{
                   perspective: '1000px',
                   y,
@@ -190,21 +297,13 @@ export default function Home() {
                 }}
             >
                 <motion.div
-                    className="w-full h-full border rounded-xl shadow-2xl shadow-primary/20"
+                    className="w-full h-full shadow-2xl shadow-primary/20"
                     style={{
                       rotateX,
                       transformStyle: 'preserve-3d',
                     }}
                 >
-                    <Image
-                        src="https://placehold.co/1200x800.png"
-                        alt="QuizForge Dashboard"
-                        data-ai-hint="app dashboard"
-                        width={1200}
-                        height={800}
-                        className="object-cover object-top w-full h-full rounded-xl"
-                        priority
-                    />
+                    <DemoDashboard />
                 </motion.div>
             </motion.div>
         </div>
