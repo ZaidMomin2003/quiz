@@ -51,8 +51,11 @@ export default function AppLayout({
   }, [user, loading, router, pathname]);
 
   useEffect(() => {
+    if (!user || !user.email) return;
+    const bookmarksKey = `bookmarks_${user.email}`;
+
     const updateBookmarkCount = () => {
-        const storedBookmarks = localStorage.getItem('bookmarks');
+        const storedBookmarks = localStorage.getItem(bookmarksKey);
         if (storedBookmarks) {
             try {
                 const bookmarks = JSON.parse(storedBookmarks);
@@ -74,7 +77,7 @@ export default function AppLayout({
         window.removeEventListener('storage', updateBookmarkCount);
         window.removeEventListener('bookmarksUpdated', handleBookmarkUpdate);
     }
-  }, []);
+  }, [user]);
 
   // Don't render sidebar layout for onboarding or admin pages
   if (pathname.startsWith('/onboarding') || pathname.startsWith('/admin')) {

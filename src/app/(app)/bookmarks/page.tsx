@@ -12,25 +12,32 @@ import {
 import { Button } from '@/components/ui/button';
 import { Bookmark, Trash2 } from 'lucide-react';
 import { Badge } from '@/components/ui/badge';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function BookmarksPage() {
+  const { user } = useAuth();
   const [bookmarks, setBookmarks] = useState<BookmarkItem[]>([]);
   const [hydrated, setHydrated] = useState(false);
 
   useEffect(() => {
-    const storedBookmarks = localStorage.getItem('bookmarks');
+    if (!user || !user.email) return;
+    const bookmarksKey = `bookmarks_${user.email}`;
+    const storedBookmarks = localStorage.getItem(bookmarksKey);
     if (storedBookmarks) {
       setBookmarks(JSON.parse(storedBookmarks).sort((a: BookmarkItem, b: BookmarkItem) => b.timestamp - a.timestamp));
     }
     setHydrated(true);
-  }, []);
+  }, [user]);
 
   const handleRemoveBookmark = (timestamp: number) => {
+    if (!user || !user.email) return;
+    const bookmarksKey = `bookmarks_${user.email}`;
+
     const updatedBookmarks = bookmarks.filter(
       (bookmark) => bookmark.timestamp !== timestamp
     );
     setBookmarks(updatedBookmarks);
-    localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+    localStorage.setItem(bookmarksKey, JSON.stringify(updatedBookmarks));
     // Dispatch a custom event to notify other components (like the layout) of the change
     window.dispatchEvent(new CustomEvent('bookmarksUpdated'));
   };

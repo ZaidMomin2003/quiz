@@ -1,4 +1,3 @@
-
 // src/app/learn-quiz/page.tsx
 'use client';
 
@@ -15,6 +14,7 @@ import { cn } from '@/lib/utils';
 import { CheckCircle, XCircle, Lightbulb, Loader2, PartyPopper, Bookmark as BookmarkIcon } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useToast } from "@/hooks/use-toast";
+import { useAuth } from '@/hooks/use-auth';
 
 
 type LearnQuizData = {
@@ -25,6 +25,7 @@ type LearnQuizData = {
 export default function LearnQuizPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { user } = useAuth();
     const [quizData, setQuizData] = useState<LearnQuizData | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [selectedAnswer, setSelectedAnswer] = useState<string | null>(null);
@@ -82,7 +83,8 @@ export default function LearnQuizPage() {
     };
 
     const handleBookmark = () => {
-        if (!quizData) return;
+        if (!quizData || !user || !user.email) return;
+        const bookmarksKey = `bookmarks_${user.email}`;
 
         const newBookmark: BookmarkItem = {
             topic: quizData.topic,
@@ -92,14 +94,14 @@ export default function LearnQuizPage() {
             timestamp: Date.now() + currentQuestionIndex, // ensure uniqueness
         };
 
-        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
         
         // Prevent duplicates for the same question in the same session
         const alreadyExists = existingBookmarks.some(b => b.question === newBookmark.question);
         
         if (!alreadyExists) {
             const updatedBookmarks = [...existingBookmarks, newBookmark];
-            localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+            localStorage.setItem(bookmarksKey, JSON.stringify(updatedBookmarks));
             setBookmarkedTimestamps(prev => new Set(prev).add(currentQuestionIndex));
              // Dispatch a custom event to notify other components (like the layout) of the change
             window.dispatchEvent(new CustomEvent('bookmarksUpdated'));

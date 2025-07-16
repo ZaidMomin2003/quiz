@@ -54,7 +54,7 @@ export default function QuizPage() {
 
 
     const submitQuiz = useCallback(async (finalAnswers: Record<number, string>) => {
-        if (!quizData || quizState === 'submitted') return;
+        if (!quizData || quizState === 'submitted' || !user || !user.email) return;
 
         setQuizState('submitted');
         setIsAnalyzing(true);
@@ -184,7 +184,9 @@ export default function QuizPage() {
     };
 
     const handleBookmark = (index: number, explanation: Explanation) => {
-        if (!quizData) return;
+        if (!quizData || !user || !user.email) return;
+
+        const bookmarksKey = `bookmarks_${user.email}`;
 
         const newBookmark: BookmarkItem = {
             topic: quizData.topic,
@@ -194,13 +196,13 @@ export default function QuizPage() {
             timestamp: Date.now() + index, // ensure uniqueness
         };
 
-        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem('bookmarks') || '[]');
+        const existingBookmarks: BookmarkItem[] = JSON.parse(localStorage.getItem(bookmarksKey) || '[]');
         
         const alreadyExists = existingBookmarks.some(b => b.question === newBookmark.question);
         
         if (!alreadyExists) {
             const updatedBookmarks = [...existingBookmarks, newBookmark];
-            localStorage.setItem('bookmarks', JSON.stringify(updatedBookmarks));
+            localStorage.setItem(bookmarksKey, JSON.stringify(updatedBookmarks));
             setBookmarkedTimestamps(prev => new Set(prev).add(index));
              // Dispatch a custom event to notify other components (like the layout) of the change
             window.dispatchEvent(new CustomEvent('bookmarksUpdated'));
