@@ -3,7 +3,16 @@
 
 import React, { createContext, useContext, useState, useEffect, ReactNode } from 'react';
 import { useRouter } from 'next/navigation';
-import { getAuth, signInWithPopup, signOut, onAuthStateChanged, User as FirebaseUser } from 'firebase/auth';
+import { 
+    getAuth, 
+    signInWithPopup, 
+    signOut, 
+    onAuthStateChanged, 
+    User as FirebaseUser,
+    createUserWithEmailAndPassword,
+    signInWithEmailAndPassword,
+    updateProfile
+} from 'firebase/auth';
 import { auth, googleProvider } from '@/lib/firebase';
 
 
@@ -16,6 +25,8 @@ type User = {
 
 interface AuthContextType {
   user: User | null;
+  signup: (name: string, email: string, pass: string) => Promise<void>;
+  login: (email: string, pass: string) => Promise<void>;
   signInWithGoogle: () => Promise<void>;
   logout: () => void;
   loading: boolean;
@@ -49,22 +60,48 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
     return () => unsubscribe();
   }, []);
 
+  const handleSuccessfulLogin = (firebaseUser: FirebaseUser) => {
+    if (firebaseUser.email) {
+        const onboardingComplete = localStorage.getItem(`onboarding_complete_${firebaseUser.email}`);
+        if (onboardingComplete) {
+            router.push('/dashboard');
+        } else {
+            router.push('/onboarding/welcome');
+        }
+    }
+  };
+  
+  const signup = async (name: string, email: string, pass: string) => {
+    setLoading(true);
+    try {
+      const userCredential = await createUserWithEmailAndPassword(auth, email, pass);
+      await updateProfile(userCredential.user, { displayName: name });
+      handleSuccessfulLogin(userCredential.user);
+    } finally {
+      setLoading(false);
+    }
+  };
+  
+  const login = async (email: string, pass: string) => {
+      setLoading(true);
+      try {
+          const userCredential = await signInWithEmailAndPassword(auth, email, pass);
+          handleSuccessfulLogin(userCredential.user);
+      } finally {
+          setLoading(false);
+      }
+  };
+
+
   const signInWithGoogle = async (): Promise<void> => {
     setLoading(true);
     try {
         const result = await signInWithPopup(auth, googleProvider);
-        const firebaseUser = result.user;
-        if (firebaseUser.displayName && firebaseUser.email) {
-             const onboardingComplete = localStorage.getItem(`onboarding_complete_${firebaseUser.email}`);
-            if (onboardingComplete) {
-                router.push('/dashboard');
-            } else {
-                router.push('/onboarding/welcome');
-            }
-        }
+        handleSuccessfulLogin(result.user);
     } catch (error) {
         console.error("Error during Google sign-in:", error);
-        // Handle errors here, e.g., show a toast notification
+        // Rethrow or handle error as needed
+        throw error;
     } finally {
         setLoading(false);
     }
@@ -84,7 +121,7 @@ export const AuthProvider = ({ children }: { children: ReactNode }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ user, signInWithGoogle, logout, loading }}>
+    <AuthContext.Provider value={{ user, signup, login, signInWithGoogle, logout, loading }}>
       {!loading && children}
     </AuthContext.Provider>
   );

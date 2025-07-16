@@ -1,3 +1,4 @@
+
 // src/app/signup/page.tsx
 'use client';
 import { PublicPageLayout } from "@/components/public-page-layout";
@@ -7,6 +8,7 @@ import { AuthCarousel } from "@/components/auth-carousel";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
+import { SignupForm } from "@/components/signup-form";
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -23,9 +25,12 @@ export default function SignupPage() {
 
      const handleSignUp = async () => {
         setIsSigningIn(true);
-        await signInWithGoogle();
-        // The auth hook will handle redirection to the onboarding flow for new users.
-        setTimeout(() => setIsSigningIn(false), 3000); 
+        try {
+            await signInWithGoogle();
+        } catch (error) {
+            console.error("Google sign up failed:", error);
+            setIsSigningIn(false);
+        }
     };
 
     return (
@@ -34,14 +39,28 @@ export default function SignupPage() {
                  <div className="flex items-center justify-center py-12">
                     <div className="mx-auto grid w-[350px] gap-6">
                         <div className="grid gap-2 text-center">
-                            <div className="flex justify-center">
+                            <Link href="/" className="flex justify-center lg:hidden">
                                 <Bot className="h-12 w-12 text-primary" />
-                            </div>
+                            </Link>
                             <h1 className="text-3xl font-bold">Create an account</h1>
                             <p className="text-balance text-muted-foreground">
-                               Get started by signing up with your Google account.
+                                Enter your information below to create your account.
                             </p>
                         </div>
+                        
+                        <SignupForm />
+                        
+                         <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-muted-foreground">
+                                Or continue with
+                                </span>
+                            </div>
+                        </div>
+
                         <Button 
                             variant="outline" 
                             className="w-full"

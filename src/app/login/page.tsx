@@ -1,3 +1,4 @@
+
 // src/app/login/page.tsx
 'use client';
 import { PublicPageLayout } from "@/components/public-page-layout";
@@ -7,6 +8,7 @@ import { AuthCarousel } from "@/components/auth-carousel";
 import { Button } from "@/components/ui/button";
 import { useAuth } from "@/hooks/use-auth";
 import { useState } from "react";
+import { LoginForm } from "@/components/login-form";
 
 const GoogleIcon = () => (
     <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
@@ -23,10 +25,12 @@ export default function LoginPage() {
 
     const handleSignIn = async () => {
         setIsSigningIn(true);
-        await signInWithGoogle();
-        // The auth hook will handle redirection, so we don't need to do anything here.
-        // We set isSigningIn to false in a timeout in case of errors, though the page will likely redirect away.
-        setTimeout(() => setIsSigningIn(false), 3000); 
+        try {
+            await signInWithGoogle();
+        } catch (error) {
+             console.error("Google sign in failed:", error);
+             setIsSigningIn(false);
+        }
     };
 
     return (
@@ -47,14 +51,28 @@ export default function LoginPage() {
                 <div className="flex items-center justify-center py-12">
                     <div className="mx-auto grid w-[350px] gap-6">
                         <div className="grid gap-2 text-center">
-                            <div className="flex justify-center">
+                             <Link href="/" className="flex justify-center lg:hidden">
                                 <Bot className="h-12 w-12 text-primary" />
-                            </div>
+                            </Link>
                             <h1 className="text-3xl font-bold">Welcome Back!</h1>
                             <p className="text-balance text-muted-foreground">
-                                Sign in with Google to continue to your account.
+                                Sign in to your account to continue.
                             </p>
                         </div>
+
+                        <LoginForm />
+
+                        <div className="relative">
+                            <div className="absolute inset-0 flex items-center">
+                                <span className="w-full border-t" />
+                            </div>
+                            <div className="relative flex justify-center text-xs uppercase">
+                                <span className="bg-background px-2 text-muted-foreground">
+                                Or continue with
+                                </span>
+                            </div>
+                        </div>
+
                         <Button 
                             variant="outline" 
                             className="w-full" 
@@ -64,6 +82,7 @@ export default function LoginPage() {
                            {isSigningIn ? <Loader2 className="mr-2 h-4 w-4 animate-spin" /> : <GoogleIcon />}
                            {isSigningIn ? 'Redirecting...' : 'Sign In with Google'}
                         </Button>
+
                         <div className="mt-4 text-center text-sm">
                             Don&apos;t have an account?{" "}
                             <Link href="/signup" className="underline font-semibold text-primary">
