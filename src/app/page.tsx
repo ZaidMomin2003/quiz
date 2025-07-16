@@ -108,34 +108,34 @@ function QuizGeneratorPrototype() {
 export default function Home() {
   const testimonials = [
     {
-      name: 'Sarah K., Teacher',
-      role: 'High School Educator',
-      text: "QuizForge has revolutionized how I create assessments. I can generate a unique quiz on any topic in minutes, saving me hours of work each week. The students find it engaging too!",
+      name: 'Priya S., NEET Aspirant',
+      role: 'Kota, Rajasthan',
+      text: "QuizForge is a game-changer for my NEET prep. I can generate unlimited practice questions for tricky Biology chapters. The weakness analysis helps me focus on exactly what I need to improve.",
     },
     {
-      name: 'Michael B., Corporate Trainer',
-      role: 'L&D Manager',
-      text: "We use QuizForge for our internal training programs. The AI's ability to create varied and challenging questions is impressive. It's a fantastic tool for reinforcing learning.",
+      name: 'Rohan M., JEE Aspirant',
+      role: 'Hyderabad, Telangana',
+      text: "The AI-generated Physics questions are top-notch and match the JEE Advanced level. It's like having a personal question setter. This has saved me hours of searching for quality problems.",
     },
      {
-      name: 'David L., Student',
-      role: 'University Student',
-      text: "I use QuizForge to create practice tests for myself. It's a great way to study and test my knowledge on different subjects before exams. Super easy to use!",
+      name: 'Ananya K., JEE Mains Aspirant',
+      role: 'Mumbai, Maharashtra',
+      text: "I love using QuizForge for daily revision of Chemistry concepts. The instant feedback and explanations are incredibly helpful. It's much more engaging than just reading textbooks.",
     },
     {
-      name: 'Emily R., Homeschooling Parent',
-      role: 'Parent & Educator',
-      text: "As a homeschooling parent, QuizForge is a lifesaver. I can instantly create fun and educational quizzes for my kids on any subject they're interested in.",
+      name: 'Vikram P., Teacher',
+      role: 'Physics Educator, Delhi',
+      text: "As a teacher, I use QuizForge to create quick chapter-wise tests for my students. The ability to set difficulty levels is fantastic for catering to different batches. Highly recommended.",
     },
     {
-      name: 'John S., Developer',
-      role: 'Tech Bootcamp Student',
-      text: "I use QuizForge to quickly generate quizzes on programming concepts. It helps me verify my understanding and prepare for technical interviews. Highly recommended!",
+      name: 'Sneha G., NEET Repeater',
+      role: 'Chennai, Tamil Nadu',
+      text: "This app helped me identify gaps in my preparation that I missed last year. The 'Practice Your Weaknesses' feature is pure gold for any serious aspirant. A must-have tool!",
     },
     {
-      name: 'Maria G., HR Professional',
-      role: 'Human Resources',
-      text: "We've integrated QuizForge into our onboarding process. It's a simple and effective way to ensure new hires have grasped the essential company knowledge.",
+      name: 'Aditya V., Student',
+      role: 'Class 12, Bangalore',
+      text: "I use QuizForge to prepare for my board exams alongside my JEE prep. It's so versatile. Being able to create a quiz on any topic, anytime, is amazing.",
     },
   ];
 
@@ -149,18 +149,18 @@ export default function Home() {
            <div className="container mx-auto text-center py-20 md:py-28 relative z-10">
             <Badge variant="outline" className="mb-4 bg-card/50 backdrop-blur">
               <Star className="w-3 h-3 mr-1.5 fill-current" />
-              Powered by the latest AI models
+              Perfect for NEET & JEE Aspirants
             </Badge>
             <h1 className="text-4xl sm:text-5xl md:text-6xl font-black tracking-tighter mb-4 max-w-4xl mx-auto">
-              Create Engaging Quizzes in Seconds with AI
+              Ace Your Competitive Exams with AI-Powered Practice
             </h1>
             <p className="max-w-2xl mx-auto text-base sm:text-lg text-muted-foreground mb-8">
-              Stop spending hours creating quizzes. With QuizForge, just enter a topic and let our AI do the hard work. Perfect for educators, trainers, and lifelong learners.
+              Stop searching for question banks. With QuizForge, instantly generate high-quality MCQs for any NEET or JEE topic. Master concepts, identify weaknesses, and conquer your exams.
             </p>
             <div className="flex flex-col sm:flex-row justify-center items-center gap-4">
               <Button asChild size="lg" className="w-full sm:w-auto">
                 <Link href="/signup">
-                  Get Started For Free <ChevronRight className="ml-2 h-4 w-4" />
+                  Start Practicing For Free <ChevronRight className="ml-2 h-4 w-4" />
                 </Link>
               </Button>
             </div>
@@ -180,31 +180,31 @@ export default function Home() {
             <div className="container mx-auto grid grid-cols-1 md:grid-cols-3 gap-8">
                 <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4 md:col-span-2">
                     <div className="flex items-center justify-between w-full">
-                        <h3 className="font-bold text-lg">AI-Powered Generation</h3>
+                        <h3 className="font-bold text-lg">NEET & JEE Aligned AI</h3>
                         <Zap className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic. Our AI generates relevant questions and answers in seconds, tailoring content to your specified difficulty.</p>
+                    <p className="text-muted-foreground text-sm">Instantly create quizzes on any topic from the official syllabus. Our AI generates relevant, exam-pattern questions in seconds, tailored to your specified difficulty.</p>
                 </Card>
                  <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
                     <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">Interactive Learning</h3>
                         <BookOpen className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant explanations.</p>
+                    <p className="text-muted-foreground text-sm">Go beyond testing with our "Learn Mode" that provides instant, detailed explanations for every question.</p>
                  </Card>
                 <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4">
                     <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">Performance Analytics</h3>
                         <TrendingUp className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Track your progress and identify areas for improvement.</p>
+                    <p className="text-muted-foreground text-sm">Track your progress, see your scores, and identify your strong and weak chapters over time.</p>
                  </Card>
                  <Card className="bg-card/50 backdrop-blur-lg p-6 h-full flex flex-col items-start gap-4 md:col-span-2">
                     <div className="flex items-center justify-between w-full">
                         <h3 className="font-bold text-lg">Weakness-Focused Practice</h3>
                         <BrainCircuit className="text-primary" />
                     </div>
-                    <p className="text-muted-foreground text-sm">Our AI analyzes your quiz results to identify your weak spots and automatically generates new quizzes focused on those specific concepts, helping you turn weaknesses into strengths.</p>
+                    <p className="text-muted-foreground text-sm">Our AI analyzes your quiz results to find your weak spots and automatically generates new quizzes focused on those specific concepts, helping you turn weaknesses into strengths.</p>
                  </Card>
             </div>
         </section>
@@ -215,22 +215,22 @@ export default function Home() {
           <div className="container mx-auto grid grid-cols-1 md:grid-cols-2 gap-12 items-center">
             <div>
               <Badge variant="secondary" className="mb-2">How It Works</Badge>
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Create a Quiz in 3 Simple Steps</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Create a Practice Test in Seconds</h2>
               <p className="text-muted-foreground mb-8">
-                We've simplified the quiz creation process so you can focus on what matters most: learning and assessment.
+                We've simplified the quiz creation process so you can focus on what matters most: practice and revision.
               </p>
               <ul className="space-y-4 text-muted-foreground">
                 <li className="flex items-start gap-4">
                   <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">1</div>
-                  <div><span className="font-semibold text-foreground">Enter Your Topic:</span> Simply type any subject, from "World War II" to "JavaScript Fundamentals".</div>
+                  <div><span className="font-semibold text-foreground">Pick Your Topic:</span> Browse the complete NEET/JEE syllabus and pick any topic, from "Rotational Motion" to "p-Block Elements".</div>
                 </li>
                 <li className="flex items-start gap-4">
                   <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">2</div>
-                  <div><span className="font-semibold text-foreground">Set Parameters:</span> Choose the number of questions and the desired difficulty level.</div>
+                  <div><span className="font-semibold text-foreground">Set Parameters:</span> Choose the number of questions and the desired difficulty level (Easy, Medium, Hard).</div>
                 </li>
                 <li className="flex items-start gap-4">
                   <div className="bg-primary/10 text-primary font-bold rounded-full h-8 w-8 flex items-center justify-center shrink-0">3</div>
-                  <div><span className="font-semibold text-foreground">Generate & Share:</span> Click generate! Your quiz is ready to be taken, shared, or even printed.</div>
+                  <div><span className="font-semibold text-foreground">Generate & Practice:</span> Click generate! Your test is ready instantly. Analyze your performance and practice your weak areas.</div>
                 </li>
               </ul>
             </div>
@@ -349,14 +349,14 @@ export default function Home() {
         {/* Testimonials Section */}
         <section className="w-full py-16 md:py-24 bg-card/30">
           <div className="container mx-auto text-center">
-              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Loved by Educators and Learners</h2>
+              <h2 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">Loved by Toppers and Teachers</h2>
               <p className="max-w-2xl mx-auto text-muted-foreground mb-12">
                 Don't just take our word for it. Here's what our users have to say.
               </p>
               <Carousel
                 plugins={[
                   Autoplay({
-                    delay: 2000,
+                    delay: 2500,
                     stopOnInteraction: true,
                     stopOnMouseEnter: true,
                   }),
@@ -403,19 +403,25 @@ export default function Home() {
               <AccordionItem value="item-1">
                 <AccordionTrigger>What kind of topics can I create quizzes on?</AccordionTrigger>
                 <AccordionContent>
-                  Literally anything! Our AI is trained on a vast range of information. You can create quizzes on history, science, literature, coding, pop culture, and much more. If you can think of it, QuizForge can create a quiz for it.
+                  Literally anything! Our AI is trained on a vast range of information, with special focus on the NEET and JEE syllabus. You can create quizzes on history, science, literature, coding, pop culture, and much more. If you can think of it, QuizForge can create a quiz for it.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
                 <AccordionTrigger>Is there a free trial?</AccordionTrigger>
                 <AccordionContent>
-                  We have a "Free Trial" that lets you generate 10 questions to see how the app works. If you need more, you can upgrade to our Monthly or Yearly plans.
+                  We have a "Free Trial" that lets you generate 10 questions to see how the app works. If you need more, you can upgrade to our Monthly or Yearly plans for unlimited access.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3">
                 <AccordionTrigger>Can I share the quizzes I create?</AccordionTrigger>
                 <AccordionContent>
                   Yes! Once you generate a quiz, you can easily share it with others. We're working on features to provide a unique link for each quiz you create.
+                </AccordionContent>
+              </AccordionItem>
+              <AccordionItem value="item-4">
+                <AccordionTrigger>Are the questions relevant for competitive exams like NEET and JEE?</AccordionTrigger>
+                <AccordionContent>
+                  Absolutely. We have specifically tuned our AI to generate questions that match the pattern, difficulty, and syllabus of major competitive exams like NEET, JEE Mains, and JEE Advanced.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
