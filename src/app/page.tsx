@@ -179,7 +179,7 @@ export default function Home() {
         </section>
 
         {/* Parallax Image Section */}
-        <div className="container mx-auto w-full relative h-[40vh] md:h-[60vh]">
+        <div className="container mx-auto w-full relative h-[40vh] md:h-[60vh] mt-16">
             <motion.div
                 className="w-full h-[150%] absolute -top-[50%] p-4"
                 style={{
