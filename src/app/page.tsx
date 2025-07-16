@@ -182,7 +182,7 @@ export default function Home() {
         {/* Parallax Image Section */}
         <div className="container mx-auto w-full relative h-[25vh] md:h-[60vh] mt-40">
             <motion.div
-                className="w-11/12 md:w-full mx-auto h-[150%] absolute -top-[50%] p-4"
+                className="w-full mx-auto h-[150%] absolute -top-[50%] p-4"
                 style={{
                   perspective: '1000px',
                   y,
