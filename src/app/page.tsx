@@ -22,13 +22,12 @@ import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
-import { motion, useScroll, useTransform } from "framer-motion";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
 import { cn } from "@/lib/utils";
 
 function DemoDashboard() {
     return (
-        <div className="flex w-full h-full bg-[#121212] text-white overflow-hidden rounded-xl">
+        <div className="flex w-full h-full bg-[#121212] text-white overflow-hidden rounded-xl border border-white/10 shadow-2xl shadow-primary/20">
             {/* Sidebar */}
             <aside className="w-1/5 bg-[#1a1a1a] p-4 flex flex-col justify-between">
                 <div>
@@ -249,21 +248,12 @@ export default function Home() {
     },
   ];
   
-  const heroRef = useRef(null);
-  const { scrollYProgress } = useScroll({
-    target: heroRef,
-    offset: ["end end", "end start"],
-  });
-  const rotateX = useTransform(scrollYProgress, [0, 1], [0, -20]);
-  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
-  const opacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
-
   return (
     <PublicPageLayout>
         <div className="flex flex-col items-center w-full">
 
         {/* Hero Section */}
-        <section ref={heroRef} className="w-full grid-bg relative">
+        <section className="w-full grid-bg relative">
            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
            <div className="container mx-auto text-center py-20 md:py-28 relative z-10">
             <Badge variant="outline" className="mb-4 bg-card/50 backdrop-blur">
@@ -286,26 +276,12 @@ export default function Home() {
           </div>
         </section>
 
-        {/* Parallax Image Section */}
-        <div className="container mx-auto w-full relative h-[60vh] mt-52">
-            <motion.div
-                className="w-full h-[150%] absolute -top-[50%] p-4"
-                style={{
-                  perspective: '1000px',
-                  y,
-                  opacity,
-                }}
-            >
-                <motion.div
-                    className="w-full h-full shadow-2xl shadow-primary/20"
-                    style={{
-                      rotateX,
-                      transformStyle: 'preserve-3d',
-                    }}
-                >
-                    <DemoDashboard />
-                </motion.div>
-            </motion.div>
+        {/* Static Dashboard Preview */}
+        <div className="w-full h-[70vh] relative -mt-16 md:-mt-24">
+            <div className="absolute inset-x-0 top-0 h-32 bg-gradient-to-b from-background to-transparent z-10"></div>
+            <div className="container mx-auto h-full p-4">
+                <DemoDashboard />
+            </div>
         </div>
         
         <QuizGeneratorPrototype />
