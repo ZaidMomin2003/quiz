@@ -1,6 +1,8 @@
+'use client';
 import Link from "next/link";
-import { Bot, LogIn } from "lucide-react";
+import { Bot, LayoutDashboard, LogIn } from "lucide-react";
 import { Button } from "./ui/button";
+import { useAuth } from "@/hooks/use-auth";
 
 export function PublicPageLayout({
   children,
@@ -11,6 +13,8 @@ export function PublicPageLayout({
   showHeader?: boolean;
   showFooter?: boolean;
 }) {
+  const { user } = useAuth();
+
   return (
     <div className="relative flex min-h-screen flex-col">
       {showHeader && (
@@ -30,9 +34,15 @@ export function PublicPageLayout({
                 </nav>
             </div>
             <div className="flex items-center space-x-4">
-                <Button asChild size="sm">
-                <Link href="/signup">Start For Free</Link>
-                </Button>
+                {user ? (
+                   <Button asChild size="sm">
+                     <Link href="/dashboard"><LayoutDashboard className="mr-2 h-4 w-4" />Dashboard</Link>
+                   </Button>
+                ) : (
+                    <Button asChild size="sm">
+                        <Link href="/signup">Start For Free</Link>
+                    </Button>
+                )}
             </div>
             </div>
         </header>
