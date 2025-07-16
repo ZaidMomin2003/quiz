@@ -93,7 +93,7 @@ export default function SyllabusPage() {
 
   const handleGenerateSet = async (topic: string) => {
     setGeneratingSetTopic(topic);
-    const result = await generateQuestionSetAction({ topic });
+    const result = await generateQuestionSetAction({ topic, easy:10, moderate: 5, difficult: 3, extreme: 2 });
     setGeneratingSetTopic(null);
 
     if (result.error) {
