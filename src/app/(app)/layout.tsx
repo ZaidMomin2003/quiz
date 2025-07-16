@@ -24,15 +24,16 @@ export default function AppLayout({
   const [bookmarkCount, setBookmarkCount] = useState(0);
 
   useEffect(() => {
+    // DEVELOPMENT: Bypassing auth check
     if (loading) return;
 
-    if (!user) {
-      router.push('/login');
-      return;
-    }
+    // if (!user) {
+    //   router.push('/login');
+    //   return;
+    // }
 
     // Check if onboarding is complete
-    if (user.email) {
+    if (user && user.email) {
       const onboardingComplete = localStorage.getItem(`onboarding_complete_${user.email}`);
       
       // If onboarding is NOT complete and we are not in an onboarding or login page, redirect to onboarding
@@ -80,13 +81,15 @@ export default function AppLayout({
     return <>{children}</>;
   }
 
-  if (loading || !user) {
-    return (
-       <div className="flex h-screen items-center justify-center">
-         <p>Loading...</p>
-       </div>
-    );
-  }
+  // DEVELOPMENT: Bypassing loading screen if no user
+  // if (loading || !user) {
+  //   return (
+  //      <div className="flex h-screen items-center justify-center">
+  //        <p>Loading...</p>
+  //      </div>
+  //   );
+  // }
+  const mockUser = user || { name: 'Dev User', email: 'dev@example.com' };
 
   const handleLogout = async () => {
     await logout();
@@ -152,12 +155,12 @@ export default function AppLayout({
               <DropdownMenuTrigger asChild>
                 <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent/80 bg-sidebar-accent/40 border border-sidebar-border">
                    <Avatar className="h-8 w-8">
-                     <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
-                      <AvatarFallback>{user.name ? user.name.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
+                     <AvatarImage src={`https://i.pravatar.cc/150?u=${mockUser.email}`} />
+                      <AvatarFallback>{mockUser.name ? mockUser.name.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
                    </Avatar>
                    <div className="flex flex-col justify-center group-data-[collapsible=icon]:hidden">
                      <span className="text-sm font-medium text-sidebar-foreground">
-                       {user.name}
+                       {mockUser.name}
                      </span>
                    </div>
                 </button>
@@ -165,8 +168,8 @@ export default function AppLayout({
               <DropdownMenuContent className="mb-2 w-56" side="top" align="start">
                 <DropdownMenuLabel>
                     <div className="flex flex-col">
-                        <span className="text-sm font-medium">{user.name}</span>
-                        <span className="text-xs text-muted-foreground font-normal">{user.email}</span>
+                        <span className="text-sm font-medium">{mockUser.name}</span>
+                        <span className="text-xs text-muted-foreground font-normal">{mockUser.email}</span>
                     </div>
                 </DropdownMenuLabel>
                 <DropdownMenuSeparator />
