@@ -23,7 +23,7 @@ export function useOnboarding() {
   const currentStepIndex = ONBOARDING_STEPS.indexOf(currentStep);
 
   useEffect(() => {
-    if (user) {
+    if (user && user.email) {
       const storedData = localStorage.getItem(`onboarding_data_${user.email}`);
       if (storedData) {
         const data = JSON.parse(storedData);
@@ -58,7 +58,7 @@ export function useOnboarding() {
   }, [onboardingData.completedSteps, router]);
 
   const updateOnboardingData = (newData: Partial<OnboardingData>) => {
-    if (!user) return;
+    if (!user || !user.email) return;
 
     const currentData = JSON.parse(localStorage.getItem(`onboarding_data_${user.email}`) || '{ "completedSteps": [] }');
     const completed = currentData.completedSteps || [];

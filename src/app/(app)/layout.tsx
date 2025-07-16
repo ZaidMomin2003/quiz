@@ -32,16 +32,18 @@ export default function AppLayout({
     }
 
     // Check if onboarding is complete
-    const onboardingComplete = localStorage.getItem(`onboarding_complete_${user.email}`);
-    
-    // If onboarding is NOT complete and we are not in an onboarding or login page, redirect to onboarding
-    if (!onboardingComplete && !pathname.startsWith('/onboarding') && !pathname.startsWith('/login')) {
-      router.push('/onboarding/welcome');
-      return;
+    if (user.email) {
+      const onboardingComplete = localStorage.getItem(`onboarding_complete_${user.email}`);
+      
+      // If onboarding is NOT complete and we are not in an onboarding or login page, redirect to onboarding
+      if (!onboardingComplete && !pathname.startsWith('/onboarding') && !pathname.startsWith('/login')) {
+        router.push('/onboarding/welcome');
+        return;
+      }
     }
     
     // If onboarding IS complete and the user is somehow on the root app page, push them to dashboard
-    if (onboardingComplete && pathname === '/') {
+    if (pathname === '/') {
         router.push('/dashboard');
     }
 
@@ -86,8 +88,8 @@ export default function AppLayout({
     );
   }
 
-  const handleLogout = () => {
-    logout();
+  const handleLogout = async () => {
+    await logout();
   }
 
   return (
@@ -151,7 +153,7 @@ export default function AppLayout({
                 <button className="flex items-center gap-3 p-2 rounded-md w-full text-left transition-colors hover:bg-sidebar-accent/80 bg-sidebar-accent/40 border border-sidebar-border">
                    <Avatar className="h-8 w-8">
                      <AvatarImage src={`https://i.pravatar.cc/150?u=${user.email}`} />
-                      <AvatarFallback>{user.name.charAt(0).toUpperCase()}</AvatarFallback>
+                      <AvatarFallback>{user.name ? user.name.charAt(0).toUpperCase() : 'U'}</AvatarFallback>
                    </Avatar>
                    <div className="flex flex-col justify-center group-data-[collapsible=icon]:hidden">
                      <span className="text-sm font-medium text-sidebar-foreground">

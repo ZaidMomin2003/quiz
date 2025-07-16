@@ -22,7 +22,7 @@ export default function ProfilePage() {
     });
 
     useEffect(() => {
-        if (user) {
+        if (user && user.email) {
             const storedOnboardingData = localStorage.getItem(`onboarding_data_${user.email}`);
             if (storedOnboardingData) {
                 setUserData(JSON.parse(storedOnboardingData));
@@ -34,7 +34,7 @@ export default function ProfilePage() {
         return null;
     }
 
-    const userInitial = user.name.charAt(0).toUpperCase();
+    const userInitial = user.name ? user.name.charAt(0).toUpperCase() : 'U';
 
     const goalDisplay: { [key: string]: string } = {
         'ace-exams': 'Ace Exams',
