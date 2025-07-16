@@ -17,10 +17,12 @@ import {
   CarouselItem,
 } from "@/components/ui/carousel"
 import Autoplay from "embla-carousel-autoplay"
-import { useState } from "react";
+import { useState, useRef } from "react";
 import { useRouter } from "next/navigation";
 import { Slider } from "@/components/ui/slider";
 import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group";
+import { motion, useScroll, useTransform } from "framer-motion";
+import Image from "next/image";
 
 
 function QuizGeneratorPrototype() {
@@ -138,13 +140,22 @@ export default function Home() {
       text: "I use QuizForge to prepare for my board exams alongside my JEE prep. It's so versatile. Being able to create a quiz on any topic, anytime, is amazing.",
     },
   ];
+  
+  const heroRef = useRef(null);
+  const { scrollYProgress } = useScroll({
+    target: heroRef,
+    offset: ["end end", "end start"],
+  });
+  const rotateX = useTransform(scrollYProgress, [0, 1], [0, -20]);
+  const y = useTransform(scrollYProgress, [0, 1], [0, -100]);
+  const opacity = useTransform(scrollYProgress, [0.5, 1], [1, 0]);
 
   return (
     <PublicPageLayout>
         <div className="flex flex-col items-center w-full">
 
         {/* Hero Section */}
-        <section className="w-full grid-bg relative">
+        <section ref={heroRef} className="w-full grid-bg relative">
            <div className="absolute inset-0 bg-gradient-to-t from-background via-background/80 to-transparent"></div>
            <div className="container mx-auto text-center py-20 md:py-28 relative z-10">
             <Badge variant="outline" className="mb-4 bg-card/50 backdrop-blur">
@@ -166,6 +177,36 @@ export default function Home() {
             </div>
           </div>
         </section>
+
+        {/* Parallax Image Section */}
+        <div className="container mx-auto w-full relative h-[40vh] md:h-[60vh] -mt-16 md:-mt-24">
+            <motion.div
+                className="w-full h-[150%] absolute -top-[50%] p-4"
+                style={{
+                  perspective: '1000px',
+                  y,
+                  opacity,
+                }}
+            >
+                <motion.div
+                    className="w-full h-full border rounded-xl shadow-2xl shadow-primary/20"
+                    style={{
+                      rotateX,
+                      transformStyle: 'preserve-3d',
+                    }}
+                >
+                    <Image
+                        src="https://placehold.co/1200x800.png"
+                        alt="QuizForge Dashboard"
+                        data-ai-hint="app dashboard"
+                        width={1200}
+                        height={800}
+                        className="object-cover object-top w-full h-full rounded-xl"
+                        priority
+                    />
+                </motion.div>
+            </motion.div>
+        </div>
         
         <QuizGeneratorPrototype />
 
