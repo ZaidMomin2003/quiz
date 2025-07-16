@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardFooter, CardHeader, CardTitle } from "@/components/ui/card";
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from "@/components/ui/accordion";
-import { Check, ChevronRight, Star, BrainCircuit, BookOpen, Share2, AreaChart, Target, Zap, TrendingUp, Lightbulb, Bot } from "lucide-react";
+import { Check, ChevronRight, Star, BrainCircuit, BookOpen, TrendingUp, Zap, Bot } from "lucide-react";
 import Link from "next/link";
 import { PublicPageLayout } from "@/components/public-page-layout";
 import { Label } from "@/components/ui/label";
@@ -268,14 +268,13 @@ export default function Home() {
                 </p>
             </div>
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-start max-w-5xl mx-auto">
-              {/* Basic Plan */}
+              {/* Free Trial Plan */}
               <Card className="flex flex-col h-full border-border">
                 <CardHeader className="flex-grow">
                   <CardTitle className="text-2xl font-bold">Free Trial</CardTitle>
-                  <CardDescription>For individuals and casual use.</CardDescription>
+                  <CardDescription>Get a taste of our platform.</CardDescription>
                   <div className="pt-4">
                     <span className="text-4xl font-bold">₹0</span>
-                    <span className="text-sm font-normal text-muted-foreground"> one-time</span>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
@@ -283,47 +282,46 @@ export default function Home() {
                   <div className="mt-6 space-y-3">
                       <p className="font-semibold text-sm">Free Trial includes:</p>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Generate 10 questions for free</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Standard AI model</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Basic analytics</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Generate 10 questions for free</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Standard AI model</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Basic analytics</li>
                       </ul>
                   </div>
                 </CardContent>
               </Card>
               
-              {/* Pro Plan */}
-              <Card className="relative flex flex-col h-full bg-gradient-to-br from-gradient-pro-start to-gradient-pro-end border-0 text-black shadow-lg shadow-emerald-500/30">
+              {/* Monthly Plan */}
+              <Card className="relative flex flex-col h-full border-primary ring-2 ring-primary shadow-lg shadow-primary/20">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 -translate-y-1/2">
                    <Badge>Most Popular</Badge>
                 </div>
                 <CardHeader className="flex-grow">
                   <CardTitle className="text-2xl font-bold">Monthly</CardTitle>
-                  <CardDescription className="text-black/80">For dedicated learners and educators.</CardDescription>
+                  <CardDescription>For dedicated learners.</CardDescription>
                   <div className="pt-4">
                     <span className="text-4xl font-bold">₹299</span>
-                    <span className="text-sm font-normal text-black/80">/month</span>
+                    <span className="text-sm font-normal text-muted-foreground">/month</span>
                   </div>
                 </CardHeader>
                 <CardContent className="flex-grow">
-                   <Button className="w-full bg-emerald-800 text-white hover:bg-emerald-800/90" asChild><Link href="/signup">Choose Monthly</Link></Button>
-                   <p className="text-xs text-black/80 text-center mt-2">Billed monthly.</p>
+                   <Button className="w-full" asChild><Link href="/signup">Choose Monthly</Link></Button>
                    <div className="mt-6 space-y-3">
                       <p className="font-semibold text-sm">All Free Trial features, plus:</p>
-                      <ul className="space-y-2 text-sm text-black/80">
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Unlimited Quizzes</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Up to 50 questions per quiz</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Advanced AI model</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4" />Advanced Analytics</li>
+                      <ul className="space-y-2 text-sm text-muted-foreground">
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Unlimited Quizzes</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Up to 50 questions per quiz</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Advanced AI model for exam accuracy</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Detailed Performance Analytics</li>
                       </ul>
                    </div>
                 </CardContent>
               </Card>
 
-              {/* Team Plan */}
+              {/* Yearly Plan */}
               <Card className="flex flex-col h-full border-border">
                 <CardHeader className="flex-grow">
                   <CardTitle className="text-2xl font-bold">Yearly</CardTitle>
-                  <CardDescription>Best value for serious users.</CardDescription>
+                  <CardDescription>Best value for serious aspirants.</CardDescription>
                   <div className="pt-4">
                      <span className="text-4xl font-bold">₹2999</span>
                     <span className="text-sm font-normal text-muted-foreground">/year</span>
@@ -331,13 +329,12 @@ export default function Home() {
                 </CardHeader>
                 <CardContent className="flex-grow">
                    <Button className="w-full" variant="outline" asChild><Link href="/signup">Choose Yearly</Link></Button>
-                   <p className="text-xs text-muted-foreground text-center mt-2">Billed annually.</p>
                    <div className="mt-6 space-y-3">
                       <p className="font-semibold text-sm">All Monthly plan features, plus:</p>
                       <ul className="space-y-2 text-sm text-muted-foreground">
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Unlimited everything</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Access to the full question library</li>
-                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary/50" />Priority Support</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Access to the full question library</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Priority Support</li>
+                        <li className="flex items-center gap-2"><Check className="h-4 w-4 text-primary" />Save 15% compared to monthly</li>
                       </ul>
                    </div>
                 </CardContent>
@@ -403,25 +400,25 @@ export default function Home() {
               <AccordionItem value="item-1">
                 <AccordionTrigger>What kind of topics can I create quizzes on?</AccordionTrigger>
                 <AccordionContent>
-                  Literally anything! Our AI is trained on a vast range of information, with special focus on the NEET and JEE syllabus. You can create quizzes on history, science, literature, coding, pop culture, and much more. If you can think of it, QuizForge can create a quiz for it.
+                  You can create quizzes on any topic from the official NEET and JEE syllabus. Our AI is specifically trained to provide relevant questions for Physics, Chemistry, and Biology/Mathematics. Beyond that, you can try any topic you're curious about!
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-2">
                 <AccordionTrigger>Is there a free trial?</AccordionTrigger>
                 <AccordionContent>
-                  We have a "Free Trial" that lets you generate 10 questions to see how the app works. If you need more, you can upgrade to our Monthly or Yearly plans for unlimited access.
+                  Yes! Our "Free Trial" lets you generate up to 10 questions to experience the app. If you need more, you can upgrade to our Monthly or Yearly plans for unlimited access.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-3">
-                <AccordionTrigger>Can I share the quizzes I create?</AccordionTrigger>
+                <AccordionTrigger>Are the questions truly relevant for competitive exams?</AccordionTrigger>
                 <AccordionContent>
-                  Yes! Once you generate a quiz, you can easily share it with others. We're working on features to provide a unique link for each quiz you create.
+                  Absolutely. We have specifically tuned our AI to generate questions that match the pattern, difficulty, and syllabus of major competitive exams like NEET, JEE Mains, and JEE Advanced.
                 </AccordionContent>
               </AccordionItem>
               <AccordionItem value="item-4">
-                <AccordionTrigger>Are the questions relevant for competitive exams like NEET and JEE?</AccordionTrigger>
+                <AccordionTrigger>Can I practice just the topics I'm weak in?</AccordionTrigger>
                 <AccordionContent>
-                  Absolutely. We have specifically tuned our AI to generate questions that match the pattern, difficulty, and syllabus of major competitive exams like NEET, JEE Mains, and JEE Advanced.
+                  Yes! This is one of our best features. After you take a quiz, our AI analyzes your performance and identifies your weak concepts. You can then generate a new quiz focused specifically on those areas to turn your weaknesses into strengths.
                 </AccordionContent>
               </AccordionItem>
             </Accordion>
