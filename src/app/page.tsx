@@ -278,7 +278,8 @@ export default function Home() {
 
         {/* Static Dashboard Preview */}
         <div className="w-full h-[70vh] relative -mt-16 md:-mt-24">
-            <div className="absolute inset-x-0 bottom-0 h-32 bg-gradient-to-t from-background to-transparent z-10"></div>
+            <div className="absolute inset-x-0 bottom-0 h-48 bg-gradient-to-t from-background to-transparent z-10"></div>
+            <div className="absolute inset-x-0 top-0 h-48 bg-gradient-to-b from-background to-transparent z-10"></div>
             <div className="container mx-auto h-full p-4">
                 <DemoDashboard />
             </div>
