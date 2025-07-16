@@ -11,6 +11,7 @@ import { Loader2, BrainCircuit } from "lucide-react";
 import { useToast } from "@/hooks/use-toast";
 import { useRouter } from "next/navigation";
 import type { QuizHistoryItem } from '@/lib/types';
+import { useAuth } from '@/hooks/use-auth';
 
 type DashboardStats = {
     quizzesTaken: number;
@@ -20,6 +21,7 @@ type DashboardStats = {
 };
 
 export default function DashboardPage() {
+    const { user } = useAuth();
     const [topic, setTopic] = useState('');
     const [questionCount, setQuestionCount] = useState(5);
     const [timePerQuestion, setTimePerQuestion] = useState(1);
@@ -38,18 +40,28 @@ export default function DashboardPage() {
     const router = useRouter();
 
     useEffect(() => {
-        const storedHistory = localStorage.getItem('quizHistory');
+        if (!user || !user.email) return;
+
+        const historyKey = `quizHistory_${user.email}`;
+        const weakConceptsKey = `weakConcepts_${user.email}`;
+
+        const storedHistory = localStorage.getItem(historyKey);
         if (storedHistory) {
             const parsedHistory: QuizHistoryItem[] = JSON.parse(storedHistory);
             calculateStats(parsedHistory);
+        } else {
+             // Reset stats if no history is found for the user
+            setStats({ quizzesTaken: 0, correctRatio: 0, averageScore: '0/0', totalQuestionsAttempted: 0});
         }
         
-        const storedWeakConcepts = localStorage.getItem('weakConcepts');
+        const storedWeakConcepts = localStorage.getItem(weakConceptsKey);
         if (storedWeakConcepts) {
             setWeakConcepts(JSON.parse(storedWeakConcepts));
+        } else {
+            setWeakConcepts([]);
         }
 
-    }, []);
+    }, [user]);
 
     const calculateStats = (historyItems: QuizHistoryItem[]) => {
         if (historyItems.length === 0) {

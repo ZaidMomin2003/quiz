@@ -10,18 +10,24 @@ import { RefreshCw, MoreHorizontal } from "lucide-react";
 import { useRouter } from "next/navigation";
 import type { QuizHistoryItem } from '@/lib/types';
 import { DropdownMenu, DropdownMenuContent, DropdownMenuItem, DropdownMenuLabel, DropdownMenuSeparator, DropdownMenuTrigger } from '@/components/ui/dropdown-menu';
+import { useAuth } from '@/hooks/use-auth';
 
 export default function HistoryPage() {
     const [history, setHistory] = useState<QuizHistoryItem[]>([]);
     const router = useRouter();
+    const { user } = useAuth();
 
     useEffect(() => {
-        const storedHistory = localStorage.getItem('quizHistory');
+        if (!user || !user.email) return;
+        const historyKey = `quizHistory_${user.email}`;
+        const storedHistory = localStorage.getItem(historyKey);
         if (storedHistory) {
             const parsedHistory: QuizHistoryItem[] = JSON.parse(storedHistory);
             setHistory(parsedHistory.sort((a, b) => b.timestamp - a.timestamp)); // Most recent first
+        } else {
+            setHistory([]);
         }
-    }, []);
+    }, [user]);
 
     function handleRetakeQuiz(quizToRetake: QuizHistoryItem) {
         const quizData = {

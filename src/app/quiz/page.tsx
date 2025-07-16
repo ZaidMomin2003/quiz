@@ -15,6 +15,7 @@ import { motion, AnimatePresence } from 'framer-motion';
 import { Accordion, AccordionContent, AccordionItem, AccordionTrigger } from '@/components/ui/accordion';
 import { useToast } from "@/hooks/use-toast";
 import { cn } from '@/lib/utils';
+import { useAuth } from '@/hooks/use-auth';
 
 
 type QuizData = {
@@ -40,6 +41,7 @@ type Analysis = {
 export default function QuizPage() {
     const router = useRouter();
     const { toast } = useToast();
+    const { user } = useAuth();
     const [quizData, setQuizData] = useState<QuizData | null>(null);
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
     const [userAnswers, setUserAnswers] = useState<Record<number, string>>({});
@@ -78,7 +80,7 @@ export default function QuizPage() {
         }
         setIsAnalyzing(false);
 
-    }, [quizData, quizState]);
+    }, [quizData, quizState, user]);
 
 
     useEffect(() => {
@@ -124,7 +126,10 @@ export default function QuizPage() {
 
 
     const saveQuizToHistory = (score: number, analysisResult: Analysis | null, finalAnswers: Record<number, string>) => {
-        if (!quizData) return;
+        if (!quizData || !user || !user.email) return;
+
+        const historyKey = `quizHistory_${user.email}`;
+        const weakConceptsKey = `weakConcepts_${user.email}`;
 
         const newHistoryItem: QuizHistoryItem = {
             topic: quizData.topic,
@@ -136,17 +141,17 @@ export default function QuizPage() {
             timestamp: Date.now(),
         };
 
-        const existingHistory = localStorage.getItem('quizHistory');
+        const existingHistory = localStorage.getItem(historyKey);
         const history = existingHistory ? JSON.parse(existingHistory) : [];
         history.push(newHistoryItem);
-        localStorage.setItem('quizHistory', JSON.stringify(history));
+        localStorage.setItem(historyKey, JSON.stringify(history));
 
         // Save weak concepts
         if (analysisResult?.weakConcepts && analysisResult.weakConcepts.length > 0) {
-            const existingWeakConcepts = localStorage.getItem('weakConcepts');
+            const existingWeakConcepts = localStorage.getItem(weakConceptsKey);
             const weakConceptsSet = existingWeakConcepts ? new Set(JSON.parse(existingWeakConcepts)) : new Set();
             analysisResult.weakConcepts.forEach(concept => weakConceptsSet.add(concept));
-            localStorage.setItem('weakConcepts', JSON.stringify(Array.from(weakConceptsSet)));
+            localStorage.setItem(weakConceptsKey, JSON.stringify(Array.from(weakConceptsSet)));
         }
     };
 
